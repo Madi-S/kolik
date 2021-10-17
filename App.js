@@ -21,10 +21,13 @@ export default function App() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Testing fonts</Text>
+        <>
+            <AppNavigation />
             <StatusBar style='auto' />
-        </View>
+        </>
+        // <View style={styles.container}>
+        //     <Text style={styles.text}>Testing fonts</Text>
+        // </View>
     )
 }
 
