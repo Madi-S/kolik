@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
 
+import Tabs from './src/tabs'
 import THEME from './src/theme'
 import loadApp from './src/loadApp'
 
@@ -22,7 +24,9 @@ export default function App() {
 
     return (
         <>
-            <AppNavigation />
+            <NavigationContainer>
+                <Tabs />
+            </NavigationContainer>
             <StatusBar style='auto' />
         </>
         // <View style={styles.container}>
