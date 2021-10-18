@@ -1,20 +1,26 @@
 import React from 'react'
-import { StyleSheet, View, Image, TouchableOpcaity } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
-import FeedScreen from './screens/FeedScreen'
+import THEME from './theme'
+import PostsScreen from './screens/PostsScreen'
+import CreateScreen from './screens/CreateScreen'
 import ProfileScreen from './screens/ProfileScreen'
 
+// const Tab = createMaterialBottomTabNavigator()
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
     return (
         <Tab.Navigator
+            initialRouteName='Posts'
             screenOptions={{
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     position: 'absolute',
-                    bottom: 25,
+                    bottom: 15,
                     left: 20,
                     right: 20,
                     elevation: 0,
@@ -25,9 +31,73 @@ const Tabs = () => {
                 }
             }}
         >
-            <Tab.Screen name='Profile' component={ProfileScreen} />
-            <Tab.Screen name='Feed' component={FeedScreen} />
+            <Tab.Screen
+                name='Profile'
+                component={ProfileScreen}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Ionicons
+                            name={focused ? 'person' : 'person-outline'}
+                            size={30}
+                            color={THEME.INFO_COLOR}
+                        />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name='Create'
+                component={CreateScreen}
+                options={{
+                    // tabBarShowLabel: true,
+                    tabBarIcon: ({ focused }) => (
+                        <Ionicons
+                            name={focused ? 'add' : 'add-outline'}
+                            size={24}
+                            color='white'
+                        />
+                    ),
+                    tabBarButton: props => <CustomTabButton {...props} />
+                }}
+            />
+            <Tab.Screen
+                name='Posts'
+                component={PostsScreen}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Ionicons
+                            name={focused ? 'albums' : 'albums-outline'}
+                            size={24}
+                            color={THEME.INFO_COLOR}
+                        />
+                    )
+                }}
+            />
         </Tab.Navigator>
+    )
+}
+
+const CustomTabButton = ({ children, onPress }) => {
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            style={{
+                top: -20,
+                justifyContent: 'center',
+                alignItems: 'center',
+                ...styles.shadow
+            }}
+        >
+            <View
+                style={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: 35,
+                    backgroundColor: THEME.DANGER_COLOR
+                }}
+            >
+                {children}
+            </View>
+        </TouchableOpacity>
     )
 }
 
