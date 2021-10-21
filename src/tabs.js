@@ -35,7 +35,7 @@ const Tabs = () => {
                 name='Profile'
                 component={ProfileScreen}
                 options={{
-                    tabBarIcon: ({ focused }) => (
+                    tabBarIcon: ({ focused, onPress }) => (
                         <Ionicons
                             name={focused ? 'person' : 'person-outline'}
                             size={30}
@@ -56,7 +56,7 @@ const Tabs = () => {
                             color='white'
                         />
                     ),
-                    tabBarButton: props => <CustomTabButton {...props} />
+                    tabBarButton: props => <CustomCircleButton {...props} />
                 }}
             />
             <Tab.Screen
@@ -65,7 +65,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Ionicons
-                            name={focused ? 'albums' : 'albums-outline'}
+                            name={focused ? 'search' : 'search-outline'}
                             size={24}
                             color={THEME.INFO_COLOR}
                         />
@@ -76,7 +76,7 @@ const Tabs = () => {
     )
 }
 
-const CustomTabButton = ({ children, onPress }) => {
+const CustomCircleButton = ({ children, onPress }) => {
     return (
         <TouchableOpacity
             onPress={onPress}

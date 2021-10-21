@@ -2,7 +2,7 @@ import React from 'react'
 import { Text } from 'react-native'
 
 const CreateScreen = ({ navigation }) => {
-    return <Text>Posts Screen</Text>
+    return <Text>Create Screen</Text>
 }
 
 export default CreateScreen
