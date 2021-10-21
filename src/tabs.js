@@ -2,14 +2,12 @@ import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 
 import THEME from './theme'
 import PostsScreen from './screens/PostsScreen'
 import CreateScreen from './screens/CreateScreen'
 import ProfileScreen from './screens/ProfileScreen'
 
-// const Tab = createMaterialBottomTabNavigator()
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
@@ -18,29 +16,15 @@ const Tabs = () => {
             initialRouteName='Posts'
             screenOptions={{
                 tabBarShowLabel: false,
-                tabBarStyle: {
-                    position: 'absolute',
-                    bottom: 15,
-                    left: 20,
-                    right: 20,
-                    elevation: 0,
-                    backgroundColor: 'white',
-                    borderRadius: 15,
-                    height: 70,
-                    ...styles.shadow
-                }
+                tabBarStyle: { ...styles.tab, ...styles.shadow }
             }}
         >
             <Tab.Screen
                 name='Profile'
                 component={ProfileScreen}
                 options={{
-                    tabBarIcon: ({ focused, onPress }) => (
-                        <Ionicons
-                            name={focused ? 'person' : 'person-outline'}
-                            size={30}
-                            color={THEME.INFO_COLOR}
-                        />
+                    tabBarIcon: ({ focused }) => (
+                        <CustomTabIcon focused={focused} iconName='person' />
                     )
                 }}
             />
@@ -50,11 +34,7 @@ const Tabs = () => {
                 options={{
                     // tabBarShowLabel: true,
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons
-                            name={focused ? 'add' : 'add-outline'}
-                            size={24}
-                            color='white'
-                        />
+                        <CustomTabIcon focused={focused} iconName='add' />
                     ),
                     tabBarButton: props => <CustomCircleButton {...props} />
                 }}
@@ -64,15 +44,21 @@ const Tabs = () => {
                 component={PostsScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <Ionicons
-                            name={focused ? 'search' : 'search-outline'}
-                            size={24}
-                            color={THEME.INFO_COLOR}
-                        />
+                        <CustomTabIcon focused={focused} iconName='search' />
                     )
                 }}
             />
         </Tab.Navigator>
+    )
+}
+
+const CustomTabIcon = ({ focused, iconName }) => {
+    return (
+        <Ionicons
+            size={24}
+            color={THEME.INFO_COLOR}
+            name={focused ? iconName : `${iconName}-outline`}
+        />
     )
 }
 
@@ -81,27 +67,26 @@ const CustomCircleButton = ({ children, onPress }) => {
         <TouchableOpacity
             onPress={onPress}
             style={{
-                top: -20,
-                justifyContent: 'center',
-                alignItems: 'center',
+                ...styles.center,
                 ...styles.shadow
             }}
         >
-            <View
-                style={{
-                    width: 70,
-                    height: 70,
-                    borderRadius: 35,
-                    backgroundColor: THEME.DANGER_COLOR
-                }}
-            >
-                {children}
-            </View>
+            <View style={styles.circle}>{children}</View>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
+    tab: {
+        position: 'absolute',
+        bottom: 15,
+        left: 20,
+        right: 20,
+        elevation: 0,
+        backgroundColor: 'white',
+        borderRadius: 15,
+        height: 70
+    },
     shadow: {
         shadowColor: '#7f5df0',
         shadowOffset: {
@@ -111,6 +96,17 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.5,
         elevation: 5
+    },
+    center: {
+        top: -20,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    circle: {
+        width: 70,
+        height: 70,
+        borderRadius: 35,
+        backgroundColor: THEME.DANGER_COLOR
     }
 })
 
