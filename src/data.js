@@ -19,7 +19,7 @@ const getRandomCategory = () => {
     return CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]
 }
 
-export const DATA = [
+export default DATA = [
     {
         id: '1',
         price: 5000,
