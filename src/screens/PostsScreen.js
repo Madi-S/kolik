@@ -1,14 +1,19 @@
-import React from 'react'
-import { Text, ScrollView } from 'react-native'
-import { Card, ListItem } from 'react-native-elements'
+import React, { useState } from 'react'
+import { ScrollView, Text, FlatList } from 'react-native'
 
 import DATA from '../data'
-import DetailScreen from './DetailScreen'
-
 import * as CONSTANTS from '../constants'
+import DetailScreen from './DetailScreen'
+import PostPreview from '../components/PostPreview'
 
 const PostsScreen = ({ navigation }) => {
     const posts = DATA
+    const [currentPostId, setCurrentPostId] = useState(null)
+
+    if (currentPostId) {
+        // return <Text>Hello</Text>
+        return  <DetailScreen navigation={navigation} post={posts[currentPostId]} />
+    }
 
     return (
         <ScrollView
@@ -17,15 +22,15 @@ const PostsScreen = ({ navigation }) => {
                 fontfamily: 'm-bold'
             }}
         >
-            <Card containerStyle={{ padding: 0 }}>
-                {posts.map(post => (
-                    <ListItem key={post.id.toString()} post={post} />
-                ))}
-            </Card>
+            {posts.map(post => (
+                <PostPreview
+                    post={post}
+                    key={post.id.toString()}
+                    setCurrentPostId={setCurrentPostId}
+                />
+            ))}
         </ScrollView>
     )
-
-    // return <DetailScreen post={DATA[0]} navigation={navigation} />
 }
 
 export default PostsScreen

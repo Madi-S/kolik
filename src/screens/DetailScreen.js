@@ -9,8 +9,6 @@ const DetailScreen = ({ navigation, post }) => {
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
     const screenWidth = Dimensions.get('window').width
 
-    console.log('Rendered DetailScreen')
-
     return (
         <ScrollView
             style={{
