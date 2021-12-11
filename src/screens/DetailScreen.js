@@ -1,27 +1,28 @@
 import React, { useState } from 'react'
-import { AntDesign } from '@expo/vector-icons'
+// import { AntDesign } from '@expo/vector-icons'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 import { Text, Card, Button } from 'react-native-elements'
 
 import * as CONSTANTS from '../constants'
 
 const DetailScreen = ({ navigation, post }) => {
-    const [phoneNumberIsShown, setPhoneNumberIsShown] = useState()
+    const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
     const screenWidth = Dimensions.get('window').width
+
+    console.log('Rendered DetailScreen')
 
     return (
         <ScrollView
             style={{
-                marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM,
-                fontfamily: 'm-bold'
+                marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
             }}
         >
-            <AntDesign
+            {/* <AntDesign
                 name='back'
                 size={24}
                 color='black'
                 // onPress={() => navigation.navigate('Profile')}
-            />
+            /> */}
             <Card>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />
@@ -44,15 +45,15 @@ const DetailScreen = ({ navigation, post }) => {
                         marginRight: 0,
                         marginBottom: 0
                     }}
-                    onClick={() => {
+                    onPress={() => {
                         phoneNumberIsShown
                             ? setPhoneNumberIsShown(false)
                             : setPhoneNumberIsShown(true)
                     }}
                     title={
                         phoneNumberIsShown
-                            ? 'SHOW PHONE NUMBER'
-                            : 'HIDE PHONE NUMBER'
+                            ? 'HIDE PHONE NUMBER'
+                            : 'SHOW PHONE NUMBER'
                     }
                 />
                 {phoneNumberIsShown ? (
