@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Provider } from 'react-redux'
 import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet } from 'react-native'
@@ -9,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import Tabs from './src/tabs'
 import THEME from './src/theme'
 import loadApp from './src/loadApp'
+import store from './src/redux/store'
 
 const providerTheme = {
     Button: {
@@ -34,12 +36,14 @@ const App = () => {
     }
 
     return (
-        <ThemeProvider theme={providerTheme} useDark={isDarkScheme}>
-            <NavigationContainer>
-                <Tabs />
-            </NavigationContainer>
-            <StatusBar style='auto' />
-        </ThemeProvider>
+        <Provider store={store}>
+            <ThemeProvider theme={providerTheme} useDark={isDarkScheme}>
+                <NavigationContainer>
+                    <Tabs />
+                </NavigationContainer>
+                <StatusBar style='auto' />
+            </ThemeProvider>
+        </Provider>
     )
 }
 

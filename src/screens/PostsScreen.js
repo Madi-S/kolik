@@ -11,8 +11,7 @@ const PostsScreen = ({ navigation }) => {
     const [currentPostId, setCurrentPostId] = useState(null)
 
     if (currentPostId) {
-        // return <Text>Hello</Text>
-        return  <DetailScreen navigation={navigation} post={posts[currentPostId]} />
+        return  <DetailScreen setCurrentPostId={setCurrentPostId} navigation={navigation} post={posts[currentPostId]} />
     }
 
     return (

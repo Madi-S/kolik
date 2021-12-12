@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-// import { AntDesign } from '@expo/vector-icons'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 import { Text, Card, Button } from 'react-native-elements'
 
 import * as CONSTANTS from '../constants'
 
-const DetailScreen = ({ navigation, post }) => {
+const DetailScreen = ({ setCurrentPostId, post }) => {
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
     const screenWidth = Dimensions.get('window').width
 
@@ -15,12 +14,7 @@ const DetailScreen = ({ navigation, post }) => {
                 marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
             }}
         >
-            {/* <AntDesign
-                name='back'
-                size={24}
-                color='black'
-                // onPress={() => navigation.navigate('Profile')}
-            /> */}
+            <Button title='Back' onPress={() => setCurrentPostId(null)} />
             <Card>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />
