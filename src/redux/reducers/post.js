@@ -1,15 +1,15 @@
-import { SET_CURRENT_POST_ID } from '../types'
+import { SET_CURRENT_POST } from '../types'
 
 const initialState = {
-    currentPostId: null
+    currentPost: null
 }
 
 export const postReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_CURRENT_POST_ID:
+        case SET_CURRENT_POST:
             return {
                 ...state,
-                currentPostId: action.payload.currentPostId
+                currentPost: action.payload.currentPost
             }
         default:
             return state

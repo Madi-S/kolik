@@ -1,32 +1,28 @@
-import React, { useState } from 'react'
-import { ScrollView, Text, FlatList } from 'react-native'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { ScrollView } from 'react-native'
 
 import DATA from '../data'
 import * as CONSTANTS from '../constants'
 import DetailScreen from './DetailScreen'
 import PostPreview from '../components/PostPreview'
 
+const posts = DATA
+
 const PostsScreen = ({ navigation }) => {
-    const posts = DATA
-    const [currentPostId, setCurrentPostId] = useState(null)
+    const toShowDetailPost = Boolean(useSelector(state => state.post.currentPost))
 
-    if (currentPostId) {
-        return  <DetailScreen setCurrentPostId={setCurrentPostId} navigation={navigation} post={posts[currentPostId]} />
+    if (toShowDetailPost) {
+        return <DetailScreen navigation={navigation} />
     }
-
     return (
         <ScrollView
             style={{
-                marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM,
-                fontfamily: 'm-bold'
+                marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
             }}
         >
             {posts.map(post => (
-                <PostPreview
-                    post={post}
-                    key={post.id.toString()}
-                    setCurrentPostId={setCurrentPostId}
-                />
+                <PostPreview post={post} key={post.id.toString()} />
             ))}
         </ScrollView>
     )

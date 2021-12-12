@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, Dimensions } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
 import { Text, Card, Button } from 'react-native-elements'
+import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 
 import * as CONSTANTS from '../constants'
+import { setCurrentPost } from '../redux/actions/post'
 
-const DetailScreen = ({ setCurrentPostId, post }) => {
+const DetailScreen = () => {
+    const dispatch = useDispatch()
+    const post = useSelector(state => state.post.currentPost)
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
     const screenWidth = Dimensions.get('window').width
+
+    const goBack = () => {
+        /* 
+        Set currentPost to falsy value so that PostsScreen will not return this component
+        */
+        dispatch(setCurrentPost(null))
+    }
 
     return (
         <ScrollView
@@ -14,7 +25,7 @@ const DetailScreen = ({ setCurrentPostId, post }) => {
                 marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
             }}
         >
-            <Button title='Back' onPress={() => setCurrentPostId(null)} />
+            <Button title='Back' onPress={goBack} />
             <Card>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />

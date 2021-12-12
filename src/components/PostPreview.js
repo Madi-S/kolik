@@ -1,9 +1,17 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { Button } from 'react-native'
 import { Card } from 'react-native-elements'
 
+import { setCurrentPost } from '../redux/actions/post'
 
-const PostPreview = ({ post, setCurrentPostId }) => {
+const PostPreview = ({ post }) => {
+    const dispatch = useDispatch()
+
+    const showPostDetail = () => {
+        dispatch(setCurrentPost(post))
+    }
+
     return (
         <Card>
             <Card.Image
@@ -21,10 +29,7 @@ const PostPreview = ({ post, setCurrentPostId }) => {
                     marginBottom: 0
                 }}
                 title='VIEW NOW'
-                onPress={() => {
-                    console.log('!!!!! SET POST ID', post.id)
-                    setCurrentPostId(post.id)
-                }}
+                onPress={showPostDetail}
             />
             <Card.Divider />
         </Card>
