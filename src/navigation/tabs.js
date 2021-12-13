@@ -3,10 +3,10 @@ import { Ionicons } from '@expo/vector-icons'
 import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import THEME from './theme'
-import PostsScreen from './screens/PostsScreen'
-import CreateScreen from './screens/CreateScreen'
-import ProfileScreen from './screens/ProfileScreen'
+import THEME from '../theme'
+import PostsScreen from '../screens/PostsScreen'
+import CreateScreen from '../screens/CreateScreen'
+import ProfileScreen from '../screens/ProfileScreen'
 
 const Tab = createBottomTabNavigator()
 

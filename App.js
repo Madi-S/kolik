@@ -7,7 +7,7 @@ import { ThemeProvider } from 'react-native-elements'
 import { useColorScheme } from 'react-native-appearance'
 import { NavigationContainer } from '@react-navigation/native'
 
-import Tabs from './src/tabs'
+import Tabs from './src/navigation/tabs'
 import THEME from './src/theme'
 import loadApp from './src/loadApp'
 import store from './src/redux/store'
