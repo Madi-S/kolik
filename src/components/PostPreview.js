@@ -1,9 +1,11 @@
 import React from 'react'
+import { Text } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { Button } from 'react-native'
 import { Card } from 'react-native-elements'
+import { FontAwesome } from '@expo/vector-icons'
 
 import { setCurrentPost } from '../redux/actions/post'
+import THEME from '../theme'
 
 const PostPreview = ({ post }) => {
     const dispatch = useDispatch()
@@ -20,17 +22,17 @@ const PostPreview = ({ post }) => {
             />
             <Card.Title>{post.title}</Card.Title>
             <Card.Title>Price: {post.price} $</Card.Title>
-            <Button
-                // icon={<Icon name='code' color='#ffffff' />}
-                buttonStyle={{
-                    borderRadius: 0,
-                    marginLeft: 0,
-                    marginRight: 0,
-                    marginBottom: 0
+            <FontAwesome.Button
+                style={{
+                    height: 38
                 }}
-                title='VIEW NOW'
+                name='mail-forward'
+                backgroundColor={THEME.DANGER_COLOR}
                 onPress={showPostDetail}
-            />
+            >
+                VIEW NOW
+            </FontAwesome.Button>
+
             <Card.Divider />
         </Card>
     )

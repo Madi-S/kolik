@@ -1,30 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
+import { SearchBar } from 'react-native-elements'
 
 import DATA from '../data'
 import * as CONSTANTS from '../constants'
 import DetailScreen from './DetailScreen'
 import PostPreview from '../components/PostPreview'
+import THEME from '../theme'
 
 const posts = DATA
 
 const PostsScreen = ({ navigation }) => {
-    const toShowDetailPost = Boolean(useSelector(state => state.post.currentPost))
+    const [searchQuery, setSearchQuery] = useState('')
+
+    const toShowDetailPost = Boolean(
+        useSelector(state => state.post.currentPost)
+    )
 
     if (toShowDetailPost) {
         return <DetailScreen navigation={navigation} />
     }
+
+    useEffect(() => {
+        console.log(
+            'Making request to server to fetch posts for query',
+            searchQuery
+        )
+    }, [searchQuery])
+
     return (
-        <ScrollView
-            style={{
-                marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
-            }}
-        >
-            {posts.map(post => (
-                <PostPreview post={post} key={post.id.toString()} />
-            ))}
-        </ScrollView>
+        <View>
+            <SearchBar
+                placeholder='Type Here...'
+                onChangeText={setSearchQuery}
+                value={searchQuery}
+                containerStyle={{ backgroundColor: THEME.PRIMARY_COLOR }}
+                inputContainerStyle={{
+                    backgroundColor: THEME.DARKEN_PRIMARY_COLOR
+                }}
+            />
+            <ScrollView
+                style={{
+                    marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
+                }}
+            >
+                {posts.map(post => (
+                    <PostPreview post={post} key={post.id.toString()} />
+                ))}
+            </ScrollView>
+        </View>
     )
 }
 

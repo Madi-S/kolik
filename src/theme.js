@@ -1,8 +1,10 @@
 const THEME = {
     INFO_COLOR: '#457b9d',
-    PRIMARY_COLOR: '#1d3557',
     DANGER_COLOR: '#e63946',
     SECONDARY_COLOR: '#a8dadc',
+    PRIMARY_COLOR: '#1d3557',
+    DARKEN_PRIMARY_COLOR: '#152741',
+    LIGHTEN_PRIMARY_COLOR: '#3562a0'
 }
 
 export default THEME
