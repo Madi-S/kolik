@@ -4,8 +4,8 @@ import { StyleSheet, View, Button } from 'react-native'
 
 import DefaultModalContent from './utils/DefaultModalContent'
 
-const BottomHalfModal = ({ visible = false }) => {
-    const [isVisible, setIsVisible] = useState(visible)
+const BottomHalfModal = props => {
+    const [isVisible, setIsVisible] = useState(props.visible)
 
     const openModal = () => setIsVisible(true)
     const closeModal = () => setIsVisible(false)
@@ -28,7 +28,7 @@ const BottomHalfModal = ({ visible = false }) => {
                     style={styles.view}
                     hideModalContentWhileAnimating={true}
                 >
-                    <DefaultModalContent onPress={closeModal} />
+                    {props.children || <DefaultModalContent onPress={closeModal} />}
                 </Modal>
             </View>
     )

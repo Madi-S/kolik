@@ -6,31 +6,13 @@ import DATA from '../data'
 import THEME from '../theme'
 import * as CONSTANTS from '../constants'
 import PostPreview from '../components/PostPreview'
-import BottomHalfModal from '../components/modal/BottomHalfModal'
+import FilterModal from '../components/FilterModal'
 
 const posts = DATA
 
 const queryPosts = params => {
     console.log('Querying posts with params:', params)
     return posts
-}
-
-const Filter = () => {
-    const [isModalVisible, setIsisModalVisible] = useState(false)
-
-    return (
-        <View
-            style={{
-                // flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            }}
-        >
-            <BottomHalfModal />
-            <BottomHalfModal />
-        </View>
-    )
 }
 
 const PostsScreen = ({ navigation }) => {
@@ -53,7 +35,7 @@ const PostsScreen = ({ navigation }) => {
                     backgroundColor: THEME.DARKEN_PRIMARY_COLOR
                 }}
             />
-            <Filter />
+            <FilterModal />
             <ScrollView
                 style={{
                     marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
