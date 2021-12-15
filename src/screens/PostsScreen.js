@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, ScrollView } from 'react-native'
 import { SearchBar } from 'react-native-elements'
+import { ScrollView, View, Button } from 'react-native'
 
 import DATA from '../data'
 import THEME from '../theme'
 import * as CONSTANTS from '../constants'
 import PostPreview from '../components/PostPreview'
+import BottomHalfModal from '../components/modal/BottomHalfModal'
 
 const posts = DATA
 
@@ -14,14 +15,29 @@ const queryPosts = params => {
     return posts
 }
 
+const Filter = () => {
+    const [isModalVisible, setIsisModalVisible] = useState(false)
+
+    return (
+        <View
+            style={{
+                // flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}
+        >
+            <BottomHalfModal />
+            <BottomHalfModal />
+        </View>
+    )
+}
+
 const PostsScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('')
 
     useEffect(() => {
-        console.log(
-            'Making request to server to fetch posts for query',
-            searchQuery
-        )
+        queryPosts({ q: searchQuery })
     }, [searchQuery])
 
     return (
@@ -37,6 +53,7 @@ const PostsScreen = ({ navigation }) => {
                     backgroundColor: THEME.DARKEN_PRIMARY_COLOR
                 }}
             />
+            <Filter />
             <ScrollView
                 style={{
                     marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
