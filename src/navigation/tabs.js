@@ -1,23 +1,41 @@
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import { StyleSheet, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import THEME from '../theme'
 import PostsScreen from '../screens/PostsScreen'
 import CreateScreen from '../screens/CreateScreen'
+import DetailScreen from '../screens/DetailScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+
+const Stack = createNativeStackNavigator()
+
+const TabsStackNavigator = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName='Tabs'>
+                <Stack.Screen name='Tabs' component={Tabs} />
+                <Stack.Screen name='MyComponent' component={DetailScreen} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+}
 
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
+    const TabNavigatorScreenOptions = {
+        tabBarShowLabel: false,
+        tabBarStyle: { ...styles.tab, ...styles.shadow }
+    }
+
     return (
         <Tab.Navigator
             initialRouteName='Posts'
-            screenOptions={{
-                tabBarShowLabel: false,
-                tabBarStyle: { ...styles.tab, ...styles.shadow }
-            }}
+            screenOptions={TabNavigatorScreenOptions}
         >
             <Tab.Screen
                 name='Profile'
@@ -32,7 +50,6 @@ const Tabs = () => {
                 name='Create'
                 component={CreateScreen}
                 options={{
-                    // tabBarShowLabel: true,
                     tabBarIcon: ({ focused }) => (
                         <CustomTabIcon focused={focused} iconName='add' />
                     ),
@@ -110,4 +127,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Tabs
+export default TabsStackNavigator

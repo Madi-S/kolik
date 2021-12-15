@@ -4,10 +4,10 @@ import { View, ScrollView } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
 import DATA from '../data'
+import THEME from '../theme'
 import * as CONSTANTS from '../constants'
 import DetailScreen from './DetailScreen'
 import PostPreview from '../components/PostPreview'
-import THEME from '../theme'
 
 const posts = DATA
 

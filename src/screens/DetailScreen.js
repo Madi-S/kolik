@@ -6,7 +6,7 @@ import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 import * as CONSTANTS from '../constants'
 import { setCurrentPost } from '../redux/actions/post'
 
-const DetailScreen = () => {
+const DetailScreen = ({ navigation }) => {
     const dispatch = useDispatch()
     const post = useSelector(state => state.post.currentPost)
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)

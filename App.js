@@ -5,18 +5,13 @@ import { StatusBar } from 'expo-status-bar'
 import { StyleSheet } from 'react-native'
 import { ThemeProvider } from 'react-native-elements'
 import { useColorScheme } from 'react-native-appearance'
-import { NavigationContainer } from '@react-navigation/native'
 
-import Tabs from './src/navigation/tabs'
 import THEME from './src/theme'
 import loadApp from './src/loadApp'
 import store from './src/redux/store'
+import TabsStackNavigator from './src/navigation/tabs'
 
-const providerTheme = {
-    Button: {
-        raised: true
-    }
-}
+const providerTheme = { Button: { raised: true } }
 
 const App = () => {
     console.log('Rendered app')
@@ -38,9 +33,7 @@ const App = () => {
     return (
         <Provider store={store}>
             <ThemeProvider theme={providerTheme} useDark={isDarkScheme}>
-                <NavigationContainer>
-                    <Tabs />
-                </NavigationContainer>
+                    <TabsStackNavigator />
                 <StatusBar style='auto' />
             </ThemeProvider>
         </Provider>
