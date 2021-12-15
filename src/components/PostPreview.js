@@ -7,11 +7,13 @@ import { FontAwesome } from '@expo/vector-icons'
 import { setCurrentPost } from '../redux/actions/post'
 import THEME from '../theme'
 
-const PostPreview = ({ post }) => {
+const PostPreview = ({ post, onPreviewCliick }) => {
+    // If dispathcing will not be needed, don't forget to remove it
     const dispatch = useDispatch()
 
     const showPostDetail = () => {
         dispatch(setCurrentPost(post))
+        onPreviewCliick()
     }
 
     return (

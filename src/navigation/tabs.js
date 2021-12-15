@@ -18,7 +18,7 @@ const TabsStackNavigator = () => {
         <NavigationContainer>
             <Stack.Navigator initialRouteName='Tabs'>
                 <Stack.Screen name='Tabs' component={Tabs} />
-                <Stack.Screen name='MyComponent' component={DetailScreen} />
+                <Stack.Screen name='Detail' component={DetailScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -16,6 +16,7 @@ const DetailScreen = ({ navigation }) => {
         /* 
         Set currentPost to falsy value so that PostsScreen will not return this component
         */
+        navigation.navigate('Posts')
         dispatch(setCurrentPost(null))
     }
 
