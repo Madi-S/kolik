@@ -17,7 +17,13 @@ const TabsStackNavigator = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator initialRouteName='Tabs'>
-                <Stack.Screen name='Tabs' component={Tabs} />
+                <Stack.Screen
+                    options={{
+                        headerShown: false
+                    }}
+                    name='Tabs'
+                    component={Tabs}
+                />
                 <Stack.Screen name='Detail' component={DetailScreen} />
             </Stack.Navigator>
         </NavigationContainer>
@@ -32,18 +38,30 @@ const Tabs = () => {
         tabBarStyle: { ...styles.tab, ...styles.shadow }
     }
 
+    const headerStyle = {
+        backgroundColor: THEME.PRIMARY_COLOR
+    }
+
+    const headerTitleStyle = {
+        color: '#fff'
+    }
+
     return (
         <Tab.Navigator
             initialRouteName='Posts'
             screenOptions={TabNavigatorScreenOptions}
         >
             <Tab.Screen
-                name='Profile'
-                component={ProfileScreen}
+                name='Posts'
+                component={PostsScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CustomTabIcon focused={focused} iconName='person' />
-                    )
+                        <CustomTabIcon focused={focused} iconName='search' />
+                    ),
+                    // headerShown: false,
+                    // headerTransparent: true,
+                    headerStyle,
+                    headerTitleStyle
                 }}
             />
             <Tab.Screen
@@ -53,16 +71,20 @@ const Tabs = () => {
                     tabBarIcon: ({ focused }) => (
                         <CustomTabIcon focused={focused} iconName='add' />
                     ),
-                    tabBarButton: props => <CustomCircleButton {...props} />
+                    tabBarButton: props => <CustomCircleButton {...props} />,
+                    headerStyle,
+                    headerTitleStyle
                 }}
             />
             <Tab.Screen
-                name='Posts'
-                component={PostsScreen}
+                name='Profile'
+                component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CustomTabIcon focused={focused} iconName='search' />
-                    )
+                        <CustomTabIcon focused={focused} iconName='person' />
+                    ),
+                    headerStyle,
+                    headerTitleStyle
                 }}
             />
         </Tab.Navigator>

@@ -29,7 +29,7 @@ const PostPreview = ({ post, onPreviewCliick }) => {
                     height: 38
                 }}
                 name='mail-forward'
-                backgroundColor={THEME.DANGER_COLOR}
+                backgroundColor={THEME.PRIMARY_COLOR}
                 onPress={showPostDetail}
             >
                 VIEW NOW
