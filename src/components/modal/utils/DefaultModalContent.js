@@ -4,7 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native'
 const DefaultModalContent = ({ onPress }) => (
     <View style={styles.content}>
         <Text style={styles.contentTitle}>Hi 👋!</Text>
-        <Button testID={'close-button'} onPress={onPress} title='Close' />
+        <Button onPress={onPress} title='Close' />
     </View>
 )
 

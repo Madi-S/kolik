@@ -1,6 +1,6 @@
-const LOCATIONS = ['ALMATY', 'KARAGANDA', 'KOKSHETAU', 'NUR-SULTAN']
+export const LOCATIONS = ['ALMATY', 'KARAGANDA', 'KOKSHETAU', 'NUR-SULTAN']
 
-const CATEGORIES = [
+export const CATEGORIES = [
     'SUV',
     'SEDAN',
     'COUPE',
@@ -11,11 +11,11 @@ const CATEGORIES = [
     'STATION WAGON'
 ]
 
-const getRandomLocation = () => {
+export const getRandomLocation = () => {
     return LOCATIONS[Math.floor(Math.random() * LOCATIONS.length)]
 }
 
-const getRandomCategory = () => {
+export const getRandomCategory = () => {
     return CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)]
 }
 
