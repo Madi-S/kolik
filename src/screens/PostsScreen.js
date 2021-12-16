@@ -6,7 +6,7 @@ import DATA from '../data'
 import THEME from '../theme'
 import * as CONSTANTS from '../constants'
 import PostPreview from '../components/PostPreview'
-import FilterModal from '../components/FilterModal'
+import SearchBarModals from '../components/SearchBarModals'
 
 const posts = DATA
 
@@ -35,12 +35,12 @@ const PostsScreen = ({ navigation }) => {
                     backgroundColor: THEME.DARKEN_PRIMARY_COLOR
                 }}
             />
-            <FilterModal />
             <ScrollView
                 style={{
                     marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
                 }}
             >
+                <SearchBarModals />
                 {posts.map(post => (
                     <PostPreview
                         post={post}

@@ -1,3 +1,11 @@
+export const SORT_BY_OPTIONS = [
+    { label: 'Price (from highest)', value: 'price_desc' },
+    { label: 'Price (from lowest)', value: 'price_asc' },
+    { label: 'Published (from oldest)', value: 'published_at_asc' },
+    { label: 'Published (from newest)', value: 'published_at_desc' },
+    { label: 'Title', value: 'title' }
+]
+
 export const LOCATIONS = ['ALMATY', 'KARAGANDA', 'KOKSHETAU', 'NUR-SULTAN']
 
 export const CATEGORIES = [
