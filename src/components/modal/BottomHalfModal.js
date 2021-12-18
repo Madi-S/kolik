@@ -5,8 +5,13 @@ import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
 import THEME from '../../theme'
 import DefaultModalContent from './utils/DefaultModalContent'
 
-const BottomHalfModal = props => {
-    const [isVisible, setIsVisible] = useState(props.visible)
+const BottomHalfModal = ({
+    title = 'Open',
+    visible = false,
+    children = null,
+    openButtonStyle = {}
+}) => {
+    const [isVisible, setIsVisible] = useState(visible)
 
     const openModal = () => setIsVisible(true)
     const closeModal = () => setIsVisible(false)
@@ -14,11 +19,11 @@ const BottomHalfModal = props => {
     return (
         <View style={styles.wrapper}>
             <TouchableOpacity
-                activeOpacity={.9}
-                style={styles.button}
+                activeOpacity={0.9}
+                style={{ ...styles.button, ...openButtonStyle }}
                 onPress={openModal}
             >
-                <Text style={styles.buttonText}>{props.title || 'open'}</Text>
+                <Text style={styles.buttonText}>{title}</Text>
             </TouchableOpacity>
             <Modal
                 backdropOpacity={0.5}
@@ -30,7 +35,7 @@ const BottomHalfModal = props => {
                 style={styles.modal}
                 hideModalContentWhileAnimating={true}
             >
-                {props.children || <DefaultModalContent onPress={closeModal} />}
+                {children || <DefaultModalContent onPress={closeModal} />}
             </Modal>
         </View>
     )
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 15,
+        marginTop: 15
     },
     modal: {
         justifyContent: 'flex-end',

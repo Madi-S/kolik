@@ -35,43 +35,48 @@ const CategoryModal = () => {
 }
 
 const FilterModal = () => {
-    const [priceFrom, setPriceFrom] = useState(0)
-    const [priceTo, setPriceTo] = useState(999999)
+    const [priceFrom, setPriceFrom] = useState('0')
+    const [priceTo, setPriceTo] = useState('999999')
 
-    const [selectedSortBy, setSelectedSortBy] = useState()
-    const [selectedLocation, setSelectedLocation] = useState()
+    const [selectedSortByOption, setSelectedSortByOption] = useState(
+        SORT_BY_OPTIONS[0].value
+    )
+    const [selectedLocation, setSelectedLocation] = useState(LOCATIONS[0].value)
 
     return (
         <BottomHalfModal title='Filter'>
             <View style={styles.content}>
                 <Text style={styles.contentTitle}>Filter</Text>
-                <View>
+                <View style={{ marginVertical: 12 }}>
                     <Text>Price from:</Text>
                     <TextInput
+                        style={styles.input}
                         keyboardType='numeric'
                         placeholder={priceFrom}
                         value={priceFrom}
                         onChangeText={setPriceFrom}
                     />
                 </View>
-                <View>
+                <View style={{ marginVertical: 12 }}>
                     <Text>Price to:</Text>
                     <TextInput
+                        style={styles.input}
                         keyboardType='numeric'
                         placeholder={priceTo}
                         value={priceTo}
                         onChangeText={setPriceTo}
                     />
                 </View>
-                <View>
+                <View style={styles.select}>
                     <Text>Sort by:</Text>
                     <Picker
-                        selectedValue={selectedSortBy}
-                        onValueChange={setSelectedSortBy}
+                        selectedValue={selectedSortByOption}
+                        onValueChange={setSelectedSortByOption}
                     >
                         {SORT_BY_OPTIONS.map(item => {
                             return (
                                 <Picker.Item
+                                    key={item.value}
                                     label={item.label}
                                     value={item.value}
                                 />
@@ -79,7 +84,7 @@ const FilterModal = () => {
                         })}
                     </Picker>
                 </View>
-                {/* <View>
+                <View style={styles.select}>
                     <Text>Location:</Text>
                     <Picker
                         selectedValue={selectedLocation}
@@ -88,17 +93,35 @@ const FilterModal = () => {
                         {LOCATIONS.map(item => {
                             return (
                                 <Picker.Item
+                                    key={item.value}
                                     label={item.label}
                                     value={item.value}
                                 />
                             )
                         })}
                     </Picker>
-                </View> */}
-                <Button
-                    title='Apply'
-                    onPress={() => console.log('Applying filters')}
-                />
+                </View>
+                <View
+                    style={{
+                        marginTop: 20,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <TouchableOpacity
+                        style={styles.applyButton}
+                        onPress={() => {
+                            console.log('Applying filters:', {
+                                priceFrom,
+                                priceTo,
+                                selectedLocation,
+                                selectedSortByOption
+                            })
+                        }}
+                    >
+                        <Text style={{ color: 'white' }}>Apply</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </BottomHalfModal>
     )
@@ -149,6 +172,20 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: 'row'
+    },
+    select: {
+        marginVertical: 15
+    },
+    input: {
+        borderBottomWidth: 1,
+        borderColor: THEME.LIGHTEN_PRIMARY_COLOR
+    },
+    applyButton: {
+        backgroundColor: THEME.PRIMARY_COLOR,
+        width: 180,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
 
