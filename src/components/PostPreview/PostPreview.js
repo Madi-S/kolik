@@ -1,5 +1,4 @@
 import React from 'react'
-import { Text } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { Card } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons'
