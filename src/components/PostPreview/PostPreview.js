@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux'
 import { Card } from 'react-native-elements'
 import { FontAwesome } from '@expo/vector-icons'
 
-import { setCurrentPost } from '../redux/actions/post'
-import THEME from '../theme'
+import { setCurrentPost } from '../../redux/actions/post'
+import THEME from '../../theme'
 
 const PostPreview = ({ post, onPreviewCliick }) => {
     // If dispathcing will not be needed, don't forget to remove it

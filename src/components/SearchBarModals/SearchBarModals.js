@@ -9,9 +9,9 @@ import {
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 
-import THEME from '../theme'
-import BottomHalfModal from './modal/BottomHalfModal'
-import { CATEGORIES, LOCATIONS, SORT_BY_OPTIONS } from '../data'
+import THEME from '../../theme'
+import BottomHalfModal from '../modal/BottomHalfModal'
+import { CATEGORIES, LOCATIONS, SORT_BY_OPTIONS } from '../../data'
 
 const CategoryModal = () => {
     return (
