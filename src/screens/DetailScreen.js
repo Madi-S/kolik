@@ -31,10 +31,6 @@ const DetailScreen = ({ navigation }) => {
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />
                 <Card.Image source={{ uri: post.img }} />
-                <Text>
-                    The idea with React Native Elements is more about component
-                    structure than actual design.
-                </Text>
                 <Text>Price: {post.price}</Text>
                 <Text>Category: {post.category}</Text>
                 <Text>Location: {post.location}</Text>

@@ -1,25 +1,28 @@
 import React, { useState } from 'react'
 import {
     View,
-    TouchableOpacity,
     Text,
-    StyleSheet,
     TextInput,
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 
 import THEME from '../../../theme'
 import { LOCATIONS, SORT_BY_OPTIONS } from '../../../data'
-import BottomHalfModal from '../../modal/BottomHalfModal'
+import BottomHalfModal from '../../BottomHalfModal'
+
+const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
+const DEFAULT_LOCATION = LOCATIONS[0].value
 
 const FilterModal = () => {
     const [priceFrom, setPriceFrom] = useState('0')
     const [priceTo, setPriceTo] = useState('999999')
 
     const [selectedSortByOption, setSelectedSortByOption] = useState(
-        SORT_BY_OPTIONS[0].value
+        DEFAULT_SORT_BY_OPTION
     )
-    const [selectedLocation, setSelectedLocation] = useState(LOCATIONS[0].value)
+    const [selectedLocation, setSelectedLocation] = useState(DEFAULT_LOCATION)
 
     return (
         <BottomHalfModal title='Filter'>
@@ -45,47 +48,19 @@ const FilterModal = () => {
                         onChangeText={setPriceTo}
                     />
                 </View>
-                <View style={styles.select}>
-                    <Text>Sort by:</Text>
-                    <Picker
-                        selectedValue={selectedSortByOption}
-                        onValueChange={setSelectedSortByOption}
-                    >
-                        {SORT_BY_OPTIONS.map(item => {
-                            return (
-                                <Picker.Item
-                                    key={item.value}
-                                    label={item.label}
-                                    value={item.value}
-                                />
-                            )
-                        })}
-                    </Picker>
-                </View>
-                <View style={styles.select}>
-                    <Text>Location:</Text>
-                    <Picker
-                        selectedValue={selectedLocation}
-                        onValueChange={setSelectedLocation}
-                    >
-                        {LOCATIONS.map(item => {
-                            return (
-                                <Picker.Item
-                                    key={item.value}
-                                    label={item.label}
-                                    value={item.value}
-                                />
-                            )
-                        })}
-                    </Picker>
-                </View>
-                <View
-                    style={{
-                        marginTop: 20,
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}
-                >
+                <Select
+                    title='Sort by:'
+                    selectedValue={selectedSortByOption}
+                    onValueChange={setSelectedSortByOption}
+                    itemsList={SORT_BY_OPTIONS}
+                />
+                <Select
+                    title='Location:'
+                    selectedValue={selectedLocation}
+                    onValueChange={setSelectedLocation}
+                    itemsList={LOCATIONS}
+                />
+                <View style={styles.applyButtonWrapper}>
                     <TouchableOpacity
                         style={styles.applyButton}
                         onPress={() => {
@@ -97,11 +72,30 @@ const FilterModal = () => {
                             })
                         }}
                     >
-                        <Text style={{ color: 'white' }}>Apply</Text>
+                        <Text style={styles.applyButtonText}>Apply</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </BottomHalfModal>
+    )
+}
+
+const Select = ({ title, selectedValue, onValueChange, itemsList }) => {
+    return (
+        <View style={styles.select}>
+            <Text>{title}</Text>
+            <Picker selectedValue={selectedValue} onValueChange={onValueChange}>
+                {itemsList.map(item => {
+                    return (
+                        <Picker.Item
+                            key={item.value}
+                            label={item.label}
+                            value={item.value}
+                        />
+                    )
+                })}
+            </Picker>
+        </View>
     )
 }
 
@@ -134,12 +128,20 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: THEME.LIGHTEN_PRIMARY_COLOR
     },
+    applyButtonWrapper: {
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     applyButton: {
         backgroundColor: THEME.PRIMARY_COLOR,
         width: 180,
         height: 50,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    applyButtonText: {
+        color: 'white'
     }
 })
 

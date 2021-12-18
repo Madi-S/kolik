@@ -15,14 +15,15 @@ export const LOCATIONS = [
 ]
 
 export const CATEGORIES = [
-    'SUV',
-    'SEDAN',
-    'COUPE',
-    'MINIVAN',
-    'HATCHBACK',
-    'SPORTS CAR',
-    'CONVERTIBLE',
-    'STATION WAGON'
+    { label: 'ALL', value: null },
+    { label: 'SUV', value: 'suv' },
+    { label: 'SEDAN', value: 'sedan' },
+    { label: 'COUPE', value: 'coupe' },
+    { label: 'MINIVAN', value: 'minivan' },
+    { label: 'HATCHBACK', value: 'hatchback' },
+    { label: 'SPORTS CAR', value: 'sports_car' },
+    { label: 'CONVERTIBLE', value: 'convertible' },
+    { label: 'STATION WAGON', value: 'station_wagon' }
 ]
 
 export const getRandomLocation = () => {

@@ -5,8 +5,8 @@ import { ScrollView, View, Button } from 'react-native'
 import DATA from '../data'
 import THEME from '../theme'
 import * as CONSTANTS from '../constants'
-import PostPreview from '../components/PostPreview/PostPreview'
-import SearchBarModals from '../components/SearchBarModals/SearchBarModals'
+import PostPreview from '../components/PostPreview'
+import SearchBarModals from '../components/SearchBarModals'
 
 const posts = DATA
 

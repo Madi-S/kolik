@@ -1,28 +1,29 @@
 import React from 'react'
-import {
-    View,
-    TouchableOpacity,
-    Text,
-    StyleSheet,
-} from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../../theme'
 import { CATEGORIES } from '../../../data'
 import BottomHalfModal from '../../BottomHalfModal'
 
 const CategoriesModal = () => {
+    const selectCategoryHandler = value => {
+        return () => {
+            console.log('Making request for category:', value)
+        }
+    }
+
     return (
         <BottomHalfModal title='Categories'>
             <View style={styles.content}>
                 <Text style={styles.contentTitle}>Categories</Text>
-                {CATEGORIES.map((c, id) => {
+                {CATEGORIES.map(({ value, label }) => {
                     return (
                         <TouchableOpacity
-                            key={id}
-                            onPress={() => console.log('Picked: ' + c)}
+                            key={value}
+                            onPress={selectCategoryHandler(value)}
                             style={styles.button}
                         >
-                            <Text style={styles.contentText}>{c}</Text>
+                            <Text style={styles.contentText}>{label}</Text>
                         </TouchableOpacity>
                     )
                 })}
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
         marginBottom: 12,
         borderBottomWidth: 1,
         borderColor: THEME.LIGHTEN_PRIMARY_COLOR
-    },
+    }
 })
 
 export default CategoriesModal

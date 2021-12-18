@@ -4,8 +4,6 @@ import { View } from 'react-native'
 import FilterModal from './utils/FilterModal'
 import CategoriesModal from './utils/CategoriesModal'
 
-
-
 const SearchBarModals = () => {
     return (
         <View
