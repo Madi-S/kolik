@@ -1,20 +1,17 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../../theme'
 import { CATEGORIES } from '../../../data'
 import BottomHalfModal from '../../BottomHalfModal'
+import { setSearchCategory } from '../../../redux/actions/search'
 
 const CategoriesModal = () => {
     const dispatch = useDispatch()
 
-    
-
     const selectCategoryHandler = value => {
-        return () => {
-            console.log('Making request for category:', value)
-        }
+        dispatch(setSearchCategory(value))
     }
 
     return (
@@ -25,8 +22,8 @@ const CategoriesModal = () => {
                     return (
                         <TouchableOpacity
                             key={value}
-                            onPress={selectCategoryHandler(value)}
                             style={styles.button}
+                            onPress={selectCategoryHandler(value)}
                         >
                             <Text style={styles.contentText}>{label}</Text>
                         </TouchableOpacity>
