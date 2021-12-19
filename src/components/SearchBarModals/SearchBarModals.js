@@ -1,23 +1,28 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import FilterModal from './utils/FilterModal'
 import CategoriesModal from './utils/CategoriesModal'
 
 const SearchBarModals = () => {
     return (
-        <View
-            style={{
-                // flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            }}
-        >
-            <CategoriesModal />
-            <FilterModal />
-        </View>
+        <>
+            <SearchBar placeholder='Type here ...' />
+            <View style={styles.modalsWrapper}>
+                <CategoriesModal />
+                <FilterModal />
+            </View>
+        </>
     )
 }
+
+const styles = StyleSheet.create({
+    modalsWrapper: {
+        // flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    }
+})
 
 export default SearchBarModals

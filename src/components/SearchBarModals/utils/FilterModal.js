@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native'
+import { useDispatch } from 'react-redux'
 import { Picker } from '@react-native-picker/picker'
 
 import THEME from '../../../theme'

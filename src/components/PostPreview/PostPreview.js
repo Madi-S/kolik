@@ -2,8 +2,8 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Card } from 'react-native-elements'
 
-import { setCurrentPost } from '../../redux/actions/post'
 import PreviewButton from './utils/PreviewButton'
+import { setCurrentPost } from '../../redux/actions/post'
 
 const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
     // If dispathcing will not be needed, don't forget to remove it

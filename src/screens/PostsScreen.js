@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { SearchBar } from 'react-native-elements'
-import { ScrollView, View, Button } from 'react-native'
+import React from 'react'
+import { useSelector } from 'react-redux'
+import { ScrollView, View, StyleSheet } from 'react-native'
 
 import DATA from '../data'
-import THEME from '../theme'
 import * as CONSTANTS from '../constants'
 import PostPreview from '../components/PostPreview'
+import SearchBar from '../components/SearchBar'
 import SearchBarModals from '../components/SearchBarModals'
 
 const posts = DATA
@@ -16,41 +16,34 @@ const queryPosts = params => {
 }
 
 const PostsScreen = ({ navigation }) => {
-    const [searchQuery, setSearchQuery] = useState('')
+    // Implement react-redux useSelector to get posts
+    // Create seperate component for posts display like 'Posts.js'
 
-    useEffect(() => {
-        queryPosts({ q: searchQuery })
-    }, [searchQuery])
+    const openPostDetail = () => {
+        navigation.navigate('Detail')
+    }
 
     return (
         <View>
-            <SearchBar
-                placeholder='Type Here...'
-                onChangeText={setSearchQuery}
-                value={searchQuery}
-                containerStyle={{
-                    backgroundColor: THEME.PRIMARY_COLOR
-                }}
-                inputContainerStyle={{
-                    backgroundColor: THEME.DARKEN_PRIMARY_COLOR
-                }}
-            />
-            <ScrollView
-                style={{
-                    marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
-                }}
-            >
+            <SearchBar />
+            <ScrollView style={styles.postsWrapper}>
                 <SearchBarModals />
                 {posts.map(post => (
                     <PostPreview
                         post={post}
                         key={post.id.toString()}
-                        onPreviewCliick={() => navigation.navigate('Detail')}
+                        onPreviewCliick={openPostDetail}
                     />
                 ))}
             </ScrollView>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    postsWrapper: {
+        marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
+    }
+})
 
 export default PostsScreen

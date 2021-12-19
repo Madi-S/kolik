@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
+import { useDispatch } from 'react-redux'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../../theme'
@@ -6,6 +7,10 @@ import { CATEGORIES } from '../../../data'
 import BottomHalfModal from '../../BottomHalfModal'
 
 const CategoriesModal = () => {
+    const dispatch = useDispatch()
+
+    
+
     const selectCategoryHandler = value => {
         return () => {
             console.log('Making request for category:', value)

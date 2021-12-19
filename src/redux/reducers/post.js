@@ -7,10 +7,7 @@ const initialState = {
 export const postReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_CURRENT_POST:
-            return {
-                ...state,
-                currentPost: action.payload.currentPost
-            }
+            return { ...state, currentPost: action.payload.currentPost }
         default:
             return state
     }

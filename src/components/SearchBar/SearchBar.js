@@ -1,0 +1,38 @@
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { StyleSheet } from 'react-native'
+import { SearchBar as NativeSearchBar } from 'react-native-elements'
+
+import THEME from '../../theme'
+import { setSearchQuery } from '../../redux/actions/post'
+
+const SearchBar = () => {
+    const dispatch = useDispatch()
+    const [_searchQuery, _setSearchQuery] = useState()
+
+    const onChangeText = value => {
+        _setSearchQuery(posts)
+        dispatch(setSearchQuery(value))
+    }
+
+    return (
+        <NativeSearchBar
+            placeholder='Type Here ...'
+            value={_searchQuery}
+            onChangeText={onChangeText}
+            containerStyle={styles.container}
+            inputContainerStyle={styles.inputContainer}
+        />
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: THEME.PRIMARY_COLOR
+    },
+    inputContainer: {
+        backgroundColor: THEME.DARKEN_PRIMARY_COLOR
+    }
+})
+
+export default SearchBar
