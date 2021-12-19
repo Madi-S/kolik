@@ -1,10 +1,9 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Card } from 'react-native-elements'
-import { FontAwesome } from '@expo/vector-icons'
 
 import { setCurrentPost } from '../../redux/actions/post'
-import THEME from '../../theme'
+import PreviewButton from './utils/PreviewButton'
 
 const PostPreview = ({ post, onPreviewCliick }) => {
     // If dispathcing will not be needed, don't forget to remove it
@@ -23,17 +22,7 @@ const PostPreview = ({ post, onPreviewCliick }) => {
             />
             <Card.Title>{post.title}</Card.Title>
             <Card.Title>Price: {post.price} $</Card.Title>
-            <FontAwesome.Button
-                style={{
-                    height: 38
-                }}
-                name='mail-forward'
-                backgroundColor={THEME.PRIMARY_COLOR}
-                onPress={showPostDetail}
-            >
-                VIEW NOW
-            </FontAwesome.Button>
-
+            <PreviewButton title='VIEW NOW' onPress={showPostDetail} />
             <Card.Divider />
         </Card>
     )
