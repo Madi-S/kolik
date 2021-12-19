@@ -4,7 +4,7 @@ import { FontAwesome } from '@expo/vector-icons'
 
 import THEME from '../../../theme'
 
-const PreviewButton = ({ title, style, onPress }) => {
+const PreviewButton = ({ onPress, title = 'SHOW NOW', style = {} }) => {
     return (
         <FontAwesome.Button
             style={{ ...styles.button, ...style }}

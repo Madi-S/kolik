@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import Modal from 'react-native-modal'
-import { StyleSheet, View, TouchableOpacity, Text } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
-import THEME from '../../theme'
 import DefaultModalContent from './utils/DefaultModalContent'
+import OpenModalButton from './utils/OpenModalButton'
 
 const BottomHalfModal = ({
-    title = 'Open',
+    title,
+    openButtonStyle,
     visible = false,
-    children = null,
-    openButtonStyle = {}
+    children = <DefaultModalContent onPress={closeModal} />
 }) => {
     const [isVisible, setIsVisible] = useState(visible)
 
@@ -18,24 +18,22 @@ const BottomHalfModal = ({
 
     return (
         <View style={styles.wrapper}>
-            <TouchableOpacity
-                activeOpacity={0.9}
-                style={{ ...styles.button, ...openButtonStyle }}
+            <OpenModalButton
+                title={title}
                 onPress={openModal}
-            >
-                <Text style={styles.buttonText}>{title}</Text>
-            </TouchableOpacity>
+                style={openButtonStyle}
+            />
             <Modal
                 backdropOpacity={0.5}
-                onBackdropPress={closeModal}
                 isVisible={isVisible}
                 useNativeDriver={false}
+                hideModalContentWhileAnimating={true}
+                onBackdropPress={closeModal}
                 onSwipeComplete={closeModal}
                 swipeDirection={['up', 'left', 'right', 'down']}
                 style={styles.modal}
-                hideModalContentWhileAnimating={true}
             >
-                {children || <DefaultModalContent onPress={closeModal} />}
+                {children}
             </Modal>
         </View>
     )
@@ -51,14 +49,6 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'flex-end',
         margin: 0
-    },
-    button: {
-        backgroundColor: THEME.PRIMARY_COLOR,
-        width: 180,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    buttonText: { color: 'white' }
+    }
 })
 export default BottomHalfModal
