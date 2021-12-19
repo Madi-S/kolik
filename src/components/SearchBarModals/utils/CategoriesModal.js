@@ -11,7 +11,10 @@ const CategoriesModal = () => {
     const dispatch = useDispatch()
 
     const selectCategoryHandler = value => {
-        dispatch(setSearchCategory(value))
+        return () => {
+            console.log('!!! Gonna dispatch category with value', value)
+            dispatch(setSearchCategory(value))
+        }
     }
 
     return (

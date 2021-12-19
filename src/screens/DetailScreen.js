@@ -3,12 +3,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Text, Card, Button } from 'react-native-elements'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 
-import * as CONSTANTS from '../constants'
 import { setCurrentPost } from '../redux/actions/post'
 
 const DetailScreen = ({ navigation }) => {
     const dispatch = useDispatch()
-    const post = useSelector(state => state.post.currentPost)
+    const state = useSelector(state => state)
+    const post = state.post.currentPost
+
+    console.log('!!! STATE', state)
 
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
     const _screenWidth = Dimensions.get('window').width
@@ -22,19 +24,15 @@ const DetailScreen = ({ navigation }) => {
     }
 
     return (
-        <ScrollView
-            style={{
-                marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
-            }}
-        >
+        <ScrollView>
             <Button title='Back' onPress={goBack} />
             <Card>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />
                 <Card.Image source={{ uri: post.img }} />
                 <Text>Price: {post.price}</Text>
-                <Text>Category: {post.category}</Text>
-                <Text>Location: {post.location}</Text>
+                <Text>Category: {post.category.label}</Text>
+                <Text>Location: {post.location.label}</Text>
                 <Text>Created at: {Date(post.createdAt)}</Text>
                 <Text style={{ marginBottom: 10 }}>
                     Description: {post.description}
@@ -65,13 +63,6 @@ const DetailScreen = ({ navigation }) => {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 20,
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-})
+const styles = StyleSheet.create({})
 
 export default DetailScreen

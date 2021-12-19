@@ -11,7 +11,7 @@ const SearchBar = () => {
     const [_searchQuery, _setSearchQuery] = useState()
 
     const onChangeText = value => {
-        _setSearchQuery(posts)
+        _setSearchQuery(value)
         dispatch(setSearchQuery(value))
     }
 

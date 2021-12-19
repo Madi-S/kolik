@@ -7,7 +7,7 @@ export const SORT_BY_OPTIONS = [
 ]
 
 export const LOCATIONS = [
-    { label: 'Kazakhstan', value: null },
+    { label: 'Kazakhstan', value: 'all' },
     { label: 'Almaty', value: 'almaty' },
     { label: 'Karaganda', value: 'karaganda' },
     { label: 'Kokshetau', value: 'Kokshetau' },
@@ -15,7 +15,7 @@ export const LOCATIONS = [
 ]
 
 export const CATEGORIES = [
-    { label: 'ALL', value: null },
+    { label: 'ALL', value: 'all' },
     { label: 'SUV', value: 'suv' },
     { label: 'SEDAN', value: 'sedan' },
     { label: 'COUPE', value: 'coupe' },

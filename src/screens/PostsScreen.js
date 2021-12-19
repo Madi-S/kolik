@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { ScrollView, View, StyleSheet } from 'react-native'
 
 import DATA from '../data'
@@ -7,8 +7,7 @@ import * as CONSTANTS from '../constants'
 import PostPreview from '../components/PostPreview'
 import SearchBar from '../components/SearchBar'
 import SearchBarModals from '../components/SearchBarModals'
-
-const posts = DATA
+import { setCurrentPost } from '../redux/actions/post'
 
 const PostsScreen = ({ navigation }) => {
     /*  
@@ -19,7 +18,7 @@ const PostsScreen = ({ navigation }) => {
     return (
         <View>
             <SearchBar />
-            <ScrollView style={styles.postsWrapper}>
+            <ScrollView>
                 <SearchBarModals />
                 <Posts navigation={navigation} />
             </ScrollView>
@@ -27,22 +26,31 @@ const PostsScreen = ({ navigation }) => {
     )
 }
 
-const Posts = () => {
+const Posts = ({ navigation }) => {
+    const posts = DATA
+    const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
     console.log('!!! Search options:', searchOptions)
 
-    const openPostDetail = () => {
-        navigation.navigate('Detail')
+    const openPostDetail = (post) => {
+        return () => {
+            dispatch(setCurrentPost(post))
+            navigation.navigate('Detail')
+        }
     }
 
-    return posts.map(post => (
-        <PostPreview
-            post={post}
-            key={post.id.toString()}
-            onPreviewCliick={openPostDetail}
-        />
-    ))
+    return (
+        <View style={styles.postsWrapper}>
+            {posts.map(post => (
+                <PostPreview
+                    post={post}
+                    key={post.id.toString()}
+                    onPreviewCliick={openPostDetail(post)}
+                />
+            ))}
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({

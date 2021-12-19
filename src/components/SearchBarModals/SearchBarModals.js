@@ -6,13 +6,10 @@ import CategoriesModal from './utils/CategoriesModal'
 
 const SearchBarModals = () => {
     return (
-        <>
-            <SearchBar placeholder='Type here ...' />
-            <View style={styles.modalsWrapper}>
-                <CategoriesModal />
-                <FilterModal />
-            </View>
-        </>
+        <View style={styles.modalsWrapper}>
+            <CategoriesModal />
+            <FilterModal />
+        </View>
     )
 }
 

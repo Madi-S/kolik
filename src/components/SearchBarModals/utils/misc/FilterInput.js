@@ -1,6 +1,8 @@
 import React from 'react'
 import { View, Text, TextInput, StyleSheet } from 'react-native'
 
+import THEME from '../../../../theme'
+
 const FilterInput = ({ title = 'Select:', value = '', onChangeText }) => {
     return (
         <View style={styles.inputWrapper}>

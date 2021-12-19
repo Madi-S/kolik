@@ -1,19 +1,17 @@
 import {
-    SET_CURRENT_POST,
     SET_SEARCH_QUERY,
     SET_SEARCH_FILTERS,
     SET_SEARCH_CATEGORY
 } from '../types'
-import DATA from '../../data'
 
 const initialState = {
-    currentPost: null,
     query: '',
-    filters: {},
-    category: 'all'
+    category: '',
+    filters: {}
 }
 
 export const searchReducer = (state = initialState, action) => {
+    console.log('!!! IN REDUCER WITH ACTION:', action)
     switch (action.type) {
         case SET_SEARCH_QUERY:
             return { ...state, query: action.payload.query }

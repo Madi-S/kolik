@@ -1,8 +1,8 @@
 import { SET_CURRENT_POST } from '../types'
 
-export const setCurrentPost = post => async dispatch => {
+export const setCurrentPost = currentPost => async dispatch => {
     dispatch({
         type: SET_CURRENT_POST,
-        payload: { currentPost: post }
+        payload: { currentPost }
     })
 }
