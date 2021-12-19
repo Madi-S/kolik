@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import { SearchBar as NativeSearchBar } from 'react-native-elements'
 
 import THEME from '../../theme'
-import { setSearchQuery } from '../../redux/actions/post'
+import { setSearchQuery } from '../../redux/actions/search'
 
 const SearchBar = () => {
     const dispatch = useDispatch()
@@ -21,7 +21,7 @@ const SearchBar = () => {
             value={_searchQuery}
             onChangeText={onChangeText}
             containerStyle={styles.container}
-            inputContainerStyle={styles.inputContainer}
+            inputContainerStyle={styles.inputContainer} 
         />
     )
 }
