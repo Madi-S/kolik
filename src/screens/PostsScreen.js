@@ -10,34 +10,39 @@ import SearchBarModals from '../components/SearchBarModals'
 
 const posts = DATA
 
-const queryPosts = params => {
-    console.log('Querying posts with params:', params)
-    return posts
-}
-
 const PostsScreen = ({ navigation }) => {
-    // Implement react-redux useSelector to get posts
-    // Create seperate component for posts display like 'Posts.js'
-
-    const openPostDetail = () => {
-        navigation.navigate('Detail')
-    }
+    /*  
+        Implement react-redux useSelector to get posts
+        Create seperate component for posts display like 'Posts.js'
+    */
 
     return (
         <View>
             <SearchBar />
             <ScrollView style={styles.postsWrapper}>
                 <SearchBarModals />
-                {posts.map(post => (
-                    <PostPreview
-                        post={post}
-                        key={post.id.toString()}
-                        onPreviewCliick={openPostDetail}
-                    />
-                ))}
+                <Posts navigation={navigation} />
             </ScrollView>
         </View>
     )
+}
+
+const Posts = () => {
+    const searchOptions = useSelector(state => state.search)
+
+    console.log('!!! Search options:', searchOptions)
+
+    const openPostDetail = () => {
+        navigation.navigate('Detail')
+    }
+
+    return posts.map(post => (
+        <PostPreview
+            post={post}
+            key={post.id.toString()}
+            onPreviewCliick={openPostDetail}
+        />
+    ))
 }
 
 const styles = StyleSheet.create({
