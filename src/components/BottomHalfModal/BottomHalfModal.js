@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import Modal from 'react-native-modal'
 import { StyleSheet, View } from 'react-native'
 
+import { AppButton } from '../core/buttons'
 import DefaultModalContent from './utils/DefaultModalContent'
-import OpenModalButton from './utils/OpenModalButton'
 
 const BottomHalfModal = ({
-    title,
-    openButtonStyle,
+    title = '',
+    openButtonStyle = {},
     visible = false,
     children = <DefaultModalContent onPress={closeModal} />
 }) => {
@@ -18,7 +18,7 @@ const BottomHalfModal = ({
 
     return (
         <View style={styles.wrapper}>
-            <OpenModalButton
+            <AppButton
                 title={title}
                 onPress={openModal}
                 style={openButtonStyle}

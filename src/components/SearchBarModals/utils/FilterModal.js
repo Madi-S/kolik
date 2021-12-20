@@ -5,13 +5,13 @@ import { useDispatch } from 'react-redux'
 import THEME from '../../../theme'
 import FilterInput from './misc/FilterInput'
 import FilterSelect from './misc/FilterSelect'
-import FilterApplyButton from './misc/FilterApplyButton'
 import BottomHalfModal from '../../BottomHalfModal'
+import { AppButton } from '../../core/buttons'
 import { LOCATIONS, SORT_BY_OPTIONS } from '../../../data'
 import { setSearchFilters } from '../../../redux/actions/search'
 
-const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
 const DEFAULT_LOCATION = LOCATIONS[0].value
+const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
 
 const FilterModal = () => {
     const dispatch = useDispatch()
@@ -24,12 +24,6 @@ const FilterModal = () => {
     )
 
     const applyFilters = () => {
-        console.log('Apply filters:', {
-            priceFrom,
-            priceTo,
-            selectedLocation,
-            selectedSortByOption
-        })
         dispatch(
             setSearchFilters({
                 priceFrom,
@@ -66,7 +60,13 @@ const FilterModal = () => {
                     onValueChange={setSelectedLocation}
                     itemsList={LOCATIONS}
                 />
-                <FilterApplyButton title='Apply' onPress={applyFilters} />
+                <View style={styles.applyButtonWrapper}>
+                    <AppButton
+                        onPress={applyFilters}
+                        title='Apply'
+                        style={styles.applyButton}
+                    />
+                </View>
             </View>
         </BottomHalfModal>
     )
@@ -91,6 +91,18 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         fontWeight: 'bold',
         color: THEME.DARKEN_PRIMARY_COLOR
+    },
+    applyButtonWrapper: {
+        marginTop: 20,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    applyButton: {
+        backgroundColor: THEME.PRIMARY_COLOR,
+        width: 180,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
 

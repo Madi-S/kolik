@@ -1,8 +1,9 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { StyleSheet } from 'react-native'
 import { Card } from 'react-native-elements'
 
-import PreviewButton from './utils/PreviewButton'
+import { FAButton } from '../core/buttons'
 import { setCurrentPost } from '../../redux/actions/post'
 
 const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
@@ -16,13 +17,10 @@ const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
 
     return (
         <Card>
-            <Card.Image
-                source={{ uri: post.img }}
-                style={{ marginBottom: 15 }}
-            />
+            <Card.Image source={{ uri: post.img }} style={styles.img} />
             <Card.Title>{post.title}</Card.Title>
             <Card.Title>Price: {post.price} $</Card.Title>
-            <PreviewButton
+            <FAButton
                 title='VIEW NOW'
                 onPress={showPostDetail}
                 style={previewButtonStyle}
@@ -31,5 +29,9 @@ const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
         </Card>
     )
 }
+
+const styles = StyleSheet.create({
+    img: { marginBottom: 15 }
+})
 
 export default PostPreview

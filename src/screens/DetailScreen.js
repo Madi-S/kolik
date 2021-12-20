@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Text, Card, Button } from 'react-native-elements'
+import { Text, Card } from 'react-native-elements'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 
 import { setCurrentPost } from '../redux/actions/post'
+import { FAButton } from '../components/core/buttons'
 
 const DetailScreen = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -13,16 +14,22 @@ const DetailScreen = ({ navigation }) => {
     const _screenWidth = Dimensions.get('window').width
 
     const goBack = () => {
-        /* 
-        Set currentPost to falsy value so that PostsScreen will not return this component
-        */
         navigation.navigate('Posts')
         dispatch(setCurrentPost(null))
     }
 
+    const togglePhoneNumberIsShown = () => {
+        phoneNumberIsShown
+            ? setPhoneNumberIsShown(false)
+            : setPhoneNumberIsShown(true)
+    }
+
+    const togglePhoneNumberTitle = phoneNumberIsShown
+        ? 'HIDE PHONE NUMBER'
+        : 'SHOW PHONE NUMBER'
+
     return (
         <ScrollView>
-            <Button title='Back' onPress={goBack} />
             <Card>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />
@@ -34,23 +41,10 @@ const DetailScreen = ({ navigation }) => {
                 <Text style={{ marginBottom: 10 }}>
                     Description: {post.description}
                 </Text>
-                <Button
-                    buttonStyle={{
-                        borderRadius: 0,
-                        marginLeft: 0,
-                        marginRight: 0,
-                        marginBottom: 0
-                    }}
-                    onPress={() => {
-                        phoneNumberIsShown
-                            ? setPhoneNumberIsShown(false)
-                            : setPhoneNumberIsShown(true)
-                    }}
-                    title={
-                        phoneNumberIsShown
-                            ? 'HIDE PHONE NUMBER'
-                            : 'SHOW PHONE NUMBER'
-                    }
+                <FAButton
+                    style={styles.togglePhoneNumberButton}
+                    onPress={togglePhoneNumberIsShown}
+                    title={togglePhoneNumberTitle}
                 />
                 {phoneNumberIsShown ? (
                     <Text>Phone number: {post.phoneNumber}</Text>
@@ -60,6 +54,13 @@ const DetailScreen = ({ navigation }) => {
     )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    togglePhoneNumberButton: {
+        borderRadius: 0,
+        marginLeft: 0,
+        marginRight: 0,
+        marginBottom: 0
+    }
+})
 
 export default DetailScreen
