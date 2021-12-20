@@ -15,6 +15,7 @@ const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
 
 const FilterModal = () => {
     const dispatch = useDispatch()
+    const [showModal, setShowModal] = useState(false)
 
     const [priceFrom, setPriceFrom] = useState('0')
     const [priceTo, setPriceTo] = useState('99999999')
@@ -24,6 +25,7 @@ const FilterModal = () => {
     )
 
     const applyFilters = () => {
+        setShowModal(false)
         dispatch(
             setSearchFilters({
                 priceFrom,
@@ -35,7 +37,11 @@ const FilterModal = () => {
     }
 
     return (
-        <BottomHalfModal title='Filter'>
+        <BottomHalfModal
+            title='Filter'
+            isVisible={showModal}
+            setIsVisible={setShowModal}
+        >
             <View style={styles.content}>
                 <Text style={styles.contentTitle}>Filter</Text>
                 <FilterInput

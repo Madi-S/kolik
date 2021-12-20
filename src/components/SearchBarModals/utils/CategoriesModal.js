@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 
@@ -9,15 +9,21 @@ import { setSearchCategory } from '../../../redux/actions/search'
 
 const CategoriesModal = () => {
     const dispatch = useDispatch()
+    const [showModal, setShowModal] = useState(false)
 
-    const selectCategoryHandler = value => {
+    const categoryClickHandler = value => {
         return () => {
+            setShowModal(false)
             dispatch(setSearchCategory(value))
         }
     }
 
     return (
-        <BottomHalfModal title='Categories'>
+        <BottomHalfModal
+            title='Categories'
+            isVisible={showModal}
+            setIsVisible={setShowModal}
+        >
             <View style={styles.content}>
                 <Text style={styles.contentTitle}>Categories</Text>
                 {CATEGORIES.map(({ value, label }) => {
@@ -25,7 +31,7 @@ const CategoriesModal = () => {
                         <TouchableOpacity
                             key={value}
                             style={styles.button}
-                            onPress={selectCategoryHandler(value)}
+                            onPress={categoryClickHandler(value)}
                         >
                             <Text style={styles.contentText}>{label}</Text>
                         </TouchableOpacity>

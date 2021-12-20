@@ -8,10 +8,16 @@ import DefaultModalContent from './utils/DefaultModalContent'
 const BottomHalfModal = ({
     title = '',
     openButtonStyle = {},
-    visible = false,
+    isVisible = false,
+    setIsVisible = null,
     children = <DefaultModalContent onPress={closeModal} />
 }) => {
-    const [isVisible, setIsVisible] = useState(visible)
+    if (!setIsVisible) {
+        /* In case setIsVisible was not provided, create own function with useState */
+        const [_isVisible, _setIsVisible] = useState(isVisible)
+        isVisible = _isVisible
+        setIsVisible = _setIsVisible
+    }
 
     const openModal = () => setIsVisible(true)
     const closeModal = () => setIsVisible(false)
