@@ -31,8 +31,6 @@ const Posts = ({ navigation }) => {
     const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
-    console.log('!!! Search options:', searchOptions)
-
     const openPostDetail = (post) => {
         return () => {
             dispatch(setCurrentPost(post))

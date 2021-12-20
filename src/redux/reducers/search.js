@@ -11,7 +11,6 @@ const initialState = {
 }
 
 export const searchReducer = (state = initialState, action) => {
-    console.log('!!! IN REDUCER WITH ACTION:', action)
     switch (action.type) {
         case SET_SEARCH_QUERY:
             return { ...state, query: action.payload.query }

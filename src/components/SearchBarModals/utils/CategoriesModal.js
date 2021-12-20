@@ -12,7 +12,6 @@ const CategoriesModal = () => {
 
     const selectCategoryHandler = value => {
         return () => {
-            console.log('!!! Gonna dispatch category with value', value)
             dispatch(setSearchCategory(value))
         }
     }

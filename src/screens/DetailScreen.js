@@ -7,10 +7,7 @@ import { setCurrentPost } from '../redux/actions/post'
 
 const DetailScreen = ({ navigation }) => {
     const dispatch = useDispatch()
-    const state = useSelector(state => state)
-    const post = state.post.currentPost
-
-    console.log('!!! STATE', state)
+    const post = useSelector(state => state.post.currentPost)
 
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
     const _screenWidth = Dimensions.get('window').width
