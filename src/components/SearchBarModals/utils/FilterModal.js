@@ -14,8 +14,6 @@ const DEFAULT_LOCATION = LOCATIONS[0].value
 const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
 
 const FilterModal = () => {
-    console.log('Rendered FilterModal')
-
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
 
@@ -48,14 +46,13 @@ const FilterModal = () => {
                 <Text style={styles.contentTitle}>Filter</Text>
                 <AppInput
                     title='Price from:'
+                    keyboardType='numeric'
                     value={priceFrom}
-                    onChangeText={value => {
-                        setPriceFrom(value)
-                        console.log('FilterInput with PriceFrom')
-                    }}
+                    onChangeText={setPriceFrom}
                 />
                 <AppInput
                     title='Price to:'
+                    keyboardType='numeric'
                     value={priceTo}
                     onChangeText={setPriceTo}
                 />
