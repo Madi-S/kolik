@@ -6,7 +6,7 @@ import THEME from '../../../theme'
 import FilterInput from './misc/FilterInput'
 import FilterSelect from './misc/FilterSelect'
 import BottomHalfModal from '../../BottomHalfModal'
-import { AppButton } from '../../core/buttons'
+import { AppButton } from '../../core/button'
 import { LOCATIONS, SORT_BY_OPTIONS } from '../../../data'
 import { setSearchFilters } from '../../../redux/actions/search'
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Modal from 'react-native-modal'
 import { StyleSheet, View } from 'react-native'
 
-import { AppButton } from '../core/buttons'
+import { AppButton } from '../core/button'
 import DefaultModalContent from './utils/DefaultModalContent'
 
 const BottomHalfModal = ({
