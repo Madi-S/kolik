@@ -4,7 +4,7 @@ import { Text, Card } from 'react-native-elements'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 
 import { setCurrentPost } from '../redux/actions/post'
-import { FAButton } from '../components/core/buttons'
+import { FAButton } from '../components/core/button'
 
 const DetailScreen = ({ navigation }) => {
     const dispatch = useDispatch()

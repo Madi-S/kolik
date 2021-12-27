@@ -104,6 +104,7 @@ const CustomTabIcon = ({ focused, iconName }) => {
 const CustomCircleButton = ({ children, onPress }) => {
     return (
         <TouchableOpacity
+        activeOpacity={0.85}
             onPress={onPress}
             style={{
                 ...styles.center,

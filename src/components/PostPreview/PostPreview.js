@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { StyleSheet } from 'react-native'
 import { Card } from 'react-native-elements'
 
-import { FAButton } from '../core/buttons'
+import { FAButton } from '../core/button'
 import { setCurrentPost } from '../../redux/actions/post'
 
 const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
