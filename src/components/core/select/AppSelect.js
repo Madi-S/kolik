@@ -6,11 +6,11 @@ import THEME from '../../../theme'
 
 const AppSelect = ({
     title = 'Select:',
-    selectedValue = null,
-    onValueChange = () => {},
     itemsList = [{ value: 'Default value', label: 'Default label' }],
     containerStyle = {},
-    selectStyle = {}
+    selectStyle = {},
+    selectedValue = null,
+    onValueChange = () => {}
 }) => {
     return (
         <View style={{ ...styles.container, ...containerStyle }}>

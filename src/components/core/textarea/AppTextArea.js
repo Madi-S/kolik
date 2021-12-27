@@ -3,24 +3,27 @@ import { View, Text, TextInput, StyleSheet } from 'react-native'
 
 import THEME from '../../../theme'
 
-const AppInput = ({
+const AppTextArea = ({
     title = 'Enter:',
+    numberOfLines = 4,
     keyboardType = 'default',
     placeholder = 'Type ...',
     containerStyle = {},
-    inputStyle = {},
+    textAreaStyle = {},
     value = null,
     onChangeText = () => {},
 }) => {
     return (
-        <View style={{...styles.container, ...containerStyle}}>
+        <View style={{ ...styles.container, ...containerStyle }}>
             <Text>{title}</Text>
             <TextInput
-                style={{...styles.input, ...inputStyle}}
+                multiline={true}
+                numberOfLines={numberOfLines}
                 keyboardType={keyboardType}
-                value={value}
                 placeholder={placeholder}
+                value={value}
                 onChangeText={onChangeText}
+                style={{...styles.textArea, ...textAreaStyle}}
             />
         </View>
     )
@@ -30,10 +33,10 @@ const styles = StyleSheet.create({
     container: {
         marginVertical: 12
     },
-    input: {
+    textArea: {
         borderBottomWidth: 1,
         borderColor: THEME.LIGHTEN_PRIMARY_COLOR
     }
 })
 
-export default AppInput
+export default AppTextArea
