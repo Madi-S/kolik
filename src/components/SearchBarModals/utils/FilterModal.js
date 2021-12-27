@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 
 import THEME from '../../../theme'
-import FilterInput from './misc/FilterInput'
-import FilterSelect from './misc/FilterSelect'
 import BottomHalfModal from '../../BottomHalfModal'
+import { AppInput } from '../../core/input'
+import { AppSelect } from '../../core/select'
 import { AppButton } from '../../core/button'
 import { LOCATIONS, SORT_BY_OPTIONS } from '../../../data'
 import { setSearchFilters } from '../../../redux/actions/search'
@@ -14,6 +14,8 @@ const DEFAULT_LOCATION = LOCATIONS[0].value
 const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
 
 const FilterModal = () => {
+    console.log('Rendered FilterModal')
+
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
 
@@ -44,23 +46,26 @@ const FilterModal = () => {
         >
             <View style={styles.content}>
                 <Text style={styles.contentTitle}>Filter</Text>
-                <FilterInput
+                <AppInput
                     title='Price from:'
                     value={priceFrom}
-                    onChangeText={setPriceFrom}
+                    onChangeText={value => {
+                        setPriceFrom(value)
+                        console.log('FilterInput with PriceFrom')
+                    }}
                 />
-                <FilterInput
+                <AppInput
                     title='Price to:'
                     value={priceTo}
                     onChangeText={setPriceTo}
                 />
-                <FilterSelect
+                <AppSelect
                     title='Sort by:'
                     selectedValue={selectedSortByOption}
                     onValueChange={setSelectedSortByOption}
                     itemsList={SORT_BY_OPTIONS}
                 />
-                <FilterSelect
+                <AppSelect
                     title='Location:'
                     selectedValue={selectedLocation}
                     onValueChange={setSelectedLocation}
