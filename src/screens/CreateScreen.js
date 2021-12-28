@@ -2,36 +2,80 @@ import React, { useState } from 'react'
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 
 import PhotoPicker from '../components/PhotoPicker'
-import { AppButton } from '../components/core/button'
 import { AppInput } from '../components/core/input'
 import { AppSelect } from '../components/core/select'
+import { AppButton } from '../components/core/button'
 import { AppTextArea } from '../components/core/textarea'
 
-import { LOCATIONS, CATEGORIES } from '../data'
 import * as CONSTANTS from '../constants'
+import { LOCATIONS, CATEGORIES } from '../data'
 
 const DEFAULT_LOCATION = LOCATIONS[0].value
 const DEFAULT_CATEGORY = CATEGORIES[0].value
 
+const createPostAPI = async post => {
+    let response = await fetch('http://127.0.0.1:5000/test', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(post)
+    })
+    console.log(await response.text())
+}
+
 const CreateScreen = ({ navigation }) => {
+    const [img, setImg] = useState()
     const [title, setTitle] = useState('')
     const [phone, setPhone] = useState('+7')
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState('0')
     const [location, setLocation] = useState(DEFAULT_LOCATION)
     const [category, setCategory] = useState(DEFAULT_CATEGORY)
     const [description, setDescription] = useState('')
 
     const processImage = img => {
-        console.log(img)
+        setImg(img)
     }
 
-    const createPost = () => {
-        const post = { title, phone, price, location, category, description }
-        console.log('Creating post with data: ', post)
+    const createPost = async () => {
+        console.log('Creating post!!!')
+        const post = {
+            img,
+            title,
+            phone,
+            price,
+            location,
+            category,
+            description
+        }
+        // createPostAPI(post)
+
+        let localUri = img.uri
+        let filename = localUri.split('/').pop()
+
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename)
+        let type = match ? `image/${match[1]}` : `image`
+
+        // Upload the image using the fetch and FormData APIs
+        let formData = new FormData()
+        // Assume "photo" is the name of the form field the server expects
+        formData.append('photo', { uri: localUri, name: filename, type })
+
+        console.log('Gonna do fetching')
+        res = await fetch('http://192.168.56.1/test', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        })
+        console.log(await res.text())
+        console.log('Done fetching')
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             <Text>Create own Car Post</Text>
             <ScrollView>
                 <PhotoPicker onPick={processImage} />
@@ -66,7 +110,11 @@ const CreateScreen = ({ navigation }) => {
                     itemsList={CATEGORIES}
                 />
 
-                <AppButton onPress={createPost} style={styles.createButton} />
+                <AppButton
+                    title='Create'
+                    onPress={createPost}
+                    style={styles.createButton}
+                />
             </ScrollView>
         </View>
     )
@@ -75,6 +123,10 @@ const CreateScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     createButton: {
         marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
+    },
+    container: {
+        flex: 1,
+        flexDirection: 'column'
     }
 })
 
