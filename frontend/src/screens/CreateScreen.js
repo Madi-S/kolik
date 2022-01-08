@@ -63,7 +63,7 @@ const CreateScreen = ({ navigation }) => {
         formData.append('photo', { uri: localUri, name: filename, type })
 
         console.log('Gonna do fetching')
-        res = await fetch('http://192.168.56.1/test', {
+        res = await fetch('URL', {
             method: 'POST',
             body: formData,
             headers: {
