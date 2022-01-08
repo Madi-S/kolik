@@ -1,3 +1,4 @@
-*.db
-*.png
-__pycache__
+*.pyc
+__pycache
+.DS_Store
+*.log
