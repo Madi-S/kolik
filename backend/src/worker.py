@@ -18,6 +18,7 @@ celery.conf.broker_url = os.environ.get(
 def setup_periodic_tasks(sender, **kw):
     sender.add_periodic_task(2.5, modify_db_tasks.s(), name='Modify db tasks')
 
+
 @celery.task(name='sleep')
 def sleep(task_length):
     time.sleep(int(task_length))
@@ -28,7 +29,7 @@ def sleep(task_length):
 def modify_db_tasks(*_):
     print('*** Modifying db tasks ***')
     bad_task_statuses = ['PENDING', 'STARTED', 'RETRY']
-    
+
     for bad_status in bad_task_statuses:
         db_tasks = ModelTask.get_by_status(bad_status)
         for db_task in db_tasks:

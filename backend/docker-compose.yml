@@ -12,12 +12,12 @@ services:
       - POSTGRES_DB=test_db
 
   web:
-    build: ./project
+    build: ./src
     ports:
       - 8004:8000
     command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --reload"
     volumes:
-      - ./project:/usr/src/app
+      - ./src:/usr/src/app
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -38,10 +38,10 @@ services:
       - db
 
   worker:
-    build: ./project
+    build: ./src
     command: celery worker --app=worker.celery --loglevel=info --logfile=logs/celery.log
     volumes:
-      - ./project:/usr/src/app
+      - ./src:/usr/src/app
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
@@ -53,7 +53,7 @@ services:
     image: redis:6-alpine
 
   dashboard:
-    build: ./project
+    build: ./src
     command:  flower --app=worker.celery --port=5555 --broker=redis://redis:6379/0
     ports:
       - 5556:5555
