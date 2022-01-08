@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
+import { View, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../../theme'
 
@@ -36,7 +36,10 @@ const AppSelect = ({
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 15
+        borderBottomWidth: 1,
+        paddingBottom: 5,
+        marginVertical: 10,
+        borderColor: THEME.LIGHTEN_PRIMARY_COLOR
     },
     select: {}
 })

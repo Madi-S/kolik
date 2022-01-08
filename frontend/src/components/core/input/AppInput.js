@@ -28,7 +28,7 @@ const AppInput = ({
 
 const styles = StyleSheet.create({
     container: {
-        marginVertical: 12
+        marginVertical: 10
     },
     input: {
         borderBottomWidth: 1,

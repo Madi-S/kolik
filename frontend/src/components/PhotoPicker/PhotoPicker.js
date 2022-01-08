@@ -15,7 +15,8 @@ const PhotoPicker = ({
     title = 'Take a photo',
     onPick = () => {},
     containerStyle = {},
-    imageStyle = {}
+    imageStyle = {},
+    buttonStyle = {}
 }) => {
     const [image, setImage] = useState(null)
 
@@ -38,7 +39,7 @@ const PhotoPicker = ({
 
     return (
         <View style={{ ...styles.container, ...containerStyle }}>
-            <AppButton title={title} onPress={takePhoto} />
+            <AppButton title={title} onPress={takePhoto} style={buttonStyle} />
             {image && (
                 <Image
                     style={{ ...styles.image, ...imageStyle }}

@@ -7,6 +7,7 @@ import { AppSelect } from '../components/core/select'
 import { AppButton } from '../components/core/button'
 import { AppTextArea } from '../components/core/textarea'
 
+import THEME from '../theme'
 import * as CONSTANTS from '../constants'
 import { LOCATIONS, CATEGORIES } from '../data'
 
@@ -75,46 +76,55 @@ const CreateScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <Text>Create own Car Post</Text>
+        <View>
+            <Text style={styles.title}>Create own Car Post</Text>
             <ScrollView>
-                <PhotoPicker onPick={processImage} />
-                <AppInput title='Title' value={title} onChangeText={setTitle} />
-                <AppInput
-                    title='Contact phone number'
-                    keyboardType='numeric'
-                    value={phone}
-                    onChangeText={setPhone}
-                />
-                <AppInput
-                    title='Price'
-                    keyboardType='numeric'
-                    value={price}
-                    onChangeText={setPrice}
-                />
-                <AppTextArea
-                    title='Description'
-                    value={description}
-                    onChangeText={setDescription}
-                />
-                <AppSelect
-                    title='Location'
-                    selectedValue={location}
-                    onValueChange={setLocation}
-                    itemsList={LOCATIONS}
-                />
-                <AppSelect
-                    title='Location'
-                    selectedValue={category}
-                    onValueChange={setCategory}
-                    itemsList={CATEGORIES}
-                />
-
-                <AppButton
-                    title='Create'
-                    onPress={createPost}
-                    style={styles.createButton}
-                />
+                <View style={styles.container}>
+                    <View style={styles.center}>
+                        <PhotoPicker onPick={processImage} />
+                    </View>
+                    <AppInput
+                        title='Title'
+                        value={title}
+                        onChangeText={setTitle}
+                    />
+                    <AppInput
+                        title='Contact phone number'
+                        keyboardType='numeric'
+                        value={phone}
+                        onChangeText={setPhone}
+                    />
+                    <AppInput
+                        title='Price'
+                        keyboardType='numeric'
+                        value={price}
+                        onChangeText={setPrice}
+                    />
+                    <AppTextArea
+                        title='Description'
+                        value={description}
+                        onChangeText={setDescription}
+                    />
+                    <AppSelect
+                        title='Location'
+                        selectedValue={location}
+                        onValueChange={setLocation}
+                        itemsList={LOCATIONS}
+                    />
+                    <AppSelect
+                        title='Location'
+                        selectedValue={category}
+                        onValueChange={setCategory}
+                        itemsList={CATEGORIES}
+                    />
+                    <View style={styles.center}>
+                        <AppButton
+                            title='Create'
+                            onPress={createPost}
+                            style={styles.createButton}
+                        />
+                    </View>
+                </View>
             </ScrollView>
         </View>
     )
@@ -122,11 +132,26 @@ const CreateScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     createButton: {
-        marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
+        marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM,
+        borderRadius: 25,
+        backgroundColor: THEME.DANGER_COLOR
     },
     container: {
         flex: 1,
-        flexDirection: 'column'
+        justifyContent: 'center',
+        flexDirection: 'column',
+        marginHorizontal: CONSTANTS.DEFAULT_MARGIN_HORIZONTAL
+    },
+    center: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: '800',
+        textAlign: 'center',
+        marginBottom: 12
     }
 })
 
