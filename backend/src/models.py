@@ -17,7 +17,7 @@ else:
 
 class CreateMixin():
     @classmethod
-    def create(cls, **data) -> Any:
+    def create(cls, data: dict) -> Any:
         obj = cls(**data)
         db.session.add(obj)
         db.session.commit()

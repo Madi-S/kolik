@@ -28,7 +28,7 @@ def test():
 
 @app.get('/user/create', response_model=schema.UserOut, tags=['user'])
 def user_create(data: schema.UserIn):
-    user = User.create(**data)
+    user = User.create(data.dict())
     return user
 
 

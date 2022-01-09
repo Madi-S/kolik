@@ -5,6 +5,7 @@ from fastapi_camelcase import CamelModel
 
 import enums
 
+
 class Model(CamelModel):
     '''CamelModel already inherits from pydantic's BaseModel'''
     class Config:
@@ -19,3 +20,6 @@ class UserIn(Model):
 class UserOut(Model):
     id: str
     name: str
+
+    class Config:
+        orm_mode = True

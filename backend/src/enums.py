@@ -8,6 +8,5 @@ class Location(str, Enum):
     kokshetau = 'KOKSHETAU'
 
 
-
 class CarType(str, Enum):
     ...
