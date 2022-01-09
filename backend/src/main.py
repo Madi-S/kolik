@@ -1,15 +1,13 @@
 import os
 import sys
-from typing import List
 from dotenv import load_dotenv
 
-from fastapi import FastAPI, Path
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-import schema
-from models import User
-from routers.user.api import user as user_router
-from routers.user.api import post as post_router
+from routers.user.api import router as user_router
+from routers.user.api import router as post_router
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -45,26 +43,8 @@ if not sys.platform.startswith('win'):
 
 
 @app.get('/test')
-def test():
+async def test():
     return {'hello': 'world'}
-
-
-@app.post('/user', response_model=schema.UserOut, tags=['user'])
-def user_create(data: schema.UserIn):
-    user = User.create(data.dict())
-    return user
-
-
-@app.get('/user/query', response_model=List[schema.UserOut], tags=['user'])
-def user_query():
-    users = User.query.all()
-    return users
-
-
-@app.get('/user/{id}', response_model=schema.UserOut, tags=['user'])
-def user_get(id: int = Path(...)):
-    user = User.query.all()[id]
-    return user
 
 
 '''

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 
-post = APIRouter(
+router = APIRouter(
     prefix='/post',
     tags=['post']
 )
