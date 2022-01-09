@@ -8,7 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import schema
 from models import User
-
+from routers.user.api import user as user_router
+from routers.user.api import post as post_router
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
@@ -29,6 +30,10 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
+
+app.include_router(user_router)
+app.include_router(post_router)
+
 
 if not sys.platform.startswith('win'):
     # from fastapi_sqlalchemy import DBSessionMiddleware
