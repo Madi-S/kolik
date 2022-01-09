@@ -3,7 +3,7 @@ import sys
 from typing import List
 from dotenv import load_dotenv
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 from fastapi.middleware.cors import CORSMiddleware
 
 import schema
@@ -31,11 +31,11 @@ app.add_middleware(
 )
 
 if not sys.platform.startswith('win'):
-    from fastapi_sqlalchemy import DBSessionMiddleware
-    app.add_middleware(
-        DBSessionMiddleware,
-        db_url=os.environ['DATABASE_URL']
-    )
+    # from fastapi_sqlalchemy import DBSessionMiddleware
+    # app.add_middleware(
+    #     DBSessionMiddleware,
+    #     db_url=os.environ['DATABASE_URL']
+    # )
     ...
 
 
@@ -44,7 +44,7 @@ def test():
     return {'hello': 'world'}
 
 
-@app.get('/user/create', response_model=schema.UserOut, tags=['user'])
+@app.post('/user', response_model=schema.UserOut, tags=['user'])
 def user_create(data: schema.UserIn):
     user = User.create(data.dict())
     return user
@@ -55,10 +55,11 @@ def user_query():
     users = User.query.all()
     return users
 
-@app.get('/user/get', response_model=schema.UserOut, tags=['user'])
-def user_get():
-    users = User.query.all()
-    return users
+
+@app.get('/user/{id}', response_model=schema.UserOut, tags=['user'])
+def user_get(id: int = Path(...)):
+    user = User.query.all()[id]
+    return user
 
 
 '''

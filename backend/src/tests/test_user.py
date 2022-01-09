@@ -1,10 +1,32 @@
 import json
 from unittest.mock import patch, call
-from worker import create_task
 
 
-def test_home(test_app):
+def test_test(test_app):
     response = test_app.get('/test')
+    assert response.status_code == 200
+
+
+def test_post_user(test_app):
+    response = test_app.post('/user', json={'name': 'Madi Shaiken'})
+    content = response.json()
+    assert content
+    assert response.status_code == 200
+
+
+def test_fail_post_user(test_app):
+    response = test_app.post(
+        '/user', json={'name': 'Madi Shaiken', 'location': 'aboltus'})
+    content = response.json()
+    assert content
+    assert response.status_code == 422
+
+
+def test_get_user(test_app):
+    user_id = '1'
+    response = test_app.get(f'/user/{user_id}')
+    content = response.json()
+    assert content
     assert response.status_code == 200
 
 

@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Location(str, Enum):
-    all = 'all'
+    all = 'ALL'
     astana = 'ASTANA'
     almaty = 'ALMATY'
     kokshetau = 'KOKSHETAU'
