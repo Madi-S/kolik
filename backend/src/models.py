@@ -1,24 +1,21 @@
 import sys
-from typing import Any, List
-from sqlalchemy import Column, Integer, String
+from typing import Any
+from datetime import datetime
+from sqlalchemy import Column, Boolean, String, DateTime
+
+from utils import generate_user_id, generate_user_token
 
 
 if sys.platform.startswith('win'):
-    import dev.db as db
-    from dev.db import Base
+    from dev.db import Base, db
 else:
-    from fastapi_sqlalchemy import db
+    # from fastapi_sqlalchemy import db
     from sqlalchemy.ext.declarative import declarative_base
 
     Base = declarative_base()
 
-if __name__ == '__main__':
-    db.drop_all()
-    db.create_all()
 
-
-class CreateMixin:
-
+class CreateMixin():
     @classmethod
     def create(cls, **data) -> Any:
         obj = cls(**data)
@@ -27,44 +24,28 @@ class CreateMixin:
         return obj
 
 
-class ModelUser(Base, CreateMixin):
+class User(Base, CreateMixin):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, index=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    age = Column(Integer)
+
+    id = Column(String(100), primary_key=True, default=generate_user_id)
+    token = Column(String(100), unique=True, default=generate_user_token)
+    name = Column(String(200), nullable=False)
+    location = Column(String(200))
+    device_info = Column(String(300))
+    blocked = Column(Boolean, default=False)
+    registered_at = Column(DateTime, default=datetime.now)
+    last_login_at = Column(DateTime, default=datetime.now)
+
+    def __repr__(self) -> str:
+        return f'<User #{self.id} {self.name}>'
 
 
-class ModelTask(Base, CreateMixin):
-    __tablename__ = 'task'
-    id = Column(String, primary_key=True)
-    status = Column(String, default='PENDING')
-    result = Column(String)
-    additional_data = Column(String)
+if __name__ == '__main__' and sys.platform.startswith('win'):
+    from dev.db import init_db
 
-    def change_to(self, task_result: Any) -> None:
-        self.set_status(task_result.status)
-        self.set_result(task_result.result)
-
-    def set_result(self, result: str) -> None:
-        self.result = result
-        db.session.commit()
-
-    def set_status(self, status: str) -> None:
-        self.status = status
-        db.session.commit()
-
-    def set_additional_data(self, data: str) -> None:
-        self.additional_data = 'Changed via celery'
-
-    @classmethod
-    def get_by_id(cls, id: str) -> Any:
-        return db.session.query(cls).get(id)
-
-    @classmethod
-    def get_from_to(cls, start: int, end: int) -> List[Any]:
-        return db.session.query(cls).offset(start).limit(end - start).all()
-
-    @classmethod
-    def get_by_status(cls, status: str) -> List[Any]:
-        return db.session.query(cls).filter_by(status=status).all()
+    print('Initializing database')
+    try:
+        init_db()
+        print('Initializion successful')
+    except Exception as e:
+        print(f'Initializion failed {e}')
