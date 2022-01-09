@@ -1,10 +1,20 @@
+import sys
 from typing import Any, List
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
-from fastapi_sqlalchemy import db
 
 
-Base = declarative_base()
+if sys.platform.startswith('win'):
+    import dev.db as db
+    from dev.db import Base
+else:
+    from fastapi_sqlalchemy import db
+    from sqlalchemy.ext.declarative import declarative_base
+
+    Base = declarative_base()
+
+if __name__ == '__main__':
+    db.drop_all()
+    db.create_all()
 
 
 class CreateMixin:
@@ -43,10 +53,10 @@ class ModelTask(Base, CreateMixin):
     def set_status(self, status: str) -> None:
         self.status = status
         db.session.commit()
-        
+
     def set_additional_data(self, data: str) -> None:
         self.additional_data = 'Changed via celery'
-        
+
     @classmethod
     def get_by_id(cls, id: str) -> Any:
         return db.session.query(cls).get(id)
