@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, Path
 
-import schema
 from models import User, Phone
 from .utils import PhoneEntity
+from .schema import UserIn, UserOut
 
 
 router = APIRouter(
@@ -31,9 +31,9 @@ async def send_confirmation_code(phone: str = Path(...)):
             phone_obj.set_confirmation_code_to(code)
 
 
-@router.post('/user/{phone}/{confirmation_code}', response_model=schema.UserOut, tags=['user'])
+@router.post('/user/{phone}/{confirmation_code}', response_model=UserOut, tags=['user'])
 async def user_create(
-    data: schema.UserIn,
+    data: UserIn,
     phone: str = Path(...),
     confirmation_code: str = Path(...)
 ):
@@ -46,13 +46,13 @@ async def user_create(
             return user
 
 
-@router.get('/user/query', response_model=List[schema.UserOut], tags=['user'])
+@router.get('/user/query', response_model=List[UserOut], tags=['user'])
 async def user_query():
     users = User.query.all()
     return users
 
 
-@router.get('/user/{index}', response_model=schema.UserOut, tags=['user'])
+@router.get('/user/{index}', response_model=UserOut, tags=['user'])
 async def user_get_by_index(index: int = Path(...)):
     user = User.query.all()[index]
     return user

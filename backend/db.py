@@ -8,9 +8,9 @@ DB_URL = 'sqlite:///./kolik.db'
 # check_same_thread is only for sqlite
 engine = create_engine(DB_URL, connect_args={'check_same_thread': False})
 db_session = scoped_session(sessionmaker(
-    autocommit=False,
+    bind=engine,
     autoflush=False,
-    bind=engine
+    autocommit=False
 ))
 
 Base = declarative_base()

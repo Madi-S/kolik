@@ -22,7 +22,6 @@ class PostCategory(str, Enum):
 
 
 class PostSortByOption(str, Enum):
-    ...
     title = 'title'
     price_asc = 'price_asc'
     price_desc = 'price_desc'
