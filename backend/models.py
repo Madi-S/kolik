@@ -57,6 +57,7 @@ class User(Base, CreateMixin):
     
     name = Column(String(200), nullable=False)
     
+    location = Column(String(500))
     token = Column(String(100), unique=True, default=generate_user_token)
     device_info = Column(String(300))
     blocked = Column(Boolean, default=False)
@@ -74,7 +75,7 @@ class User(Base, CreateMixin):
 class Post(Base, CreateMixin):
     __tablename__ = 'post'
     
-    id = Column(String(100), primary_key=True, default=generate_user_id)
+    id = Column(Integer, primary_key=True)
     
     description = Column(String(1000), nullable=False)
     title = Column(String(100), nullable=False)
@@ -86,6 +87,9 @@ class Post(Base, CreateMixin):
     image = Column(String)
     
     user_id = Column(Integer, ForeignKey('user.id'))
+    
+    def __repr__(self) -> str:
+        return f'<Post #{self.id} from user {self.user.name}>'
 
 
 if __name__ == '__main__':

@@ -30,8 +30,8 @@ const FilterModal = () => {
             setSearchFilters({
                 priceFrom,
                 priceTo,
-                selectedLocation,
-                selectedSortByOption
+                location: selectedLocation,
+                sortByOption: selectedSortByOption
             })
         )
     }

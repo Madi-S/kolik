@@ -7,7 +7,12 @@ import {
 const initialState = {
     query: '',
     category: '',
-    filters: {}
+    filters: {
+        priceFrom: 0,
+        priceTo: 99999,
+        location: 'ALL',
+        sortByOption: ''
+    }
 }
 
 export const searchReducer = (state = initialState, action) => {

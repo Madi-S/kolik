@@ -12,8 +12,22 @@ class Model(CamelModel):
         use_enum_values = True
 
 
+class PostFilters(Model):
+    price_from: int
+    price_to: int
+    location: enums.Location
+    sort_by_option: enums.PostSortByOption
+
+
+class PostQuery(Model):
+    query: str
+    category: enums.PostCategory
+    filters: PostFilters
+
+
 class PostIn(Model):
     ...
+
 
 class PostOut(Model):
     ...
