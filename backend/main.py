@@ -33,15 +33,6 @@ app.include_router(user_router)
 app.include_router(post_router)
 
 
-if not sys.platform.startswith('win'):
-    # from fastapi_sqlalchemy import DBSessionMiddleware
-    # app.add_middleware(
-    #     DBSessionMiddleware,
-    #     db_url=os.environ['DATABASE_URL']
-    # )
-    ...
-
-
 @app.get('/test')
 async def test():
     return {'hello': 'world'}
