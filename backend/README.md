@@ -1,5 +1,11 @@
 # Asynchronous Tasks with FastAPI, Celery and Docker
 
+### Run on local server
+
+```sh
+uvicorn main:app --reload
+```
+
 ### View logs on Heroku
 
 ```sh

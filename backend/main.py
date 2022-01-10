@@ -34,8 +34,3 @@ async def home():
 @app.get('/test')
 async def test():
     return {'msg': 'Hello World'}
-
-
-'''
-uvicorn main:app --reload
-'''
