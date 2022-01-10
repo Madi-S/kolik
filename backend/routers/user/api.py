@@ -41,8 +41,9 @@ async def user_create(
         if phone_obj.confirm(confirmation_code):
             data_dict = data.dict()
             data_dict.update({'phone': phone_obj})
-            
-            user = User.create_or_login(data_dict)
+
+            user = User.query.filter_by(
+                phone=phone_obj).first() or User.create(data_dict)
             return user
 
 
