@@ -16,11 +16,17 @@ db_session = scoped_session(sessionmaker(
 Base = declarative_base()
 Base.query = db_session.query_property()
 
+
 class db:
     session = db_session
 
 
 def init_db():
     '''!!! MUST BE CALLED INSIDE `models.py` !!!'''
-    Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
+    print('Initializing database')
+    try:
+        print('Initializion successful')
+        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f'Initializion failed {e}')

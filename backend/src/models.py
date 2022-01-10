@@ -4,16 +4,8 @@ from datetime import datetime
 from sqlalchemy import Column, Boolean, String, DateTime, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
+from db import Base, db
 from utils import generate_user_id, generate_user_token
-
-
-if sys.platform.startswith('win'):
-    from dev.db import Base, db
-else:
-    # from fastapi_sqlalchemy import db
-    from sqlalchemy.ext.declarative import declarative_base
-
-    Base = declarative_base()
 
 
 class CreateMixin():
@@ -74,12 +66,6 @@ class User(Base, CreateMixin):
         return f'<User #{self.id} name: {self.name}>'
 
 
-if __name__ == '__main__' and sys.platform.startswith('win'):
-    from dev.db import init_db
-
-    print('Initializing database')
-    try:
-        init_db()
-        print('Initializion successful')
-    except Exception as e:
-        print(f'Initializion failed {e}')
+if __name__ == '__main__':
+    from db import init_db
+    init_db()
