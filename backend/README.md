@@ -19,6 +19,18 @@ alembic revision --autogenerate -m "I am a teapot"
 alembic upgrade head
 ```
 
+### In case alembic behaves abnormally
+
+1. Drop alembic database (use sqlitestudio for instance)
+2.
+
+```sh
+alembic stamp head
+alembic revision --autogenerate -m "New revision"
+alembic upgrade head
+alembic stamp head
+```
+
 ### Run tests:
 
 ```sh

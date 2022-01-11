@@ -23,11 +23,11 @@ class Phone(Base):
 
     value = Column(String(12), primary_key=True)
     confirmation_code = Column(String(4))
-    
+
     confirmed = Column(Boolean, default=False)
     blocked = Column(Boolean, default=False)
     failed_confirmation_attempts = Column(Integer, default=0)
-    
+
     user_id = Column(Integer, ForeignKey('user.id'), unique=True)
 
     def __repr__(self):
@@ -54,18 +54,18 @@ class User(Base, CreateMixin):
     __tablename__ = 'user'
 
     id = Column(String(100), primary_key=True, default=generate_user_id)
-    
+
     name = Column(String(200), nullable=False)
-    
+
     location = Column(String(500))
     token = Column(String(100), unique=True, default=generate_user_token)
     device_info = Column(String(300))
     blocked = Column(Boolean, default=False)
     registered_at = Column(DateTime, default=datetime.now)
     last_login_at = Column(DateTime, default=datetime.now)
+
     phone = relationship('Phone', uselist=False,
                          backref='user')
-    
     posts = relationship('Post', uselist=True, backref='user')
 
     def __repr__(self) -> str:
@@ -74,20 +74,20 @@ class User(Base, CreateMixin):
 
 class Post(Base, CreateMixin):
     __tablename__ = 'post'
-    
+
     id = Column(Integer, primary_key=True)
-    
+
     description = Column(String(1000), nullable=False)
     title = Column(String(100), nullable=False)
     location = Column(String(500), nullable=False)
     price = Column(Integer, nullable=False)
-    
+
     slug = Column(String(100))
     activated = Column(Boolean, default=False)
     image = Column(String)
-    
+
     user_id = Column(Integer, ForeignKey('user.id'))
-    
+
     def __repr__(self) -> str:
         return f'<Post #{self.id} from user {self.user.name}>'
 
