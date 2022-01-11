@@ -16,21 +16,32 @@ class PostFilters(Model):
     price_from: int
     price_to: int
     location: enums.Location
+    category: enums.PostCategory
     sort_by_option: enums.PostSortByOption
 
 
 class PostQuery(Model):
-    query: str
-    category: enums.PostCategory
+    q: str
+    from_: Optional[int] = 0
+    to: Optional[int] = 10
     filters: PostFilters
 
 
-class PostIn(Model):
-    ...
+class PostBaseModel(Model):
+    title: str
+    price: int
+    image: Any
+    description: str
+    location: enums.Location
+    category: enums.PostCategory
 
 
-class PostOut(Model):
-    ...
+class PostIn(PostBaseModel):
+    user_id: int
+
+
+class PostOut(PostBaseModel):
+    id: int
 
     class Config:
         orm_mode = True

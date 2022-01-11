@@ -80,11 +80,12 @@ class Post(Base, CreateMixin):
     description = Column(String(1000), nullable=False)
     title = Column(String(100), nullable=False)
     location = Column(String(500), nullable=False)
+    category = Column(String(500), nullable=False)
     price = Column(Integer, nullable=False)
+    image = Column(String)
 
     slug = Column(String(100))
     activated = Column(Boolean, default=False)
-    image = Column(String)
 
     user_id = Column(Integer, ForeignKey('user.id'))
 
