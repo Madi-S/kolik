@@ -21,9 +21,10 @@ class PostCategory(str, Enum):
     station_wagon = 'station_wagon'
 
 
-class PostSortByOption(str, Enum):
-    title = 'title'
-    price_asc = 'price_asc'
-    price_desc = 'price_desc'
-    published_at_asc = 'published_at_asc'
-    published_at_desc = 'published_at_desc'
+class PostOrderByOption(str, Enum):
+    title_asc = 'title-asc'
+    title_desc = 'title-desc'
+    price_asc = 'price-asc'
+    price_desc = 'price-desc'
+    published_at_asc = 'published_at-asc'
+    published_at_desc = 'published_at-desc'

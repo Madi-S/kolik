@@ -13,11 +13,11 @@ class Model(CamelModel):
 
 
 class PostFilters(Model):
-    price_from: int
-    price_to: int
+    price_from: int = 0
+    price_to: int = 9999999
     location: enums.Location
     category: enums.PostCategory
-    sort_by_option: enums.PostSortByOption
+    order_by_option: enums.PostOrderByOption
 
 
 class PostQuery(Model):

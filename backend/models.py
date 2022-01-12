@@ -17,6 +17,19 @@ class CreateMixin():
         return obj
 
 
+class EditMixin():
+    @classmethod
+    def edit(cls, data: dict) -> Any:
+        '''Incoming data dictionary mush have primary key id'''
+        obj = cls.query.get(data['id'])
+        data.pop('id')
+        
+        for attr in data.keys():
+            setattr(obj, attr, data[attr])
+        db.session.commit()
+        return obj
+
+
 class Phone(Base):
     '''TODO: Implement strict one to one relationship with User'''
     __tablename__ = 'phone'
@@ -50,7 +63,7 @@ class Phone(Base):
         db.session.commit()
 
 
-class User(Base, CreateMixin):
+class User(Base, CreateMixin, EditMixin):
     __tablename__ = 'user'
 
     id = Column(String(100), primary_key=True, default=generate_user_id)
@@ -72,7 +85,7 @@ class User(Base, CreateMixin):
         return f'<User #{self.id} name: {self.name}>'
 
 
-class Post(Base, CreateMixin):
+class Post(Base, CreateMixin, EditMixin):
     __tablename__ = 'post'
 
     id = Column(Integer, primary_key=True)
@@ -83,6 +96,7 @@ class Post(Base, CreateMixin):
     category = Column(String(500), nullable=False)
     price = Column(Integer, nullable=False)
     image = Column(String)
+    published_at = Column(DateTime, default=datetime.now)
 
     slug = Column(String(100))
     activated = Column(Boolean, default=False)
