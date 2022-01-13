@@ -22,22 +22,27 @@ class PostFilters(Model):
 
 class PostQuery(Model):
     q: str
+    filters: PostFilters
     from_: Optional[int] = 0
     to: Optional[int] = 10
-    filters: PostFilters
 
 
 class PostBaseModel(Model):
     title: str
     price: int
-    image: Any
     description: str
+    image: Optional[Any]
     location: enums.Location
     category: enums.PostCategory
 
 
 class PostIn(PostBaseModel):
     user_id: int
+
+
+class PostEditIn(PostBaseModel):
+    user_id: int
+    id: int
 
 
 class PostOut(PostBaseModel):

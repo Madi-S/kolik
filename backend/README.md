@@ -12,6 +12,12 @@ uvicorn main:app --reload
 heroku logs --tail -a kolik-backend
 ```
 
+### Initialize database models
+
+```sh
+python models.py
+```
+
 ### Make & Run migrations
 
 ```sh
