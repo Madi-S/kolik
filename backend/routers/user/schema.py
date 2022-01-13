@@ -12,14 +12,13 @@ class Model(CamelModel):
         use_enum_values = True
 
 
-class PhoneOut(Model):
-    value: str
-
-    class Config:
-        orm_mode = True
-
-
 class UserIn(Model):
+    name: str
+    phone: str
+    location: Optional[enums.Location]
+
+
+class UserEditIn(Model):
     name: str
     location: Optional[enums.Location]
 
@@ -28,7 +27,7 @@ class UserOut(Model):
     id: str
     name: str
     token: str
-    phone: PhoneOut
+    phone: str
     location: enums.Location
 
     class Config:

@@ -17,12 +17,12 @@ posts = []
 
 def fill_user(n=10) -> None:
     for n in range(n):
-        phone = Phone.create('+' + faker.msisdn())
+        phone = Phone.create('+' + faker.msisdn()[:-1])
 
         user_data = {
             'name': faker.name(),
+            'phone': phone.value,
             'location': random.choice(locations),
-            'phone': phone
         }
         user = User.create(user_data)
         users.append(user)

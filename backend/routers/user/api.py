@@ -4,7 +4,7 @@ from fastapi import APIRouter, Path, HTTPException
 
 from models import User, Phone
 from .utils import PhoneEntity
-from .schema import UserOut, UserIn
+from .schema import UserOut, UserIn, UserEditIn
 
 
 router = APIRouter(
@@ -37,10 +37,10 @@ async def get_user_by_id(id: int = Path(...)):
 
 
 @router.post('/{id}', response_model=UserOut, tags=['user'])
-async def edit_user(data: UserIn, id: int = Path(...)):
+async def edit_user(data: UserEditIn, id: int = Path(...)):
     data_dict = data.dict()
     data_dict.update({'id': id})
-    
+
     user = User.edit(data_dict)
     return user
 
@@ -55,8 +55,8 @@ async def send_confirmation_code(phone: str = Path(...)):
     if phone_entity.is_valid():
         code = TEST_CONFIRMATION_CODE
         if phone_entity.confirmation_code_sent(code):
-            phone_obj = Phone.query.filter_by(
-                value=phone).first() or Phone.create(phone)
+            phone_obj = Phone.query.filter_by(value=phone).first() or \
+                Phone.create(phone)
             phone_obj.set_confirmation_code_to(code)
 
             return {'msg': f'Confirmation code sent to {phone}', 'status': True}
@@ -67,24 +67,21 @@ async def send_confirmation_code(phone: str = Path(...)):
 
 
 @router.put(
-    '/confirm/{phone}/{confirmation_code}',
+    '/{confirmation_code}',
     response_model=UserOut,
     tags=['user', 'phone'],
     description=registration_steps
 )
 async def create_user(
     data: UserIn,
-    phone: str = Path(...),
     confirmation_code: str = Path(...)
 ):
-    if phone_obj := Phone.query.filter_by(value=phone).first():
+    if phone_obj := Phone.query.filter_by(value=data.phone).first():
         if phone_obj.confirmed(confirmation_code):
             logger.debug('Phone confirmed successfully')
-            data_dict = data.dict()
-            data_dict.update({'phone': phone_obj})
 
-            user = User.query.filter_by(
-                phone=phone_obj).first() or User.create(data_dict)
+            user = User.query.filter_by(phone=data.phone).first() or \
+                User.create(data.dict())
             return user
         else:
             raise HTTPException(404, 'Confirmation code is incorrect')

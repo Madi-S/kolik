@@ -12,12 +12,7 @@ from utils import generate_user_id, generate_user_token
 class CreateMixin():
     @classmethod
     def create(cls, data: dict) -> Any:
-        obj = cls()
-
-        for attr, value in data.items():
-            if value != None:
-                setattr(obj, attr, value)
-
+        obj = cls(**data)
         db.session.add(obj)
         db.session.commit()
         return obj
@@ -43,17 +38,19 @@ class Phone(Base):
     '''TODO: Implement strict one to one relationship with User'''
     __tablename__ = 'phone'
 
-    value = Column(String(12), primary_key=True)
+    id = Column(Integer, primary_key=True)
+
+    value = Column(String(12), unique=True)
     confirmation_code = Column(String(4))
 
     confirmed = Column(Boolean, default=False)
     blocked = Column(Boolean, default=False)
     failed_confirmation_attempts = Column(Integer, default=0)
 
-    user_id = Column(Integer, ForeignKey('user.id'), unique=True)
+    user = relationship('User', uselist=False, backref='phone_obj')
 
-    def __repr__(self):
-        return f'<Phone: {self.value}, confirmed: {self.confirmed}, user_id: {self.user_id}, code: {self.confirmation_code}>'
+    def __repr__(self) -> str:
+        return f'<Phone #{self.id}: value: {self.value}, code: {self.confirmation_code} for user #{self.user.id}>'
 
     @classmethod
     def create(cls, phone_value: str) -> Any:
@@ -63,12 +60,14 @@ class Phone(Base):
         return phone
 
     def confirmed(self, code: str) -> bool:
-        logger.debug('Confirmation code received {} and set confirmation code {} ',
-                     code, self.confirmation_code)
+        logger.debug(
+            'Confirmation code received {} and set confirmation code {} ',
+            code, self.confirmation_code
+        )
         return self.confirmation_code == code
 
     def set_confirmation_code_to(self, value: str) -> None:
-        logger('Setting confirmation code to', value)
+        logger.debug('Setting confirmation code to', value)
         self.confirmation_code = value
         db.session.commit()
 
@@ -88,12 +87,12 @@ class User(Base, CreateMixin, EditMixin):
     registered_at = Column(DateTime, default=datetime.now)
     last_login_at = Column(DateTime, default=datetime.now)
 
-    phone = relationship('Phone', uselist=False,
-                         backref='user')
+    phone = Column(Integer, ForeignKey('phone.value'), unique=True)
+
     posts = relationship('Post', uselist=True, backref='user')
 
     def __repr__(self) -> str:
-        return f'<User #{self.id} name: {self.name}>'
+        return f'<User #{self.id} name: {self.name}, phone: {self.phone}>'
 
 
 class Post(Base, CreateMixin, EditMixin):
