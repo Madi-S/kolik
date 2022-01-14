@@ -33,7 +33,7 @@ const App = () => {
     return (
         <Provider store={store}>
             <ThemeProvider theme={providerTheme} useDark={isDarkScheme}>
-                    <TabsStackNavigator />
+                <TabsStackNavigator />
                 <StatusBar style='auto' />
             </ThemeProvider>
         </Provider>

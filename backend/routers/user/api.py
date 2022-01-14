@@ -1,6 +1,7 @@
+from fastapi import APIRouter, Path, HTTPException
+
 from typing import List
 from loguru import logger
-from fastapi import APIRouter, Path, HTTPException
 
 from models import User, Phone
 from .utils import PhoneEntity

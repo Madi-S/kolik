@@ -31,7 +31,6 @@ class PostBaseModel(Model):
     title: str
     price: int
     description: str
-    image: Optional[Any]
     location: enums.Location
     category: enums.PostCategory
 
@@ -41,8 +40,8 @@ class PostIn(PostBaseModel):
 
 
 class PostEditIn(PostBaseModel):
-    user_id: int
     id: int
+    user_id: int
 
 
 class PostOut(PostBaseModel):

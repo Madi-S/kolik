@@ -117,6 +117,10 @@ class Post(Base, CreateMixin, EditMixin):
     def __repr__(self) -> str:
         return f'<Post #{self.id} from user {self.user.name}>'
 
+    def set_image(self, file_path: str) -> None:
+        self.image = file_path
+        db.session.commit()
+
 
 if __name__ == '__main__':
     from db import init_db

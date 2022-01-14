@@ -2,5 +2,3 @@
 __pycache
 .DS_Store
 *.log
-*.db
-/images

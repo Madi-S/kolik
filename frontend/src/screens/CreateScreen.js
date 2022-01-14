@@ -9,20 +9,33 @@ import { AppTextArea } from '../components/core/textarea'
 
 import THEME from '../theme'
 import * as CONSTANTS from '../constants'
+import { makeRestfulRequest } from '../http'
 import { LOCATIONS, CATEGORIES } from '../data'
 
 const DEFAULT_LOCATION = LOCATIONS[0].value
 const DEFAULT_CATEGORY = CATEGORIES[0].value
 
-const createPostAPI = async post => {
-    let response = await fetch('http://127.0.0.1:5000/test', {
+const sendCreatePostRequest = async ({ img, post = {} }) => {
+    const localUri = img.uri
+    const filename = localUri.split('/').pop()
+
+    const match = /\.(\w+)$/.exec(filename)
+    const type = match ? `image/${match[1]}` : `image`
+
+    const formData = new FormData()
+    formData.append('data', post)
+    formData.append('image', { uri: localUri, name: filename, type })
+
+    const headers = { 'content-type': 'multipart/form-data' }
+
+    const res = await makeRestfulRequest({
+        headers,
+        body: formData,
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify(post)
+        route: '/image'
     })
-    console.log(await response.text())
+    const resText = await res.text()
+    console.log('Done fetching:', resText)
 }
 
 const CreateScreen = ({ navigation }) => {
@@ -34,12 +47,23 @@ const CreateScreen = ({ navigation }) => {
     const [category, setCategory] = useState(DEFAULT_CATEGORY)
     const [description, setDescription] = useState('')
 
-    const processImage = img => {
+    const processImage = async img => {
         setImg(img)
+        await sendCreatePostRequest({
+            img,
+            post: {
+                title,
+                phone,
+                price,
+                location,
+                category,
+                description,
+                userId: 1
+            }
+        })
     }
 
     const createPost = async () => {
-        console.log('Creating post!!!')
         const post = {
             img,
             title,
@@ -49,30 +73,8 @@ const CreateScreen = ({ navigation }) => {
             category,
             description
         }
-        // createPostAPI(post)
 
-        let localUri = img.uri
-        let filename = localUri.split('/').pop()
-
-        // Infer the type of the image
-        let match = /\.(\w+)$/.exec(filename)
-        let type = match ? `image/${match[1]}` : `image`
-
-        // Upload the image using the fetch and FormData APIs
-        let formData = new FormData()
-        // Assume "photo" is the name of the form field the server expects
-        formData.append('photo', { uri: localUri, name: filename, type })
-
-        console.log('Gonna do fetching')
-        res = await fetch('URL', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        })
-        console.log(await res.text())
-        console.log('Done fetching')
+        await processImage()
     }
 
     return (
