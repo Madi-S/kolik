@@ -14,15 +14,15 @@ router = APIRouter(
 )
 
 
-@router.get('/', response_model=List[PostOut], tags=['post'])
-async def get_posts(data: PostQuery):
+@router.post('/query', response_model=List[PostOut], tags=['post'])
+async def query_posts(data: PostQuery):
     query_handler = PostQueryHandler(data)
     query_handler.apply_all()
     posts = query_handler.generate_entries()
     return posts
 
 
-@router.get('/{id}', response_model=List[PostOut], tags=['post'])
+@router.get('/{id}', response_model=PostOut, tags=['post'])
 async def get_post_by_id(id: int = Path(...)):
     if post := Post.query.get(id):
         return post
@@ -50,13 +50,15 @@ async def upload_post_image(post_id: int = Header(None), image: UploadFile = Fil
     if post := Post.query.get(post_id):
         contents = await image.read()
 
-        file_name = f'{post_id}__{image.file_name}'
+        file_name = f'{post_id}__{image.filename}'
         file_path = f'{IMAGES_FOLDER}/{file_name}'
+        
+        print('Saving image to', file_path)
 
         with open(file_path, 'wb') as f:
             f.write(contents)
 
-        post.set_image(file_path)
+        post.set_image_uri(file_path)
         return post
 
     raise HTTPException(404, 'Post not found')
@@ -65,9 +67,9 @@ async def upload_post_image(post_id: int = Header(None), image: UploadFile = Fil
 @router.get('/image/{post_id}', tags=['post', 'image'])
 async def get_post_image(post_id: int = Path(...)):
     if post := Post.query.get(post_id):
-        logger.debug('Post found {}', post.image)
-        if post.image:
-            return FileResponse(post.image)
+        logger.debug('Post found {}', post.image_uri)
+        if post.image_uri:
+            return FileResponse(post.image_uri)
 
     default_image = f'{IMAGES_FOLDER}/potnyara.png'
     return FileResponse(default_image)

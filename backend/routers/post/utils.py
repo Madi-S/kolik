@@ -82,5 +82,5 @@ class PostQueryHandler:
         # self.entries = self.query.all(
         # )[self.params.from_: self.params.to + 1]
         offset_value = self.params.from_
-        limit_value = self.params.to - self.params_from_
+        limit_value = self.params.to - self.params.from_
         self.query = self.query.offset(offset_value).limit(limit_value)

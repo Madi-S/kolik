@@ -12,13 +12,14 @@ const cameraOptions = {
 }
 
 const PhotoPicker = ({
+    uri = null,
     title = 'Take a photo',
     onPick = () => {},
     containerStyle = {},
     imageStyle = {},
     buttonStyle = {}
 }) => {
-    const [image, setImage] = useState(null)
+    const [image, setImage] = useState(uri)
 
     const showAndProcessImage = img => {
         setImage(img.uri)

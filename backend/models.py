@@ -106,7 +106,7 @@ class Post(Base, CreateMixin, EditMixin):
     category = Column(
         String(500), default=enums.PostCategory.all, nullable=False)
     price = Column(Integer, nullable=False)
-    image = Column(String)
+    image_uri = Column(String)
     published_at = Column(DateTime, default=datetime.now)
 
     slug = Column(String(100))
@@ -117,8 +117,8 @@ class Post(Base, CreateMixin, EditMixin):
     def __repr__(self) -> str:
         return f'<Post #{self.id} from user {self.user.name}>'
 
-    def set_image(self, file_path: str) -> None:
-        self.image = file_path
+    def set_image_uri(self, file_path: str) -> None:
+        self.image_uri = file_path
         db.session.commit()
 
 

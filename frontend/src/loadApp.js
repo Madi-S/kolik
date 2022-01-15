@@ -1,6 +1,11 @@
 import * as Font from 'expo-font'
+import { setToken, setUserId } from './auth'
+
+
 
 const loadApp = async () => {
+    await setAuthParams()
+
     try {
         await Font.loadAsync({
             'm-bold': require('../assets/fonts/Montserrat-Bold.ttf'),
@@ -12,6 +17,11 @@ const loadApp = async () => {
     } catch (error) {
         console.warn('Failed to load fonts', err)
     }
+}
+
+const setAuthParams = async () => {
+    setUserId(2)
+    setToken('2222')
 }
 
 export default loadApp
