@@ -46,11 +46,10 @@ const uploadPostImageRequest = async (postId, imageUri) => {
     const formData = new FormData()
     formData.append('image', { uri: imageUri, name: filename, type })
 
-    const res = await fetch('https://kolik-backend.herokuapp.com/post/image', {
+    const res = await fetch(`https://kolik-backend.herokuapp.com/post/image/${postId}`, {
         method: 'PUT',
         body: formData,
         headers: {
-            'post-id': postId,
             'content-type': 'multipart/form-data'
         }
     })

@@ -38,12 +38,12 @@ async def get_user_by_id(id: int = Path(...)):
 
 
 @router.post('/{id}', response_model=UserOut, tags=['user'])
-async def edit_user(data: UserEditIn, id: int = Path(...)):
-    data_dict = data.dict()
-    data_dict.update({'id': id})
-
-    user = User.edit(data_dict)
-    return user
+async def edit_user(data: UserEditIn, id: int = Path(...)):    
+    if user := User.query.get(id):
+        user.edit(data.dict())
+        return user
+    
+    raise HTTPException(404, 'User not found')
 
 
 @router.post(

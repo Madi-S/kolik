@@ -19,12 +19,15 @@ class UserIn(Model):
 
 
 class UserEditIn(Model):
-    name: str
-    location: Optional[enums.Location]
+    '''
+    Does not matter if any attribute is `None` because EditMixin will not apply None attribute values; `id` is provided in the path.
+    '''
+    name: Optional[str] = None
+    location: Optional[enums.Location] = None
 
 
 class UserOut(Model):
-    id: str
+    id: int
     name: str
     token: str
     phone: str

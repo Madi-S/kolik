@@ -1,5 +1,6 @@
-from random import randint
 from fastapi.testclient import TestClient
+
+from random import randint
 
 from models import User, Phone
 from routers.user.schema import UserOut
@@ -7,7 +8,7 @@ from routers.user.api import TEST_CONFIRMATION_CODE
 
 
 USER_ID = 2
-PHONE = '+77784156867'
+PHONE = '+7778415' + str(randint(1000, 9999))
 
 
 def test_get_users(test_app: TestClient):
@@ -29,7 +30,7 @@ def test_get_user_by_id(test_app: TestClient):
 
 
 def test_edit_user(test_app: TestClient):
-    '''POST /user should edit User model according to given data arguments'''
+    '''POST /user route should edit User model according to given data arguments'''
     expected_user_name = 'Edited user name'
     data = {'name': expected_user_name}
     response = test_app.post(f'/user/{USER_ID}', json=data)
@@ -42,16 +43,22 @@ def test_edit_user(test_app: TestClient):
 
 
 def test_send_confirmation_code(test_app: TestClient):
+    '''POST /user/send-code/{phone} route should send confirmation code to provided phone and set this code for database model as well'''
     expected_msg = {
         'msg': f'Confirmation code sent to {PHONE}', 'status': True
     }
     response = test_app.post(f'/user/send-code/{PHONE}')
 
+    phone_obj = Phone.query.filter_by(value=PHONE).first()
+
     assert response.status_code == 200
     assert response.json() == expected_msg
+    assert isinstance(phone_obj.confirmation_code, str)
+    assert len(phone_obj.confirmation_code) == 4
 
 
 def test_create_user(test_app: TestClient):
+    '''PUT /user/{confirmation_code} route should create User model if provided confirmation code is correct'''
     json = {'name': 'New user name', 'phone': PHONE}
     response = test_app.put(
         f'/user/{TEST_CONFIRMATION_CODE}', json=json

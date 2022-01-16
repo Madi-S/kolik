@@ -19,19 +19,19 @@ class CreateMixin():
 
 
 class EditMixin():
-    @classmethod
-    def edit(cls, data: dict) -> Any:
-        '''Incoming data dictionary mush have primary key id'''
-        obj = cls.query.get(data['id'])
-        data.pop('id')
+    def edit(self, data: dict) -> Any:
+        try:
+            data.pop('id')
+            data.pop('user_id')
+        except:
+            pass
 
-        for attr, value in data.items():
-            if value != None:
-                logger.debug('Setting attr {} to {}', attr, value)
-                setattr(obj, attr, value)
+        for key, value in data.items():
+            if not 'id' in key and value is not None:
+                setattr(self, key, value)
 
         db.session.commit()
-        return obj
+        return self
 
 
 class Phone(Base):

@@ -5,7 +5,7 @@ from typing import List
 from loguru import logger
 
 from models import Post
-from .utils import PostQueryHandler
+from .utils import PostQueryHandler, generate_image_uri
 from .schema import PostQuery, PostOut, PostIn, PostEditIn
 
 router = APIRouter(
@@ -36,29 +36,37 @@ async def create_post(data: PostIn):
     return post
 
 
-@router.post('/', response_model=PostOut, tags=['post'])
-async def edit_post(data: PostEditIn):
-    post = Post.edit(data.dict())
-    return post
+@router.post('/{id}', response_model=PostOut, tags=['post'])
+async def edit_post(data: PostEditIn, id: int = Path(...)):
+    if post := Post.query.get(id):
+        # if post.user_id == data.user_id:
+        post.edit(data.dict())
+        return post
+
+        # raise HTTPException(
+        #     404, 'Given userId does not match with post.userId')
+
+    raise HTTPException(404, 'Post not found')
 
 
 IMAGES_FOLDER = 'images'
 
 
-@router.put('/image', response_model=PostOut, tags=['post', 'image'])
-async def upload_post_image(post_id: int = Header(None), image: UploadFile = File(...)):
+@router.put('/image/{post_id}', response_model=PostOut, tags=['post', 'image'])
+async def upload_post_image(
+    post_id: int = Path(...),
+    image: UploadFile = File(...)
+):
     if post := Post.query.get(post_id):
         contents = await image.read()
 
-        file_name = f'{post_id}__{image.filename}'
-        file_path = f'{IMAGES_FOLDER}/{file_name}'
-        
-        print('Saving image to', file_path)
+        image_uri = generate_image_uri(post_id, image.filename)
+        logger.debug('Saving image to', image_uri)
 
-        with open(file_path, 'wb') as f:
+        with open(image_uri, 'wb') as f:
             f.write(contents)
 
-        post.set_image_uri(file_path)
+        post.set_image_uri(image_uri)
         return post
 
     raise HTTPException(404, 'Post not found')

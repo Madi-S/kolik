@@ -21,6 +21,9 @@ params: {
 
 '''
 
+def generate_image_uri(id, name):
+    return f'images/{id}__{name}'
+
 
 class PostQueryHandler:
     def __init__(self, params: PostQuery) -> None:

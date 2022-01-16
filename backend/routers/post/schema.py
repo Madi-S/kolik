@@ -40,8 +40,15 @@ class PostIn(PostBaseModel):
 
 
 class PostEditIn(PostBaseModel):
-    id: int
+    '''
+    Does not matter if any attribute is `None` because EditMixin will not apply None attribute values; `id` is provided in the path. Only `user_id` is mandatory for authentication
+    '''
     user_id: int
+    title: Optional[str] = None
+    price: Optional[int] = None
+    description: Optional[str] = None
+    location: Optional[enums.Location] = None
+    category: Optional[enums.PostCategory] = None
 
 
 class PostOut(PostBaseModel):
