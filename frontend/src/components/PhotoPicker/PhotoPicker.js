@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Image } from 'react-native'
+import { View, StyleSheet, Image, Dimensions } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 
 import askForPermissionsAsync from './utils/permissions'
 import { AppButton } from '../core/button'
-
-const cameraOptions = {
-    quality: 0.7,
-    allowsEditing: false,
-    aspect: [16, 9]
-}
 
 const PhotoPicker = ({
     uri = null,
@@ -23,6 +17,7 @@ const PhotoPicker = ({
 
     const showAndProcessImage = img => {
         setImage(img.uri)
+        console.log('img uri', img.uri)
         onPick(img)
     }
 
@@ -51,12 +46,23 @@ const PhotoPicker = ({
     )
 }
 
+const cameraOptions = {
+    quality: 0.7,
+    allowsEditing: false,
+    aspect: [16, 9]
+}
+
+const screenWidth = Dimensions.get('window').width
+
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 10
+        marginBottom: 10,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     image: {
-        width: '100%',
+        width: screenWidth - 20,
         height: 200,
         marginTop: 10
     }
