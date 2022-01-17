@@ -1,1 +1,0 @@
-export const SCROLL_VIEW_MARGIN_BOTTOM = 180
