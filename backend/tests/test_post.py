@@ -1,20 +1,56 @@
 from fastapi.testclient import TestClient
 
-from random import randint
+import os.path
+from sqlalchemy import or_
+from random import randint, choice
 
 import enums
 from models import Post, User
+
 from routers.post.schema import PostOut
 from routers.post.api import IMAGES_FOLDER
 from routers.post.utils import generate_image_uri
-
 
 POST_ID = 6
 USER_ID = 1
 
 
 def test_query_posts(test_app: TestClient):
-    ...
+    '''POST /post/query route should return a list of posts according to given query parameters'''
+    from_ = randint(1, 4)
+    to = randint(5, 9)
+    price_from = 0
+    price_from = randint(0, 10)
+    price_to = randint(999999999, 999999999999)
+    q = choice(('a', 'b', 'c', 'd', 'e', 'f'))
+    location = enums.Location.all
+    category = enums.PostCategory.all
+    # SQLAlchemy automatically orders entries by published_at
+    order_by_option = enums.PostOrderByOption.published_at_asc
+
+    json = {
+        'q': q,
+        'from_': from_,
+        'to': to,
+        'filters': {
+            'priceTo': price_to,
+            'priceFrom': price_from,
+            'location': location,
+            'category': category,
+            'orderByOption': order_by_option
+        }
+    }
+    response = test_app.post('/post/query', json=json)
+
+    filtered_posts = Post.query.filter(
+        or_(
+            Post.title.ilike(f'%{q}%'),
+            Post.description.ilike(f'%{q}%'),
+        )
+    ).filter(Post.price >= price_from).filter(Post.price <= price_to).offset(from_).limit(to - from_)
+
+    assert response.status_code == 200
+    assert len(response.json()) == filtered_posts.count()
 
 
 def test_get_post_by_id(test_app: TestClient):
@@ -79,11 +115,12 @@ def test_upload_post_image(test_app: TestClient):
         assert response.status_code == 200
         assert response.json() == post_data
         assert post_obj.image_uri == generate_image_uri(POST_ID, filename)
-        
-        # Test for file existence with os or sys
-        
-        
+
+        assert os.path.isfile(post_obj.image_uri)
 
 
 def test_get_post_image(test_app: TestClient):
-    ...
+    '''GET /post/image/{post_id} route should return image file response with 200 status code'''
+    response = test_app.get(f'post/image/{POST_ID}')
+
+    assert response.status_code == 200

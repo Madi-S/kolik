@@ -26,5 +26,9 @@ class PostOrderByOption(str, Enum):
     title_desc = 'title-desc'
     price_asc = 'price-asc'
     price_desc = 'price-desc'
+    
+    '''From oldest to newest post'''
     published_at_asc = 'published_at-asc'
+    
+    '''From newest to oldest post'''
     published_at_desc = 'published_at-desc'

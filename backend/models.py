@@ -1,12 +1,11 @@
 from typing import Any
 from loguru import logger
-from datetime import datetime
-from sqlalchemy import Column, Boolean, String, DateTime, Integer, ForeignKey
+from sqlalchemy import Column, Boolean, String, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship
 
 import enums
 from db import Base, db
-from utils import generate_user_id, generate_user_token
+from utils import generate_user_id, generate_user_token, get_unix_time
 
 
 class CreateMixin():
@@ -46,6 +45,7 @@ class Phone(Base):
     confirmed = Column(Boolean, default=False)
     blocked = Column(Boolean, default=False)
     failed_confirmation_attempts = Column(Integer, default=0)
+    created_at = Column(Float, default=get_unix_time)
 
     user = relationship('User', uselist=False, backref='phone_obj')
 
@@ -84,8 +84,8 @@ class User(Base, CreateMixin, EditMixin):
     token = Column(String(100), unique=True, default=generate_user_token)
     device_info = Column(String(300))
     blocked = Column(Boolean, default=False)
-    registered_at = Column(DateTime, default=datetime.now)
-    last_login_at = Column(DateTime, default=datetime.now)
+    registered_at = Column(Float, default=get_unix_time)
+    last_login_at = Column(Float, default=get_unix_time)
 
     phone = Column(Integer, ForeignKey('phone.value'), unique=True)
 
@@ -107,7 +107,7 @@ class Post(Base, CreateMixin, EditMixin):
         String(500), default=enums.PostCategory.all, nullable=False)
     price = Column(Integer, nullable=False)
     image_uri = Column(String)
-    published_at = Column(DateTime, default=datetime.now)
+    published_at = Column(Float, default=get_unix_time)
 
     slug = Column(String(100))
     activated = Column(Boolean, default=False)

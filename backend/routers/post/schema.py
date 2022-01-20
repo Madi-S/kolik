@@ -1,6 +1,5 @@
-from typing import Any, Optional
+from typing import Optional
 from pydantic import validator
-from datetime import datetime
 from fastapi_camelcase import CamelModel
 
 import enums
@@ -53,6 +52,7 @@ class PostEditIn(PostBaseModel):
 
 class PostOut(PostBaseModel):
     id: int
+    # published_at: float
 
     class Config:
         orm_mode = True
