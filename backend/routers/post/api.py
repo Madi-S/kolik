@@ -1,16 +1,24 @@
-from fastapi import APIRouter, Path, HTTPException, File, UploadFile, Header
+from fastapi import Header, APIRouter, Path, HTTPException, File, UploadFile, Depends
 from fastapi.responses import FileResponse
 
-from typing import List
+from typing import Any, List
 from loguru import logger
 
 from models import Post
 from .utils import PostQueryHandler, generate_image_uri
 from .schema import PostQuery, PostOut, PostIn, PostEditIn
 
+
+# !!! Make sure that Header will be mandatory in producation build
+def validate_auth_token(x_token: str = Header('2222', alias='auth-token')) -> Any:
+    if x_token != '2222':
+        raise HTTPException(401, 'User is not authenticated')
+
+
 router = APIRouter(
     prefix='/post',
-    tags=['post']
+    tags=['post'],
+    dependencies=[Depends(validate_auth_token)]
 )
 
 

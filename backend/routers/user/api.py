@@ -10,8 +10,7 @@ from .schema import UserOut, UserIn, UserEditIn
 
 router = APIRouter(
     prefix='/user',
-    tags=['user'],
-    # dependencies=[Depends(get_token_header)]
+    tags=['user']
 )
 
 TEST_CONFIRMATION_CODE = '2222'
@@ -38,11 +37,11 @@ async def get_user_by_id(id: int = Path(...)):
 
 
 @router.post('/{id}', response_model=UserOut, tags=['user'])
-async def edit_user(data: UserEditIn, id: int = Path(...)):    
+async def edit_user(data: UserEditIn, id: int = Path(...)):
     if user := User.query.get(id):
         user.edit(data.dict())
         return user
-    
+
     raise HTTPException(404, 'User not found')
 
 
