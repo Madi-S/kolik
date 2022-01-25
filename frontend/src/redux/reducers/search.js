@@ -15,7 +15,7 @@ const initialState = {
         orderByOption: SORT_BY_OPTIONS[0].value
     },
     from_: 0,
-    to: 100,
+    to: 5,
 }
 
 export const searchReducer = (state = initialState, action) => {

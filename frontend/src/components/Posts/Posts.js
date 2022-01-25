@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
-import { useInfiniteQuery, useQueryClient } from 'react-query'
 
 import DATA from '../../data'
 import PostLoader from '../PostLoader'
@@ -10,12 +9,15 @@ import * as CONSTANTS from '../../constants'
 import { setCurrentPost } from '../../redux/actions/post'
 
 const Posts = ({ navigation }) => {
-    const [posts, setPosts] = useState(DATA)
+    let lastMaxOffsetY = 0
+
     const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
-    if (true) {
-        // TODO:  implement post loader
+    const [posts, setPosts] = useState(DATA)
+    const [postsToIndex, setPostsToIndex] = useState(3)
+
+    if (!posts) {
         return (
             <View style={styles.postsWrapper}>
                 <PostLoader />
@@ -26,14 +28,18 @@ const Posts = ({ navigation }) => {
     }
 
     useEffect(() => {
-        console.log('Fetching posts with params:', searchOptions)
+        const searchOptionsWithToIndex = {
+            ...searchOptions,
+            to: postsToIndex
+        }
+        console.log('Fetching posts with params:', searchOptionsWithToIndex)
         const fetchPosts = async () => {
-            const _posts = await loadPostsFromServer(searchOptions)
+            const _posts = await loadPostsFromServer(searchOptionsWithToIndex)
             setPosts(_posts)
         }
 
         fetchPosts().catch(console.error)
-    }, [searchOptions])
+    }, [searchOptions, postsToIndex])
 
     const openPostDetail = post => {
         return () => {
@@ -42,16 +48,32 @@ const Posts = ({ navigation }) => {
         }
     }
 
+    const loadMorePosts = event => {
+        const positionY = event.nativeEvent.contentOffset.y
+        const MAGIC_NUMBER = 400
+
+        if (positionY > lastMaxOffsetY + MAGIC_NUMBER) {
+            lastMaxOffsetY = positionY
+            setPostsToIndex(postsToIndex + 3)
+        }
+
+        /*
+            - Make sure that fetchPosts is not called if postsToIndex > overall posts count from server 
+        */
+    }
+
     return (
-        <View style={styles.postsWrapper}>
-            {posts.map(post => (
-                <PostPreview
-                    post={post}
-                    key={post.id.toString()}
-                    onPreviewCliick={openPostDetail(post)}
-                />
-            ))}
-        </View>
+        <ScrollView onScroll={loadMorePosts}>
+            <View style={styles.postsWrapper}>
+                {posts.map(post => (
+                    <PostPreview
+                        post={post}
+                        key={post.id.toString()}
+                        onPreviewCliick={openPostDetail(post)}
+                    />
+                ))}
+            </View>
+        </ScrollView>
     )
 }
 
