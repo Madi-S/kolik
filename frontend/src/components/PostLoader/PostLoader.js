@@ -5,8 +5,8 @@ const PostLoader = props => (
     <ContentLoader
         // speed={2}
         width={450}
-        height={400}
-        viewBox='0 0 450 400'
+        height={300}
+        viewBox='0 0 450 300'
         backgroundColor='#f0f0f0'
         foregroundColor='#dedede'
         {...props}
