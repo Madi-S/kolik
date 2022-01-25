@@ -4,36 +4,25 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useInfiniteQuery, useQueryClient } from 'react-query'
 
 import DATA from '../../data'
-import * as CONSTANTS from '../../constants'
+import PostLoader from '../PostLoader'
 import PostPreview from '../PostPreview'
+import * as CONSTANTS from '../../constants'
 import { setCurrentPost } from '../../redux/actions/post'
-
-const loadPostsFromServer = async params => {
-    const body = JSON.stringify(params)
-    const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': '2222'
-        },
-        body
-    })
-    const posts = JSON.parse(await res.text())
-    if (posts.length === 0) {
-        return false
-    }
-    return posts
-}
 
 const Posts = ({ navigation }) => {
     const [posts, setPosts] = useState(DATA)
     const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
-    if (!posts) {
+    if (true) {
         // TODO:  implement post loader
-        return <Text>Loading ...</Text>
+        return (
+            <View style={styles.postsWrapper}>
+                <PostLoader />
+                <PostLoader />
+                <PostLoader />
+            </View>
+        )
     }
 
     useEffect(() => {
@@ -64,6 +53,24 @@ const Posts = ({ navigation }) => {
             ))}
         </View>
     )
+}
+
+const loadPostsFromServer = async params => {
+    const body = JSON.stringify(params)
+    const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': '2222'
+        },
+        body
+    })
+    const posts = JSON.parse(await res.text())
+    if (posts.length === 0) {
+        return false
+    }
+    return posts
 }
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { StyleSheet } from 'react-native'
 import { Card } from 'react-native-elements'
@@ -34,19 +34,6 @@ const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
             <Card.Divider />
         </Card>
     )
-}
-
-const getPostImage = async postId => {
-    const res = await fetch(
-        `https://kolik-backend.herokuapp.com/post/image/${parseInt(postId)}`,
-        {
-            headers: {
-                accept: 'application/json',
-                'auth-token': '2222'
-            }
-        }
-    )
-    return await res.text()
 }
 
 const styles = StyleSheet.create({
