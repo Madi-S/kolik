@@ -55,7 +55,7 @@ const PostForm = ({
         <View>
             <Text style={{ ...styles.title, ...titleStyle }}>{label}</Text>
             <ScrollView>
-                <View style={{ ...styles.container, ...titleStyle }}>
+                <View style={{ ...styles.container, ...containerStyle }}>
                     <View style={styles.center}>
                         <PhotoPicker
                             uri={imageUri}

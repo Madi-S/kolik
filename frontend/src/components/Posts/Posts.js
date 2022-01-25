@@ -9,7 +9,6 @@ import PostPreview from '../PostPreview'
 import { setCurrentPost } from '../../redux/actions/post'
 
 const loadPostsFromServer = async params => {
-    console.log(params)
     const body = JSON.stringify(params)
     const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
         method: 'POST',
@@ -22,7 +21,7 @@ const loadPostsFromServer = async params => {
     })
     const posts = JSON.parse(await res.text())
     if (posts.length === 0) {
-        return DATA
+        return false
     }
     return posts
 }
@@ -42,7 +41,6 @@ const Posts = ({ navigation }) => {
         const fetchPosts = async () => {
             const _posts = await loadPostsFromServer(searchOptions)
             setPosts(_posts)
-            console.log('***', _posts.length)
         }
 
         fetchPosts().catch(console.error)
