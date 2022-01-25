@@ -11,7 +11,7 @@ import { LOCATIONS, SORT_BY_OPTIONS } from '../../../data'
 import { setSearchFilters } from '../../../redux/actions/search'
 
 const DEFAULT_LOCATION = LOCATIONS[0].value
-const DEFAULT_SORT_BY_OPTION = SORT_BY_OPTIONS[0].value
+const DEFAULT_ORDER_BY_OPTION = SORT_BY_OPTIONS[0].value
 
 const FilterModal = () => {
     const dispatch = useDispatch()
@@ -20,8 +20,8 @@ const FilterModal = () => {
     const [priceFrom, setPriceFrom] = useState('0')
     const [priceTo, setPriceTo] = useState('99999999')
     const [selectedLocation, setSelectedLocation] = useState(DEFAULT_LOCATION)
-    const [selectedSortByOption, setSelectedSortByOption] = useState(
-        DEFAULT_SORT_BY_OPTION
+    const [selectedOrderByOption, setSelectedOrderByOption] = useState(
+        DEFAULT_ORDER_BY_OPTION
     )
 
     const applyFilters = () => {
@@ -31,7 +31,7 @@ const FilterModal = () => {
                 priceFrom,
                 priceTo,
                 location: selectedLocation,
-                sortByOption: selectedSortByOption
+                orderByOption: selectedOrderByOption
             })
         )
     }
@@ -57,9 +57,9 @@ const FilterModal = () => {
                     onChangeText={setPriceTo}
                 />
                 <AppSelect
-                    title='Sort by:'
-                    selectedValue={selectedSortByOption}
-                    onValueChange={setSelectedSortByOption}
+                    title='Order by:'
+                    selectedValue={selectedOrderByOption}
+                    onValueChange={setSelectedOrderByOption}
                     itemsList={SORT_BY_OPTIONS}
                 />
                 <AppSelect

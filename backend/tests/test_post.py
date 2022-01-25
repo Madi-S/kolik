@@ -32,11 +32,11 @@ def test_query_posts(test_app: TestClient):
         'q': q,
         'from_': from_,
         'to': to,
+        'category': category,
         'filters': {
             'priceTo': price_to,
             'priceFrom': price_from,
             'location': location,
-            'category': category,
             'orderByOption': order_by_option
         }
     }

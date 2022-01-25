@@ -15,7 +15,6 @@ class PostFilters(Model):
     price_from: int = 0
     price_to: int = 9999999
     location: enums.Location
-    category: enums.PostCategory
     order_by_option: enums.PostOrderByOption
 
 
@@ -24,6 +23,7 @@ class PostQuery(Model):
     filters: PostFilters
     from_: Optional[int] = 0
     to: Optional[int] = 10
+    category: enums.PostCategory
 
 
 class PostBaseModel(Model):

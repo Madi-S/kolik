@@ -1,6 +1,7 @@
 from typing import List
 from sqlalchemy import or_
 
+import enums
 from models import Post
 from .schema import PostQuery
 
@@ -10,16 +11,16 @@ params: {
     q: 'toyota'
     from_: 0
     to: 100
+    category: 'station_wagon'
     filters: {
         price_from: 100
         price_to: 2000000
         location: 'astana'
-        category: 'station_wagon'
         order_by_option: 'price-desc
     }
 }
-
 '''
+
 
 def generate_image_uri(id, name):
     return f'images/{id}__{name}'
@@ -48,9 +49,9 @@ class PostQueryHandler:
         )
 
     def _apply_filters(self) -> None:
-        if self.params.filters.location != 'all':
+        if self.params.filters.location != enums.Location.all:
             self._apply_location_filter()
-        if self.params.filters.category != 'all':
+        if self.params.category != enums.PostCategory.all:
             self._apply_category_filter()
         if self.params.filters.price_from < self.params.filters.price_to:
             self._apply_price_range_filter()
@@ -61,7 +62,7 @@ class PostQueryHandler:
 
     def _apply_category_filter(self) -> None:
         self.query = self.query.filter_by(
-            category=self.params.filters.category)
+            category=self.params.category)
 
     def _apply_price_range_filter(self) -> None:
         self.query = self.query.filter(

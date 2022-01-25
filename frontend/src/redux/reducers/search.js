@@ -3,15 +3,16 @@ import {
     SET_SEARCH_FILTERS,
     SET_SEARCH_CATEGORY
 } from '../types'
+import { LOCATIONS } from '../../data'
 
 const initialState = {
     query: '',
     category: '',
     filters: {
         priceFrom: 0,
-        priceTo: 99999,
-        location: 'ALL',
-        sortByOption: ''
+        priceTo: 9999999,
+        location: LOCATIONS.ALL,
+        orderByOption: ''
     }
 }
 
