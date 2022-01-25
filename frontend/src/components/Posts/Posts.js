@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
+import { useInfiniteQuery, useQueryClient } from 'react-query'
 
 import DATA from '../../data'
 import * as CONSTANTS from '../../constants'
@@ -8,52 +9,40 @@ import PostPreview from '../PostPreview'
 import { setCurrentPost } from '../../redux/actions/post'
 
 const loadPostsFromServer = async params => {
-    /*
-    query: '',
-    category: '',
-    filters: {
-        priceFrom: 0,
-        priceTo: 99999,
-        location: 'all',
-        sortByOption: ''
-    }
-    */
     console.log(params)
-    const body = JSON.stringify({
-        q: 'a',
-        filters: {
-            priceFrom: 0,
-            priceTo: 9999999,
-            location: 'all',
-            orderByOption: 'title-asc'
-        },
-        from_: 0,
-        to: 10,
-        category: 'all'
-    })
+    const body = JSON.stringify(params)
     const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            // accept: 'application/json',
+            accept: 'application/json',
             'auth-token': '2222'
         },
         body
     })
-    // const posts = await res.text()
-    console.log('???', await res.text())
-    console.log('!!!', 'Boba')
-    return DATA
+    const posts = JSON.parse(await res.text())
+    if (posts.length === 0) {
+        return DATA
+    }
+    return posts
 }
 
 const Posts = ({ navigation }) => {
-    let posts = DATA
+    const [posts, setPosts] = useState(DATA)
     const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
+    if (!posts) {
+        // TODO:  implement post loader
+        return <Text>Loading ...</Text>
+    }
+
     useEffect(() => {
+        console.log('Fetching posts with params:', searchOptions)
         const fetchPosts = async () => {
-            posts = await loadPostsFromServer(searchOptions)
+            const _posts = await loadPostsFromServer(searchOptions)
+            setPosts(_posts)
+            console.log('***', _posts.length)
         }
 
         fetchPosts().catch(console.error)

@@ -1,16 +1,18 @@
 export const SORT_BY_OPTIONS = [
-    { label: 'Published (from newest)', value: 'published_at_desc' },
-    { label: 'Published (from oldest)', value: 'published_at_asc' },
-    { label: 'Price (from highest)', value: 'price_desc' },
-    { label: 'Price (from lowest)', value: 'price_asc' },
-    { label: 'Title', value: 'title' }
+    { label: 'Published (from newest)', value: 'published_at-desc' },
+    { label: 'Published (from oldest)', value: 'published_at-asc' },
+    { label: 'Price (from most expensive)', value: 'price-desc' },
+    { label: 'Price (from cheapest)', value: 'price-asc' },
+    { label: 'Title (A-Z)', value: 'title-asc' },
+    { label: 'Title (Z-A)', value: 'title-desc' },
+
 ]
 
 export const LOCATIONS = [
     { label: 'Kazakhstan', value: 'all' },
     { label: 'Almaty', value: 'almaty' },
     { label: 'Karaganda', value: 'karaganda' },
-    { label: 'Kokshetau', value: 'Kokshetau' },
+    { label: 'Kokshetau', value: 'kokshetau' },
     { label: 'Nur-Sultan', value: 'nur-sultan' }
 ]
 

@@ -5,11 +5,11 @@ import {
 } from '../types'
 
 export const setSearchQuery =
-    (query = '') =>
+    (q = '') =>
     async dispatch => {
         dispatch({
             type: SET_SEARCH_QUERY,
-            payload: { query }
+            payload: { q }
         })
     }
 
