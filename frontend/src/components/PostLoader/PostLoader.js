@@ -11,9 +11,10 @@ const PostLoader = props => (
         foregroundColor='#dedede'
         {...props}
     >
-        <Rect x='34' y='292' rx='4' ry='4' width='271' height='9' />
-        <Rect x='34' y='272' rx='3' ry='3' width='119' height='8' />
-        <Rect x='34' y='77' rx='10' ry='10' width='320' height='180' />
+        <Rect x='19' y='20' rx='10' ry='10' width='350' height='180' />
+        <Rect x='109' y='210' rx='3' ry='3' width='170' height='10' />
+        <Rect x='134' y='230' rx='3' ry='3' width='120' height='10' />
+        <Rect x='22' y='250' rx='4' ry='4' width='344' height='40' />
     </ContentLoader>
 )
 

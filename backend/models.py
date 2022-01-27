@@ -110,7 +110,7 @@ class Post(Base, CreateMixin, EditMixin):
     published_at = Column(Float, default=get_unix_time)
 
     slug = Column(String(100))
-    activated = Column(Boolean, default=False)
+    activated = Column(Boolean, default=True)
 
     user_id = Column(Integer, ForeignKey('user.id'))
 

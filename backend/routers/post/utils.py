@@ -29,16 +29,21 @@ def generate_image_uri(id, name):
 class PostQueryHandler:
     def __init__(self, params: PostQuery) -> None:
         self.params = params
-        self.query = Post.query
+        self.query = Post.query.filter_by(activated=True)
 
     def generate_entries(self):
         return self.query.all()
 
-    def apply_all(self) -> List[Post]:
+    def get_count(self):
+        return self.query.count()
+
+    def apply_all(self, apply_limit=True) -> List[Post]:
         self._apply_contains_q_to_columns()
         self._apply_filters()
         self._apply_order_by()
-        self._apply_offset_and_limit()
+        if apply_limit:
+            print('!!! Applying LIMIT')
+            self._apply_offset_and_limit()
 
     def _apply_contains_q_to_columns(self) -> None:
         self.query = self.query.filter(

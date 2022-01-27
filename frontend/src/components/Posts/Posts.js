@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import DATA from '../../data'
@@ -7,6 +7,8 @@ import PostLoader from '../PostLoader'
 import PostPreview from '../PostPreview'
 import * as CONSTANTS from '../../constants'
 import { setCurrentPost } from '../../redux/actions/post'
+import { queryPostsRequest, getPostsQueryCountRequest } from '../../http'
+
 
 const Posts = ({ navigation }) => {
     let lastMaxOffsetY = 0
@@ -15,7 +17,8 @@ const Posts = ({ navigation }) => {
     const searchOptions = useSelector(state => state.search)
 
     const [posts, setPosts] = useState(DATA)
-    const [postsToIndex, setPostsToIndex] = useState(3)
+    const [postsCount, setPostsCount] = useState(CONSTANTS.LOAD_POSTS_PER_TIME)
+    const [postsCountLimit, setPostsCountLimit] = useState(999)
 
     if (!posts) {
         return (
@@ -28,18 +31,30 @@ const Posts = ({ navigation }) => {
     }
 
     useEffect(() => {
+        const asyncSetPostsCountLimit = async () => {
+            const postsLimit = await getPostsQueryCountRequest(searchOptions)
+            setPostsCountLimit(postsLimit)
+        }
+
+        asyncSetPostsCountLimit().catch(console.error)
+    }, [searchOptions])
+
+    useEffect(() => {
         const searchOptionsWithToIndex = {
             ...searchOptions,
-            to: postsToIndex
+            to: postsCount
         }
+
         console.log('Fetching posts with params:', searchOptionsWithToIndex)
+
         const fetchPosts = async () => {
-            const _posts = await loadPostsFromServer(searchOptionsWithToIndex)
+            await sleep(10000)
+            const _posts = await queryPostsRequest(searchOptionsWithToIndex)
             setPosts(_posts)
         }
 
         fetchPosts().catch(console.error)
-    }, [searchOptions, postsToIndex])
+    }, [searchOptions, postsCount])
 
     const openPostDetail = post => {
         return () => {
@@ -54,13 +69,14 @@ const Posts = ({ navigation }) => {
 
         if (positionY > lastMaxOffsetY + MAGIC_NUMBER) {
             lastMaxOffsetY = positionY
-            setPostsToIndex(postsToIndex + 3)
-        }
 
-        /*
-            - Make sure that fetchPosts is not called if postsToIndex > overall posts count from server 
-        */
+            if (postsCount < postsCountLimit) {                
+                setPostsCount(postsCount + CONSTANTS.LOAD_POSTS_PER_TIME)
+            }
+        }
     }
+
+    const showLoader = postsCount < postsCountLimit
 
     return (
         <ScrollView onScroll={loadMorePosts}>
@@ -72,27 +88,16 @@ const Posts = ({ navigation }) => {
                         onPreviewCliick={openPostDetail(post)}
                     />
                 ))}
+                {showLoader ? <PostLoader /> : <Text></Text>}
             </View>
         </ScrollView>
     )
 }
 
-const loadPostsFromServer = async params => {
-    const body = JSON.stringify(params)
-    const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': '2222'
-        },
-        body
+const sleep = ms => {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
     })
-    const posts = JSON.parse(await res.text())
-    if (posts.length === 0) {
-        return false
-    }
-    return posts
 }
 
 const styles = StyleSheet.create({

@@ -2,6 +2,63 @@ import { TOKEN } from './auth'
 
 export const BASE_URL = 'https://kolik-backend.herokuapp.com'
 
+export const createPostRequest = async params => {
+    try {
+        const res = await fetch('https://kolik-backend.herokuapp.com/post/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            },
+            body: JSON.stringify(post)
+        })
+
+        const createdPost = JSON.parse(await res.text())
+        return createdPost
+    } catch (err) {
+        console.error('Error when creating post:', err)
+    }
+}
+
+export const queryPostsRequest = async params => {
+    const body = JSON.stringify(params)
+    const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        },
+        body
+    })
+    const posts = JSON.parse(await res.text())
+
+    /* For some reason in JavaScript an empty list is a truthy value */
+    if (posts.length === 0) {
+        return false
+    }
+    return posts
+}
+
+export const getPostsQueryCountRequest = async params => {
+    const body = JSON.stringify(params)
+    const res = await fetch(
+        'https://kolik-backend.herokuapp.com/post/query/count',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            },
+            body
+        }
+    )
+    const postsCount = JSON.parse(await res.text())
+    return postsCount
+}
+
 export const uploadPostImageRequest = async (postId, imageUri) => {
     const filename = imageUri.split('/').pop()
     const match = /\.(\w+)$/.exec(filename)
@@ -23,24 +80,5 @@ export const uploadPostImageRequest = async (postId, imageUri) => {
         return res
     } catch (err) {
         console.log('Error when uploading post image:', err)
-    }
-}
-
-export const createPostRequest = async post => {
-    try {
-        const res = await fetch('https://kolik-backend.herokuapp.com/post/', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                accept: 'application/json',
-                'auth-token': TOKEN
-            },
-            body: JSON.stringify(post)
-        })
-
-        const createdPost = JSON.parse(await res.text())
-        return createdPost
-    } catch (err) {
-        console.error('Error when creating post:', err)
     }
 }

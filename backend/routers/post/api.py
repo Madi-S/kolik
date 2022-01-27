@@ -30,6 +30,14 @@ async def query_posts(data: PostQuery):
     return posts
 
 
+@router.post('/query/count', response_model=int, tags=['post'])
+async def query_posts_count(data: PostQuery):
+    query_handler = PostQueryHandler(data)
+    query_handler.apply_all(apply_limit=False)
+    posts_count = query_handler.get_count()
+    return posts_count
+
+
 @router.get('/{id}', response_model=PostOut, tags=['post'])
 async def get_post_by_id(id: int = Path(...)):
     if post := Post.query.get(id):
