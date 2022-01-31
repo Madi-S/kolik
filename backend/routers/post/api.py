@@ -65,6 +65,18 @@ async def edit_post(data: PostEditIn, id: int = Path(...)):
     raise HTTPException(404, 'Post not found')
 
 
+@router.post('activate/{id}', response_model=bool, tags=['post'])
+def activate_post(id):
+    '''Returns True if post was activated'''
+    return Post.activate(id)
+
+
+@router.post('deactivate/{id}', response_model=bool, tags=['post'])
+def deactivate_post(id):
+    '''Returns True if post was deactivated'''
+    return Post.deactivate(id)
+
+
 IMAGES_FOLDER = 'images'
 
 

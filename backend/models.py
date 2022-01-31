@@ -121,6 +121,22 @@ class Post(Base, CreateMixin, EditMixin):
         self.image_uri = file_path
         db.session.commit()
 
+    @classmethod
+    def activate(cls, id: int) -> bool:
+        '''Returns True if the post was activated, otherwise falsy None'''
+        if post := Post.query.get(id):
+            post.activated = True
+            db.session.commit()
+            return True
+
+    @classmethod
+    def deactivate(cls, id: int) -> bool:
+        '''Returns True if the post was deactivated, otherwise falsy None'''
+        if post := Post.query.get(id):
+            post.activated = False
+            db.session.commit()
+            return True
+
 
 if __name__ == '__main__':
     from db import init_db

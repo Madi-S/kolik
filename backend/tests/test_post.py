@@ -91,7 +91,7 @@ def test_get_post_by_id(test_app: TestClient):
     '''GET /post/{id} route should return User model by given id according to UserOut schema'''
     response = test_app.get(f'/post/{POST_ID}')
 
-    post_data = PostOut.from_orm(Post.query.get(POST_ID)).dict()
+    post_data = PostOut.from_orm(Post.query.get(POST_ID)).dict(by_alias=True)
 
     assert response.status_code == 200
     assert response.json() == post_data
@@ -107,13 +107,13 @@ def test_create_post(test_app: TestClient):
 
     post_id = response.json()['id']
     post_obj = Post.query.get(post_id)
-    post_data = PostOut.from_orm(post_obj).dict()
+    post_data = PostOut.from_orm(post_obj).dict(by_alias=True)
 
     assert response.status_code == 200
     assert response.json() == post_data
 
     user_post_obj = User.query.get(USER_ID).posts[-1]
-    user_post_data = PostOut.from_orm(post_obj).dict()
+    user_post_data = PostOut.from_orm(post_obj).dict(by_alias=True)
 
     assert user_post_obj == post_obj
     assert response.json() == user_post_data
@@ -127,7 +127,7 @@ def test_edit_post(test_app: TestClient):
             'price': expected_price, 'userId': USER_ID}
     response = test_app.post(f'/post/{POST_ID}', json=json)
 
-    post_data = PostOut.from_orm(Post.query.get(POST_ID)).dict()
+    post_data = PostOut.from_orm(Post.query.get(POST_ID)).dict(by_alias=True)
 
     assert response.status_code == 200
     assert response.json() == post_data
@@ -144,12 +144,11 @@ def test_upload_post_image(test_app: TestClient):
         response = test_app.put(f'/post/image/{POST_ID}', files=files)
 
         post_obj = Post.query.get(POST_ID)
-        post_data = PostOut.from_orm(post_obj).dict()
+        post_data = PostOut.from_orm(post_obj).dict(by_alias=True)
 
         assert response.status_code == 200
         assert response.json() == post_data
         assert post_obj.image_uri == generate_image_uri(POST_ID, filename)
-
         assert os.path.isfile(post_obj.image_uri)
 
 

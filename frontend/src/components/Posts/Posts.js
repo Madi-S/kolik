@@ -48,7 +48,7 @@ const Posts = ({ navigation }) => {
         console.log('Fetching posts with params:', searchOptionsWithToIndex)
 
         const fetchPosts = async () => {
-            await sleep(10000)
+            await sleep(3000)
             const _posts = await queryPostsRequest(searchOptionsWithToIndex)
             setPosts(_posts)
         }
