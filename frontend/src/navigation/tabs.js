@@ -1,14 +1,16 @@
 import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import THEME from '../theme'
+import EditScreen from '../screens/EditScreen'
 import PostsScreen from '../screens/PostsScreen'
 import CreateScreen from '../screens/CreateScreen'
 import DetailScreen from '../screens/DetailScreen'
+import MyPostsScreen from '../screens/MyPostsScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 
 const Stack = createNativeStackNavigator()
@@ -25,6 +27,8 @@ const TabsStackNavigator = () => {
                     component={Tabs}
                 />
                 <Stack.Screen name='Detail' component={DetailScreen} />
+                <Stack.Screen name='Edit' component={EditScreen} />
+                <Stack.Screen name='MyPosts' component={MyPostsScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )
@@ -104,7 +108,7 @@ const CustomTabIcon = ({ focused, iconName }) => {
 const CustomCircleButton = ({ children, onPress }) => {
     return (
         <TouchableOpacity
-        activeOpacity={0.85}
+            activeOpacity={0.85}
             onPress={onPress}
             style={{
                 ...styles.center,
