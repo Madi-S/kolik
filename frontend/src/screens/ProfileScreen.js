@@ -2,53 +2,104 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Switch } from 'react-native'
 // import { Switch } from 'react-native-elemnts'
 
+import THEME from '../theme'
 import { AppButton } from '../components/core/button'
 import { AppTextArea } from '../components/core/textarea'
 
+/*  
+    Functionality:
+        - Toggle notifications
+        - Toggle darkTheme
+        - Show modal AboutUs modal
+        - Send feedback to server
+
+    UI:
+        - Userbar: user icon and user name
+        - Switches: two toggles with titles
+        - AboutUs: button, which opens modal
+        - Feedback: textarea and button
+
+*/
+
 const ProfileScreen = ({ navigation }) => {
-    const toggleSwitch = () => {}
+    // Load these parameters from redux
+    const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+    const [darkThemeEnabled, setDarkThemeEnabled] = useState(true)
+
+    // Should dispatch these parameters to redux
+    const toggleNotifications = () => setNotificationsEnabled(prev => !prev)
+    const toggleDarkTheme = () => setDarkThemeEnabled(prev => !prev)
+
+    const showAboutUs = () => {}
+    const sendFeedback = () => {}
+
+    const userName = 'Mr Madi'
+
     return (
         <View>
-            <View style={styles.userbar}></View>
+            <View style={styles.userbar}>
+                <View>
+                    <Text>I am a User Icon</Text>
+                </View>
+                <Text>Hello, {userName}</Text>
+            </View>
             <View style={styles.switches}>
                 <View style={styles.switch}>
                     <Text>Notifications</Text>
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                        trackColor={trackColor}
+                        thumbColor={
+                            notificationsEnabled
+                                ? THEME.INFO_COLOR
+                                : THEME.WHITE_COLOR
+                        }
                         ios_backgroundColor='#3e3e3e'
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
+                        onValueChange={toggleNotifications}
+                        value={notificationsEnabled}
                     />
                 </View>
                 <View style={styles.switch}>
                     <Text>Dark Theme</Text>
                     <Switch
-                        trackColor={{ false: '#767577', true: '#81b0ff' }}
-                        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                        trackColor={trackColor}
+                        thumbColor={
+                            darkThemeEnabled
+                                ? THEME.INFO_COLOR
+                                : THEME.WHITE_COLOR
+                        }
                         ios_backgroundColor='#3e3e3e'
-                        onValueChange={toggleSwitch}
-                        value={isEnabled}
+                        onValueChange={toggleDarkTheme}
+                        value={darkThemeEnabled}
                     />
                 </View>
             </View>
             <View style={styles.about}>
                 <AppButton
-                    onPress={() => {
-                        navigation.navigate('about')
-                    }}
+                    onPress={showAboutUs}
+                    title='About us'
                 />
             </View>
             <View style={styles.feedback}>
                 <AppTextArea />
-                <AppButton />
+                <AppButton title='Send feedback' onPress={sendFeedback} />
             </View>
         </View>
     )
 }
 
+const trackColor = {
+    false: THEME.DANGER_COLOR,
+    true: THEME.LIGHTEN_PRIMARY_COLOR
+}
+
 const styles = StyleSheet.create({
-    userbar: {},
+    userbar: {
+        // flex: 1,
+        // alignItems: 'center',
+        // flexDirection: 'row',
+        marginHorizontal: 20,
+        marginVertical: 30
+    },
     switches: {},
     switch: {},
     about: {},

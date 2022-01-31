@@ -1,4 +1,5 @@
 const THEME = {
+    WHITE_COLOR: '#f4f3f4',
     INFO_COLOR: '#457b9d',
     DANGER_COLOR: '#e63946',
     SECONDARY_COLOR: '#a8dadc',
