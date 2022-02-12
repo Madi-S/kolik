@@ -138,6 +138,22 @@ class Post(Base, CreateMixin, EditMixin):
             return True
 
 
+class Feedback(Base, CreateMixin):
+    __tablename__ = 'feedback'
+
+    id = Column(Integer, primary_key=True)
+
+    body = Column(String(1000), nullable=False)
+    created_at = Column(Float, default=get_unix_time)
+    is_read = Column(Boolean, default=True)
+    
+    user_id = Column(Integer, ForeignKey('user.id'))
+    
+    def __repr__(self) -> str:
+        return f'<Feedback #{self.id} from user #{self.user_id}>'
+    
+
+
 if __name__ == '__main__':
     from db import init_db
     init_db()

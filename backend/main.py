@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from routers.user.api import router as user_router
 from routers.post.api import router as post_router
+from routers.misc.api import router as misc_router
 
 
 app = FastAPI()
@@ -24,6 +25,7 @@ app.add_middleware(
 
 app.include_router(user_router)
 app.include_router(post_router)
+app.include_router(misc_router)
 
 
 @app.get('/', tags=['test'])
