@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Switch } from 'react-native'
 // import { Switch } from 'react-native-elemnts'
 
 import THEME from '../theme'
+import { sendFeedbackRequest } from '../http'
 import { AppButton } from '../components/core/button'
 import { AppTextArea } from '../components/core/textarea'
 import BottomHalfModal from '../components/BottomHalfModal'
@@ -12,40 +13,36 @@ import BottomHalfModal from '../components/BottomHalfModal'
         - Toggle notifications                  +
         - Toggle darkTheme                      +
         - Show modal AboutUs modal              +
-        - Send feedback to server
-        - Navigate to MyPostsScreen             +       
+        - Send feedback to server               +
+        - Navigate to MyPostsScreen             +
 
     UI:
         - Userbar: user icon and user name
         - Switches: two toggles with titles     +
         - AboutUs: button, which opens modal    +
         - Feedback: textarea and button         +
+        - MyPosts
 
 */
 
 const ProfileScreen = ({ navigation }) => {
-    // Load these parameters from redux
+    // Load these values from redux
     const [darkThemeEnabled, setDarkThemeEnabled] = useState(true)
     const [notificationsEnabled, setNotificationsEnabled] = useState(false)
 
     const [showAboutUsModal, setShowAboutUsModal] = useState(false)
-
     const [feedbackValue, setFeedbackValue] = useState('')
 
     // Should dispatch these parameters to redux
     const toggleDarkTheme = () => setDarkThemeEnabled(prev => !prev)
     const toggleNotifications = () => setNotificationsEnabled(prev => !prev)
 
-    const sendFeedback = () => {
-        /* Send feedback to server */
+    const openMyPostsScreen = () => {
+        navigation.navigate('MyPosts')
     }
 
     const openAboutUsModal = () => {
         setShowAboutUsModal(true)
-    }
-
-    const openMyPostsScreen = () => {
-        navigation.navigate('MyPosts')
     }
 
     const userName = 'Mr Madi'
@@ -62,6 +59,11 @@ const ProfileScreen = ({ navigation }) => {
                     <Text>I am a User Icon</Text>
                 </View>
                 <Text>Hello, {userName}</Text>
+            </View>
+
+            <View style={styles.myPosts}>
+                <Text>View & Edit My Posts</Text>
+                <AppButton title='Open' onPress={openMyPostsScreen} />
             </View>
 
             <View style={styles.switches}>
@@ -106,7 +108,10 @@ const ProfileScreen = ({ navigation }) => {
                     value={feedbackValue}
                     onChangeText={setFeedbackValue}
                 />
-                <AppButton title='Send feedback' onPress={sendFeedback} />
+                <AppButton
+                    title='Send feedback'
+                    onPress={sendFeedbackRequest}
+                />
             </View>
         </View>
     )
@@ -153,6 +158,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 30
     },
+    myPosts: {},
     switches: {},
     switch: {},
     about: {},

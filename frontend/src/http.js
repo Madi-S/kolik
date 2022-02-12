@@ -1,4 +1,4 @@
-import { TOKEN } from './auth'
+import { TOKEN, USER_ID } from './auth'
 
 export const BASE_URL = 'https://kolik-backend.herokuapp.com'
 
@@ -80,5 +80,27 @@ export const uploadPostImageRequest = async (postId, imageUri) => {
         return res
     } catch (err) {
         console.log('Error when uploading post image:', err)
+    }
+}
+
+export const sendFeedbackRequest = async feedbackBody => {
+    const body = JSON.stringify({ body: feedbackBody, userId: USER_ID })
+
+    try {
+        const res = await fetch(
+            'https://kolik-backend.herokuapp.com/misc/feedback',
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    accept: 'application/json'
+                },
+                body
+            }
+        )
+
+        return res
+    } catch (err) {
+        console.log('Error when sending feedback:', err)
     }
 }

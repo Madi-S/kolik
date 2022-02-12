@@ -12,7 +12,7 @@ class FeedbackIn(Model):
     user_id: int
 
 
-class FeedbackIn(Model):
+class FeedbackOut(Model):
     id: int
     body: str
 
