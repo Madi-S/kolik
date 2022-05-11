@@ -49,21 +49,11 @@ const ProfileScreen = ({ navigation }) => {
 
     return (
         <View style={styles.wrapper}>
-            <AboutUsModal
-                showModal={showAboutUsModal}
-                setShowModal={setShowAboutUsModal}
-            />
-
             <View style={styles.userbar}>
                 <View>
                     <Text>I am a User Icon</Text>
                 </View>
                 <Text>Hello, {userName}</Text>
-            </View>
-
-            <View style={styles.myPosts}>
-                <Text>View & Edit My Posts</Text>
-                <AppButton title='Open' onPress={openMyPostsScreen} />
             </View>
 
             <View style={styles.switches}>
@@ -98,6 +88,11 @@ const ProfileScreen = ({ navigation }) => {
                 </View>
             </View>
 
+            <View style={styles.myPosts}>
+                <Text>View & Edit My Posts</Text>
+                <AppButton title='Open' onPress={openMyPostsScreen} />
+            </View>
+
             <View style={styles.about}>
                 <AppButton onPress={openAboutUsModal} title='About Us' />
             </View>
@@ -113,6 +108,11 @@ const ProfileScreen = ({ navigation }) => {
                     onPress={sendFeedbackRequest}
                 />
             </View>
+
+            <AboutUsModal
+                showModal={showAboutUsModal}
+                setShowModal={setShowAboutUsModal}
+            />
         </View>
     )
 }
@@ -120,7 +120,7 @@ const ProfileScreen = ({ navigation }) => {
 const AboutUsModal = ({ showModal, setShowModal }) => {
     return (
         <BottomHalfModal
-            title='Categories'
+            showButton={false}
             isVisible={showModal}
             setIsVisible={setShowModal}
         >
@@ -158,7 +158,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         marginVertical: 30
     },
-    myPosts: {},
+    myPosts: {
+        marginVertical: 30
+    },
     switches: {},
     switch: {},
     about: {},

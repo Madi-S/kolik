@@ -10,6 +10,7 @@ const BottomHalfModal = ({
     openButtonStyle = {},
     isVisible = false,
     setIsVisible = null,
+    showButton = true,
     children = <DefaultModalContent onPress={closeModal} />
 }) => {
     if (!setIsVisible) {
@@ -24,11 +25,11 @@ const BottomHalfModal = ({
 
     return (
         <View style={styles.wrapper}>
-            <AppButton
+            {showButton && <AppButton
                 title={title}
                 onPress={openModal}
                 style={openButtonStyle}
-            />
+            />}
             <Modal
                 backdropOpacity={0.5}
                 isVisible={isVisible}
