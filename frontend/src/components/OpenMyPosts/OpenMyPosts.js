@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-import THEME from '../theme'
-import { AppButton } from '../components/core/button'
+import THEME from '../../theme'
+import { AppButton } from '../core/button'
 
 const OpenMyPosts = ({ onPress }) => {
     return (

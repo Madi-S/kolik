@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-import THEME from '../theme'
+import THEME from '../../theme'
 
 const UserBar = () => {
     // TODO: Load username from the server

@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import UserBar from './UserBar'
-import AboutUs from './AboutUs'
-import Feedback from './Feedback'
-import OpenMyPosts from './OpenMyPosts'
-import UserSettings from './UserSettings'
+import UserBar from '../components/Userbar'
+import AboutUs from '../components/AboutUs'
+import Feedback from '../components/Feedback'
+import OpenMyPosts from '../components/OpenMyPosts'
+import UserSettings from '../components/UserSettings'
 
 /*  
     Functionality:

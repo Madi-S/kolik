@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
-import THEME from '../theme'
-import BottomHalfModal from '../components/BottomHalfModal'
-import { AppButton } from '../components/core/button'
+import THEME from '../../theme'
+import { AppButton } from '../core/button'
+import BottomHalfModal from '../BottomHalfModal'
 
 const AboutUs = () => {
     const [showAboutUsModal, setShowAboutUsModal] = useState(false)

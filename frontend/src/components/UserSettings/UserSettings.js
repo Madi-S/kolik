@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, Switch, StyleSheet } from 'react-native'
 // import { Switch } from 'react-native-elemnts'
 
-import THEME from '../theme'
+import THEME from '../../theme'
 
 const UserSettings = () => {
     // TODO: Load these values from redux

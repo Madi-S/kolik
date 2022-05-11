@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 
-import THEME from '../theme'
-import { sendFeedbackRequest } from '../http'
-import { AppButton } from '../components/core/button'
-import { AppTextArea } from '../components/core/textarea'
+import THEME from '../../theme'
+import { AppButton } from '../core/button'
+import { AppTextArea } from '../core/textarea'
+import { sendFeedbackRequest } from '../../http'
 
 const Feedback = () => {
     const [feedbackValue, setFeedbackValue] = useState('')
