@@ -60,7 +60,11 @@ const Tabs = () => {
                 component={PostsScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CustomTabIcon focused={focused} iconName='search' />
+                        <CustomTabIcon
+                            focused={focused}
+                            iconName='search'
+                            color={THEME.INFO_COLOR}
+                        />
                     ),
                     // headerShown: false,
                     // headerTransparent: true,
@@ -85,7 +89,11 @@ const Tabs = () => {
                 component={ProfileScreen}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <CustomTabIcon focused={focused} iconName='person' />
+                        <CustomTabIcon
+                            focused={focused}
+                            iconName='person'
+                            color={THEME.INFO_COLOR}
+                        />
                     ),
                     headerStyle,
                     headerTitleStyle
@@ -95,11 +103,11 @@ const Tabs = () => {
     )
 }
 
-const CustomTabIcon = ({ focused, iconName }) => {
+const CustomTabIcon = ({ focused, iconName, size = 24, color = '#fff' }) => {
     return (
         <Ionicons
-            size={24}
-            color={THEME.INFO_COLOR}
+            size={size}
+            color={color}
             name={focused ? iconName : `${iconName}-outline`}
         />
     )
