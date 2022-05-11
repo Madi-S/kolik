@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Switch } from 'react-native'
-// import { Switch } from 'react-native-elemnts'
+import React from 'react'
+import { View, StyleSheet } from 'react-native'
 
-import THEME from '../theme'
-import { sendFeedbackRequest } from '../http'
-import { AppButton } from '../components/core/button'
-import { AppTextArea } from '../components/core/textarea'
-import BottomHalfModal from '../components/BottomHalfModal'
+import UserBar from './UserBar'
+import AboutUs from './AboutUs'
+import Feedback from './Feedback'
+import OpenMyPosts from './OpenMyPosts'
+import UserSettings from './UserSettings'
 
 /*  
     Functionality:
@@ -26,123 +25,19 @@ import BottomHalfModal from '../components/BottomHalfModal'
 */
 
 const ProfileScreen = ({ navigation }) => {
-    // Load these values from redux
-    const [darkThemeEnabled, setDarkThemeEnabled] = useState(true)
-    const [notificationsEnabled, setNotificationsEnabled] = useState(false)
-
-    const [showAboutUsModal, setShowAboutUsModal] = useState(false)
-    const [feedbackValue, setFeedbackValue] = useState('')
-
-    // Should dispatch these parameters to redux
-    const toggleDarkTheme = () => setDarkThemeEnabled(prev => !prev)
-    const toggleNotifications = () => setNotificationsEnabled(prev => !prev)
-
     const openMyPostsScreen = () => {
         navigation.navigate('MyPosts')
     }
 
-    const openAboutUsModal = () => {
-        setShowAboutUsModal(true)
-    }
-
-    const userName = 'Mr Madi'
-
     return (
         <View style={styles.wrapper}>
-            <View style={styles.userbar}>
-                <View>
-                    <Text>I am a User Icon</Text>
-                </View>
-                <Text>Hello, {userName}</Text>
-            </View>
-
-            <View style={styles.switches}>
-                <View style={styles.switch}>
-                    <Text>Notifications</Text>
-                    <Switch
-                        trackColor={trackColor}
-                        thumbColor={
-                            notificationsEnabled
-                                ? THEME.INFO_COLOR
-                                : THEME.WHITE_COLOR
-                        }
-                        ios_backgroundColor='#3e3e3e'
-                        onValueChange={toggleNotifications}
-                        value={notificationsEnabled}
-                    />
-                </View>
-
-                <View style={styles.switch}>
-                    <Text>Dark Theme</Text>
-                    <Switch
-                        trackColor={trackColor}
-                        thumbColor={
-                            darkThemeEnabled
-                                ? THEME.INFO_COLOR
-                                : THEME.WHITE_COLOR
-                        }
-                        ios_backgroundColor='#3e3e3e'
-                        onValueChange={toggleDarkTheme}
-                        value={darkThemeEnabled}
-                    />
-                </View>
-            </View>
-
-            <View style={styles.myPosts}>
-                <Text>View & Edit My Posts</Text>
-                <AppButton title='Open' onPress={openMyPostsScreen} />
-            </View>
-
-            <View style={styles.about}>
-                <AppButton onPress={openAboutUsModal} title='About Us' />
-            </View>
-
-            <View style={styles.feedback}>
-                <AppTextArea
-                    title='Recommendations ...'
-                    value={feedbackValue}
-                    onChangeText={setFeedbackValue}
-                />
-                <AppButton
-                    title='Send feedback'
-                    onPress={sendFeedbackRequest}
-                />
-            </View>
-
-            <AboutUsModal
-                showModal={showAboutUsModal}
-                setShowModal={setShowAboutUsModal}
-            />
+            <UserBar />
+            <UserSettings />
+            <OpenMyPosts onPress={openMyPostsScreen} />
+            <Feedback />
+            <AboutUs />
         </View>
     )
-}
-
-const AboutUsModal = ({ showModal, setShowModal }) => {
-    return (
-        <BottomHalfModal
-            showButton={false}
-            isVisible={showModal}
-            setIsVisible={setShowModal}
-        >
-            <View style={styles.modalWrapper}>
-                <Text style={styles.modalContentTitle}>About Us</Text>
-                <Text style={styles.modalContentText}>
-                    Kolik - a web application for loaning vehicles.
-                </Text>
-                <Text style={styles.modalContentText}>
-                    Created by Shaiken "floppy" Madi.
-                </Text>
-                <Text style={styles.modalContentText}>
-                    All Rights Reserved 2021-2022.
-                </Text>
-            </View>
-        </BottomHalfModal>
-    )
-}
-
-const trackColor = {
-    false: THEME.DANGER_COLOR,
-    true: THEME.LIGHTEN_PRIMARY_COLOR
 }
 
 const styles = StyleSheet.create({
@@ -150,38 +45,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between'
-    },
-    userbar: {
-        // flex: 1,
-        // alignItems: 'center',
-        // flexDirection: 'row',
-        marginHorizontal: 20,
-        marginVertical: 30
-    },
-    myPosts: {
-        marginVertical: 30
-    },
-    switches: {},
-    switch: {},
-    about: {},
-    feedback: {},
-    modalWrapper: {
-        backgroundColor: 'white',
-        padding: 22,
-        marginHorizontal: 20,
-        borderRadius: 4,
-        borderColor: 'rgba(0, 0, 0, 0.1)'
-    },
-    modalContentTitle: {
-        fontSize: 26,
-        marginBottom: 8,
-        fontWeight: 'bold',
-        color: THEME.DARKEN_PRIMARY_COLOR
-    },
-    modalContentText: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: THEME.PRIMARY_COLOR
     }
 })
 
