@@ -6,14 +6,8 @@ import { createPostRequest, uploadPostImageRequest } from '../http'
 const CreateScreen = ({ navigation }) => {
     const createPost = async (post, imageUri) => {
         const createdPost = await createPostRequest(post)
-        console.log('Created post:', createdPost)
-
-        const res = await uploadPostImageRequest(
-            parseInt(createdPost.id),
-            imageUri
-        )
-        const text = await res.text()
-        console.log('Upload post image response:', text)
+        const postId = parseInt(createdPost.id)
+        await uploadPostImageRequest(postId, imageUri)
 
         navigation.navigate('Posts')
     }

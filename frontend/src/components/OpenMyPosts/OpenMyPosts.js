@@ -1,8 +1,11 @@
 import React from 'react'
+import { getUserId } from '../../auth'
 import { View, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../theme'
 import { AppButton } from '../core/button'
+
+const userId = getUserId()
 
 const OpenMyPosts = ({ navigation }) => {
     const openMyPostsScreen = () => {

@@ -1,9 +1,15 @@
-import { TOKEN, USER_ID } from './auth'
+import { getToken, getUserId } from './auth'
 
+const TOKEN = getToken()
+const USER_ID = getUserId()
+
+let feedbackAlreadySent = false
 export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
 
 export const createPostRequest = async params => {
     try {
+        const body = JSON.stringify({ ...params, userId: USER_ID })
+
         const res = await fetch(`${BASE_URL}/post/`, {
             method: 'PUT',
             headers: {
@@ -11,7 +17,7 @@ export const createPostRequest = async params => {
                 accept: 'application/json',
                 'auth-token': TOKEN
             },
-            body: JSON.stringify(post)
+            body
         })
 
         const createdPost = JSON.parse(await res.text())
@@ -34,10 +40,11 @@ export const queryPostsRequest = async params => {
     })
     const posts = JSON.parse(await res.text())
 
-    /* For some reason in JavaScript an empty list is a truthy value */
+    /* For some reasons in JavaScript an empty list is a truthy value */
     if (posts.length === 0) {
         return false
     }
+
     return posts
 }
 
@@ -74,17 +81,16 @@ export const uploadPostImageRequest = async (postId, imageUri) => {
             }
         })
 
-        return res
+        const uploadedImage = await res.text()
+        return uploadedImage
     } catch (err) {
-        console.log('Error when uploading post image:', err)
+        console.error('Error when uploading post image:', err)
     }
 }
 
-export let feedbackAlreadySent = false
-
 export const sendFeedbackRequest = async feedbackBody => {
     if (feedbackAlreadySent) {
-        console.log('Feedback already sent')
+        console.warn('Feedback already sent')
         return
     }
 
@@ -101,8 +107,9 @@ export const sendFeedbackRequest = async feedbackBody => {
         })
         feedbackAlreadySent = true
 
-        return res
+        const createdFeedback = JSON.parse(await res.json())
+        return createdFeedback
     } catch (err) {
-        console.log('Error when sending feedback:', err)
+        console.error('Error when sending feedback:', err)
     }
 }

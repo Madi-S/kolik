@@ -8,7 +8,6 @@ import { AppButton } from '../core/button'
 import { AppTextArea } from '../core/textarea'
 
 import THEME from '../../theme'
-import { USER_ID } from '../../auth'
 import * as CONSTANTS from '../../constants'
 import { LOCATIONS, CATEGORIES } from '../../data'
 
@@ -39,11 +38,10 @@ const PostForm = ({
 
     const onPostSubmit = async () => {
         const post = {
-            title,
-            location,
-            category,
-            description,
-            userId: USER_ID,
+            title: title.trim(),
+            location: location.trim(),
+            category: category.trim(),
+            description: description.trim(),
             price: parseInt(price)
         }
         await onSubmit(post, imageUri)
