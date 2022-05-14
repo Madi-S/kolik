@@ -22,8 +22,8 @@ params: {
 '''
 
 
-def generate_image_uri(id, name):
-    return f'images/{id}__{name}'
+def generate_image_uri(post_id, name):
+    return f'./images/{post_id}__{name}'
 
 
 class PostQueryHandler:
@@ -42,7 +42,6 @@ class PostQueryHandler:
         self._apply_filters()
         self._apply_order_by()
         if apply_limit:
-            print('!!! Applying LIMIT')
             self._apply_offset_and_limit()
 
     def _apply_contains_q_to_columns(self) -> None:
