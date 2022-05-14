@@ -102,6 +102,8 @@ async def upload_post_image(
 
 @router.get('/image/{post_id}', tags=['post', 'image'])
 async def get_post_image(post_id: int = Path(...)):
+    logger.debug('Received postId', post_id)
+    logger.debug('Found post with such id', Post.query.get(post_id))
     if post := Post.query.get(post_id):
         logger.debug('Post found {}', post.image_uri)
         if post.image_uri:

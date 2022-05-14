@@ -18,6 +18,21 @@ const OpenMyPosts = ({ navigation }) => {
             <AppButton title='Open' onPress={openMyPostsScreen} />
         </View>
     )
+
+    // return (
+    //     <ScrollView onScroll={loadMorePosts}>
+    //         <View style={styles.postsWrapper}>
+    //             {posts.map(post => (
+    //                 <PostPreview
+    //                     post={post}
+    //                     key={post.id.toString()}
+    //                     onPreviewCliick={openPostDetail(post)}
+    //                 />
+    //             ))}
+    //             {showLoader ? <PostLoader /> : <Text></Text>}
+    //         </View>
+    //     </ScrollView>
+    // )
 }
 
 const styles = StyleSheet.create({

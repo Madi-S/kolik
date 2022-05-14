@@ -1,4 +1,5 @@
 from typing import List
+from loguru import logger
 from sqlalchemy import or_
 
 import enums
@@ -23,6 +24,7 @@ params: {
 
 
 def generate_image_uri(post_id, name):
+    logger.debug('Generated image uri', f'./images/{post_id}__{name}')
     return f'./images/{post_id}__{name}'
 
 
