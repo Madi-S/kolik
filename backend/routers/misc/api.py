@@ -14,5 +14,6 @@ router = APIRouter(
 
 @router.put('/feedback', response_model=FeedbackOut, tags=['misc'])
 def create_feedback(data: FeedbackIn):
+    print('Incoming feedback body', data)
     feedback = Feedback.create(data.dict())
     return feedback

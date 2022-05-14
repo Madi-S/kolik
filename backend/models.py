@@ -90,6 +90,7 @@ class User(Base, CreateMixin, EditMixin):
     phone = Column(Integer, ForeignKey('phone.value'), unique=True)
 
     posts = relationship('Post', uselist=True, backref='user')
+    feedbacks = relationship('Feedback', uselist=True, backref='user')
 
     def __repr__(self) -> str:
         return f'<User #{self.id} name: {self.name}, phone: {self.phone}>'
