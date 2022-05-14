@@ -6,8 +6,14 @@ import { AppButton } from '../core/button'
 import { AppTextArea } from '../core/textarea'
 import { sendFeedbackRequest } from '../../http'
 
+
 const Feedback = () => {
     const [feedbackValue, setFeedbackValue] = useState('')
+
+    const sendFeedback = () => {
+        sendFeedbackRequest(feedbackValue)
+        setFeedbackValue('')
+    }
 
     return (
         <View style={styles.wrapper}>
@@ -19,7 +25,7 @@ const Feedback = () => {
                 textAreaStyle={{ width: 300 }}
                 numberOfLines={3}
             />
-            <AppButton title='Send feedback' onPress={sendFeedbackRequest} />
+            <AppButton title='Send feedback' onPress={sendFeedback} />
         </View>
     )
 }

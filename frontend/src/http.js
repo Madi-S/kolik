@@ -1,10 +1,10 @@
 import { TOKEN, USER_ID } from './auth'
 
-export const BASE_URL = 'https://kolik-backend.herokuapp.com'
+export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
 
 export const createPostRequest = async params => {
     try {
-        const res = await fetch('https://kolik-backend.herokuapp.com/post/', {
+        const res = await fetch(`${BASE_URL}/post/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ export const createPostRequest = async params => {
 
 export const queryPostsRequest = async params => {
     const body = JSON.stringify(params)
-    const res = await fetch('https://kolik-backend.herokuapp.com/post/query', {
+    const res = await fetch(`${BASE_URL}/post/query`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -43,18 +43,15 @@ export const queryPostsRequest = async params => {
 
 export const getPostsQueryCountRequest = async params => {
     const body = JSON.stringify(params)
-    const res = await fetch(
-        'https://kolik-backend.herokuapp.com/post/query/count',
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                accept: 'application/json',
-                'auth-token': TOKEN
-            },
-            body
-        }
-    )
+    const res = await fetch(`${BASE_URL}/post/query/count`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        },
+        body
+    })
     const postsCount = JSON.parse(await res.text())
     return postsCount
 }
@@ -83,21 +80,26 @@ export const uploadPostImageRequest = async (postId, imageUri) => {
     }
 }
 
+export let feedbackAlreadySent = false
+
 export const sendFeedbackRequest = async feedbackBody => {
+    if (feedbackAlreadySent) {
+        console.log('Feedback already sent')
+        return
+    }
+
     const body = JSON.stringify({ body: feedbackBody, userId: USER_ID })
 
     try {
-        const res = await fetch(
-            'https://kolik-backend.herokuapp.com/misc/feedback',
-            {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    accept: 'application/json'
-                },
-                body
-            }
-        )
+        const res = await fetch(`${BASE_URL}/misc/feedback`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json'
+            },
+            body
+        })
+        feedbackAlreadySent = true
 
         return res
     } catch (err) {
