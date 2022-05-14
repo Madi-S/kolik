@@ -1,17 +1,34 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, Text, Switch, StyleSheet } from 'react-native'
-// import { Switch } from 'react-native-elemnts'
 
 import THEME from '../../theme'
+import {
+    toggleDarkTheme,
+    toggleNotificationsEnabled
+} from '../../redux/actions/settings'
 
 const UserSettings = () => {
-    // TODO: Load these values from redux
-    const [darkThemeEnabled, setDarkThemeEnabled] = useState(true)
-    const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+    const dispatch = useDispatch()
+    const darkThemeEnabled = useSelector(
+        state => state.settings.darkThemeEnabled
+    )
+    const notificationsEnabled = useSelector(
+        state => state.notificationsEnabled
+    )
 
-    // TODO: Should dispatch these parameters to redux
-    const toggleDarkTheme = () => setDarkThemeEnabled(prev => !prev)
-    const toggleNotifications = () => setNotificationsEnabled(prev => !prev)
+    const [darkThemeStatus, setDarkThemeStatus] = useState(darkThemeEnabled)
+    const [notificationsEnbaledStatus, setNotificationsEnbaledStatus] =
+        useState(notificationsEnabled)
+
+    const _toggleDarkTheme = status => {
+        setDarkThemeStatus(status)
+        dispatch(toggleDarkTheme(status))
+    }
+    const _toggleNotificationsEnabled = status => {
+        setNotificationsEnbaledStatus(status)
+        dispatch(toggleNotificationsEnabled(status))
+    }
 
     return (
         <View style={styles.wrapper}>
@@ -19,14 +36,12 @@ const UserSettings = () => {
                 <Text>Notifications</Text>
                 <Switch
                     trackColor={trackColor}
-                    thumbColor={
-                        notificationsEnabled
-                            ? THEME.INFO_COLOR
-                            : THEME.WHITE_COLOR
-                    }
                     ios_backgroundColor='#3e3e3e'
-                    onValueChange={toggleNotifications}
-                    value={notificationsEnabled}
+                    value={darkThemeStatus}
+                    onValueChange={_toggleDarkTheme}
+                    thumbColor={
+                        darkThemeStatus ? THEME.INFO_COLOR : THEME.WHITE_COLOR
+                    }
                 />
             </View>
 
@@ -34,12 +49,14 @@ const UserSettings = () => {
                 <Text>Dark Theme</Text>
                 <Switch
                     trackColor={trackColor}
-                    thumbColor={
-                        darkThemeEnabled ? THEME.INFO_COLOR : THEME.WHITE_COLOR
-                    }
                     ios_backgroundColor='#3e3e3e'
-                    onValueChange={toggleDarkTheme}
-                    value={darkThemeEnabled}
+                    value={notificationsEnbaledStatus}
+                    onValueChange={_toggleNotificationsEnabled}
+                    thumbColor={
+                        notificationsEnbaledStatus
+                            ? THEME.INFO_COLOR
+                            : THEME.WHITE_COLOR
+                    }
                 />
             </View>
         </View>
