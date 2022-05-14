@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Provider } from 'react-redux'
+import { StyleSheet } from 'react-native'
 import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet } from 'react-native'
 import { ThemeProvider } from 'react-native-elements'
 import { useColorScheme } from 'react-native-appearance'
 

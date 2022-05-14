@@ -3,12 +3,12 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import DATA from '../../data'
+import { sleep } from '../../utils'
 import PostLoader from '../PostLoader'
 import PostPreview from '../PostPreview'
 import * as CONSTANTS from '../../constants'
 import { setCurrentPost } from '../../redux/actions/post'
 import { queryPostsRequest, getPostsQueryCountRequest } from '../../http'
-
 
 const Posts = ({ navigation }) => {
     let lastMaxOffsetY = 0
@@ -45,8 +45,6 @@ const Posts = ({ navigation }) => {
             to: postsCount
         }
 
-        console.log('Fetching posts with params:', searchOptionsWithToIndex)
-
         const fetchPosts = async () => {
             await sleep(3000)
             const _posts = await queryPostsRequest(searchOptionsWithToIndex)
@@ -70,7 +68,7 @@ const Posts = ({ navigation }) => {
         if (positionY > lastMaxOffsetY + MAGIC_NUMBER) {
             lastMaxOffsetY = positionY
 
-            if (postsCount < postsCountLimit) {                
+            if (postsCount < postsCountLimit) {
                 setPostsCount(postsCount + CONSTANTS.LOAD_POSTS_PER_TIME)
             }
         }
@@ -92,12 +90,6 @@ const Posts = ({ navigation }) => {
             </View>
         </ScrollView>
     )
-}
-
-const sleep = ms => {
-    return new Promise(resolve => {
-        setTimeout(resolve, ms)
-    })
 }
 
 const styles = StyleSheet.create({
