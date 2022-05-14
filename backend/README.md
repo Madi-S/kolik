@@ -6,6 +6,14 @@
 uvicorn main:app --reload
 ```
 
+### Push changes to Heroku
+
+```sh
+$ git add .
+$ git commit -am "make it better"
+$ git push heroku master
+```
+
 ### View logs on Heroku
 
 ```sh
