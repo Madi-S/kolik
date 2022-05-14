@@ -25,15 +25,11 @@ import UserSettings from '../components/UserSettings'
 */
 
 const ProfileScreen = ({ navigation }) => {
-    const openMyPostsScreen = () => {
-        navigation.navigate('MyPosts')
-    }
-
     return (
         <View style={styles.wrapper}>
             <UserBar />
             <UserSettings />
-            <OpenMyPosts onPress={openMyPostsScreen} />
+            <OpenMyPosts navigation={navigation} />
             <Feedback />
             <AboutUs />
         </View>

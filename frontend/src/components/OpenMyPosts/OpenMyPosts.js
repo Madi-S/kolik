@@ -4,11 +4,15 @@ import { View, Text, StyleSheet } from 'react-native'
 import THEME from '../../theme'
 import { AppButton } from '../core/button'
 
-const OpenMyPosts = ({ onPress }) => {
+const OpenMyPosts = ({ navigation }) => {
+    const openMyPostsScreen = () => {
+        navigation.navigate('MyPosts')
+    }
+
     return (
         <View style={styles.wrapper}>
             <Text>View & Edit My Posts</Text>
-            <AppButton title='Open' onPress={onPress} />
+            <AppButton title='Open' onPress={openMyPostsScreen} />
         </View>
     )
 }
@@ -16,7 +20,7 @@ const OpenMyPosts = ({ onPress }) => {
 const styles = StyleSheet.create({
     wrapper: {
         marginVertical: 30,
-        alignItems: 'center',
+        alignItems: 'center'
     }
 })
 
