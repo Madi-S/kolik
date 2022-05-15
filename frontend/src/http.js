@@ -6,6 +6,20 @@ const USER_ID = getUserId()
 let feedbackAlreadySent = false
 export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
 
+export const getMyPostsRequest = async () => {
+    const res = await fetch(`${BASE_URL}/post/by_user/${USER_ID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        }
+    })
+
+    const posts = JSON.parse(await res.text())
+    return posts
+}
+
 export const createPostRequest = async params => {
     try {
         const body = JSON.stringify({ ...params, userId: USER_ID })
@@ -107,7 +121,7 @@ export const sendFeedbackRequest = async feedbackBody => {
         })
         feedbackAlreadySent = true
 
-        const createdFeedback = JSON.parse(await res.json())
+        const createdFeedback = JSON.parse(await res.text())
         return createdFeedback
     } catch (err) {
         console.error('Error when sending feedback:', err)
