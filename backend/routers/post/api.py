@@ -4,7 +4,7 @@ from fastapi.responses import FileResponse
 from typing import Any, List
 from loguru import logger
 
-from models import Post
+from models import Post, User
 from .utils import PostQueryHandler, generate_image_uri
 from .schema import PostQuery, PostOut, PostIn, PostEditIn
 
@@ -44,6 +44,12 @@ async def get_post_by_id(id: int = Path(...)):
         return post
 
     return HTTPException(404, 'Post not found')
+
+
+@router.get('/by_user/{user_id}', response_model=List[PostOut], tags=['post'])
+async def get_all_posts_by_user_id(user_id: int = Path(...)):
+    if user := User.query.get(user_id):
+        return user.posts
 
 
 @router.put('/', response_model=PostOut, tags=['post'])
