@@ -3,16 +3,15 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 
 import DATA from '../../data'
-import { sleep } from '../../utils'
 import PostLoader from '../PostLoader'
 import PostPreview from '../PostPreview'
 import * as CONSTANTS from '../../constants'
 import { setCurrentPost } from '../../redux/actions/post'
 import { queryPostsRequest, getPostsQueryCountRequest } from '../../http'
 
-const Posts = ({ navigation }) => {
-    let lastMaxOffsetY = 0
+let lastMaxOffsetY = 0
 
+const Posts = ({ navigation }) => {
     const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
@@ -46,7 +45,6 @@ const Posts = ({ navigation }) => {
         }
 
         const fetchPosts = async () => {
-            await sleep(3000)
             const _posts = await queryPostsRequest(searchOptionsWithToIndex)
             setPosts(_posts)
         }
@@ -74,7 +72,7 @@ const Posts = ({ navigation }) => {
         }
     }
 
-    const showLoader = postsCount < postsCountLimit
+    let showLoader = postsCount < postsCountLimit
 
     return (
         <ScrollView onScroll={loadMorePosts}>
