@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import DATA from '../../data'
 import PostLoader from '../PostLoader'
 import PostPreview from '../PostPreview'
 import * as CONSTANTS from '../../constants'
-import { setCurrentPost } from '../../redux/actions/post'
 import { queryPostsRequest, getPostsQueryCountRequest } from '../../http'
 
 let lastMaxOffsetY = 0
 
 const Posts = ({ navigation }) => {
-    const dispatch = useDispatch()
     const searchOptions = useSelector(state => state.search)
 
     const [posts, setPosts] = useState(DATA)
@@ -66,13 +64,6 @@ const Posts = ({ navigation }) => {
         }
     }
 
-    const openPostDetail = post => {
-        return () => {
-            dispatch(setCurrentPost(post))
-            navigation.navigate('Detail')
-        }
-    }
-
     let showLoader = postsCount < postsCountLimit
 
     return (
@@ -82,7 +73,7 @@ const Posts = ({ navigation }) => {
                     <PostPreview
                         post={post}
                         key={post.id.toString()}
-                        onPreviewClick={openPostDetail(post)}
+                        navigation={navigation}
                     />
                 ))}
                 {showLoader ? <PostLoader /> : <Text></Text>}

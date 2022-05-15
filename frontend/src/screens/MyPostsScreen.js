@@ -29,13 +29,6 @@ const MyPostsScreen = ({ navigation }) => {
     const dispatch = useDispatch()
     const [posts, setPosts] = useState(null)
 
-    const openPostDetail = post => {
-        return () => {
-            dispatch(setCurrentPost(post))
-            navigation.navigate('Detail')
-        }
-    }
-
     if (!posts) {
         return (
             <View style={styles.postsWrapper}>
@@ -62,7 +55,7 @@ const MyPostsScreen = ({ navigation }) => {
                     <MyPostPreview
                         post={post}
                         key={post.id.toString()}
-                        onPreviewCliick={openPostDetail(post)}
+                        navigation={navigation}
                     />
                 ))}
             </View>
@@ -70,12 +63,12 @@ const MyPostsScreen = ({ navigation }) => {
     )
 }
 
-const MyPostPreview = ({ post, onPreviewClick }) => {
+const MyPostPreview = ({ post, navigation }) => {
     const dispatch = useDispatch()
 
     const showPostDetail = () => {
         dispatch(setCurrentPost(post))
-        onPreviewClick()
+        navigation.navigate('Detail')
     }
 
     return (
