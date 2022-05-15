@@ -1,6 +1,6 @@
-import React from 'react'
 import { useDispatch } from 'react-redux'
 import { Card } from 'react-native-elements'
+import React, { useState, useEffect } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 
 import THEME from '../theme'
@@ -26,8 +26,16 @@ import { setCurrentPost } from '../redux/actions/post'
 */
 
 const MyPostsScreen = ({ navigation }) => {
-    const dispatch = useDispatch()
     const [posts, setPosts] = useState(null)
+
+    useEffect(() => {
+        const asyncFetchPosts = async () => {
+            const posts = await getMyPostsRequest()
+            setPosts(posts)
+        }
+
+        asyncFetchPosts().catch(console.error)
+    }, [])
 
     if (!posts) {
         return (
@@ -38,15 +46,6 @@ const MyPostsScreen = ({ navigation }) => {
             </View>
         )
     }
-
-    useEffect(() => {
-        const asyncFetchPosts = async () => {
-            const posts = await getMyPostsRequest()
-            setPosts(posts)
-        }
-
-        asyncFetchPosts().catch(console.error)
-    }, [])
 
     return (
         <ScrollView>
@@ -63,7 +62,7 @@ const MyPostsScreen = ({ navigation }) => {
     )
 }
 
-const MyPostPreview = ({ post, navigation }) => {
+const MyPostPreview = ({ post, navigation, previewButtonStyle }) => {
     const dispatch = useDispatch()
 
     const showPostDetail = () => {
