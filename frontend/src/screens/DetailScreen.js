@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { Text, Card } from 'react-native-elements'
+import { useDispatch, useSelector } from 'react-redux'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 
-import { setCurrentPost } from '../redux/actions/post'
+import { BASE_URL } from '../http'
+import { capitalize } from '../utils'
 import { FAButton } from '../components/core/button'
+import { setCurrentPost } from '../redux/actions/post'
 
 const DetailScreen = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -33,10 +35,14 @@ const DetailScreen = ({ navigation }) => {
             <Card>
                 <Card.Title>{post.title}</Card.Title>
                 <Card.Divider />
-                <Card.Image source={{ uri: post.img }} />
+                <Card.Image
+                    source={{
+                        uri: `${BASE_URL}/post/image/${parseInt(post.id)}`
+                    }}
+                />
                 <Text>Price: {post.price}</Text>
-                <Text>Category: {post.category.label}</Text>
-                <Text>Location: {post.location.label}</Text>
+                <Text>Category: {capitalize(post.category)}</Text>
+                <Text>Location: {capitalize(post.location)}</Text>
                 <Text>Created at: {Date(post.createdAt)}</Text>
                 <Text style={{ marginBottom: 10 }}>
                     Description: {post.description}
