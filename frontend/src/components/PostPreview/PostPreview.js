@@ -12,7 +12,7 @@ const PostPreview = ({ post, navigation, previewButtonStyle }) => {
 
     const showPostDetail = () => {
         dispatch(setCurrentPost(post))
-        navigation.navigate('Detail')
+        navigation.navigate('Detail', { name: post.title })
     }
 
     return (

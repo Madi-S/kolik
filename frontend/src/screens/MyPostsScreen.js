@@ -62,13 +62,15 @@ const MyPostsScreen = ({ navigation }) => {
     )
 }
 
-const MyPostPreview = ({ post, navigation, previewButtonStyle }) => {
+const MyPostPreview = ({ post, navigation }) => {
     const dispatch = useDispatch()
 
     const showPostDetail = () => {
         dispatch(setCurrentPost(post))
-        navigation.navigate('Detail')
+        navigation.navigate('MyDetail', { name: post.title })
     }
+
+    const deleteMyPost = () => {}
 
     return (
         <Card>
@@ -80,11 +82,10 @@ const MyPostPreview = ({ post, navigation, previewButtonStyle }) => {
             />
             <Card.Title>{post.title}</Card.Title>
             <Card.Title>Price: {post.price} $</Card.Title>
-            <FAButton
-                title='VIEW NOW'
-                onPress={showPostDetail}
-                style={previewButtonStyle}
-            />
+            <View>
+                <FAButton title='Edit' onPress={showPostDetail} />
+                <FAButton title='Delete' onPress={deleteMyPost} />
+            </View>
             <Card.Divider />
         </Card>
     )

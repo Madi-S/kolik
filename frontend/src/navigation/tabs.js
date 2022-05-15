@@ -10,8 +10,9 @@ import EditScreen from '../screens/EditScreen'
 import PostsScreen from '../screens/PostsScreen'
 import CreateScreen from '../screens/CreateScreen'
 import DetailScreen from '../screens/DetailScreen'
-import MyPostsScreen from '../screens/MyPostsScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+import MyPostsScreen from '../screens/MyPostsScreen'
+import MyDetailScreen from '../screens/MyDetailScreen'
 
 const Stack = createNativeStackNavigator()
 
@@ -27,8 +28,21 @@ const TabsStackNavigator = () => {
                     component={Tabs}
                 />
                 <Stack.Screen name='Edit' component={EditScreen} />
-                <Stack.Screen name='Detail' component={DetailScreen} />
-                <Stack.Screen name='MyPosts' component={MyPostsScreen} />
+                <Stack.Screen
+                    name='Detail'
+                    component={DetailScreen}
+                    options={({ route }) => ({ title: route.params.name })}
+                />
+                <Stack.Screen
+                    name='MyPosts'
+                    component={MyPostsScreen}
+                    options={{ title: 'My Posts' }}
+                />
+                <Stack.Screen
+                    name='MyDetail'
+                    component={MyDetailScreen}
+                    options={({ route }) => ({ title: route.params.name })}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )
