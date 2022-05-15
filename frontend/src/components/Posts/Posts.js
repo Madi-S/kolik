@@ -44,20 +44,14 @@ const Posts = ({ navigation }) => {
             to: postsCount
         }
 
-        const fetchPosts = async () => {
+        const asyncFetchPosts = async () => {
             const _posts = await queryPostsRequest(searchOptionsWithToIndex)
+
             setPosts(_posts)
         }
 
-        fetchPosts().catch(console.error)
+        asyncFetchPosts().catch(console.error)
     }, [searchOptions, postsCount])
-
-    const openPostDetail = post => {
-        return () => {
-            dispatch(setCurrentPost(post))
-            navigation.navigate('Detail')
-        }
-    }
 
     const loadMorePosts = event => {
         const positionY = event.nativeEvent.contentOffset.y
@@ -72,6 +66,13 @@ const Posts = ({ navigation }) => {
         }
     }
 
+    const openPostDetail = post => {
+        return () => {
+            dispatch(setCurrentPost(post))
+            navigation.navigate('Detail')
+        }
+    }
+
     let showLoader = postsCount < postsCountLimit
 
     return (
@@ -81,7 +82,7 @@ const Posts = ({ navigation }) => {
                     <PostPreview
                         post={post}
                         key={post.id.toString()}
-                        onPreviewCliick={openPostDetail(post)}
+                        onPreviewClick={openPostDetail(post)}
                     />
                 ))}
                 {showLoader ? <PostLoader /> : <Text></Text>}

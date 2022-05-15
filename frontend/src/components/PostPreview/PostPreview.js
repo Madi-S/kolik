@@ -7,12 +7,12 @@ import { BASE_URL } from '../../http'
 import { FAButton } from '../core/button'
 import { setCurrentPost } from '../../redux/actions/post'
 
-const PostPreview = ({ post, onPreviewCliick, previewButtonStyle }) => {
+const PostPreview = ({ post, onPreviewClick, previewButtonStyle }) => {
     const dispatch = useDispatch()
 
     const showPostDetail = () => {
         dispatch(setCurrentPost(post))
-        onPreviewCliick()
+        onPreviewClick()
     }
 
     return (
