@@ -25,6 +25,9 @@ const MyDetailScreen = ({ navigation }) => {
     return (
         <ScrollView>
             <Card>
+                <Card.Title>
+                    Activated: {post.activated ? 'Yes' : 'No'}
+                </Card.Title>
                 <Card.Title>Your Post: {post.title}</Card.Title>
                 <Card.Divider />
                 <Card.Image

@@ -3,8 +3,9 @@ import { getToken, getUserId } from './auth'
 const TOKEN = getToken()
 const USER_ID = getUserId()
 
-let feedbackAlreadySent = false
 export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
+
+let feedbackAlreadySent = false
 
 export const getMyPostsRequest = async () => {
     const res = await fetch(`${BASE_URL}/post/by_user/${USER_ID}`, {
@@ -12,12 +13,54 @@ export const getMyPostsRequest = async () => {
         headers: {
             'Content-Type': 'application/json',
             accept: 'application/json',
-            'auth-token': TOKEN
+            'auth-token': TOKEN,
         }
     })
 
     const posts = JSON.parse(await res.text())
     return posts
+}
+
+export const deleteMyPostRequest = async postId => {
+    const res = await fetch(`${BASE_URL}/post/${postId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        }
+    })
+
+    const deleted_post = JSON.parse(await res.text())
+    return deleted_post
+}
+
+export const activateMyPostRequest = async postId => {
+    const res = await fetch(`${BASE_URL}/post/activate/${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        }
+    })
+
+    const success = JSON.parse(await res.text())
+    return success
+}
+
+export const deactivateMyPostRequest = async postId => {
+    const res = await fetch(`${BASE_URL}/post/deactivate/${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        }
+    })
+
+    const success = JSON.parse(await res.text())
+    return success
 }
 
 export const createPostRequest = async params => {
