@@ -6,7 +6,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import THEME from '../theme'
-import EditScreen from '../screens/EditScreen'
 import PostsScreen from '../screens/PostsScreen'
 import CreateScreen from '../screens/CreateScreen'
 import DetailScreen from '../screens/DetailScreen'
@@ -27,7 +26,6 @@ const TabsStackNavigator = () => {
                     name='Tabs'
                     component={Tabs}
                 />
-                <Stack.Screen name='Edit' component={EditScreen} />
                 <Stack.Screen
                     name='Detail'
                     component={DetailScreen}
