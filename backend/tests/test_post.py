@@ -11,6 +11,7 @@ from routers.post.schema import PostOut
 from routers.post.api import IMAGES_FOLDER
 from routers.post.utils import generate_image_uri
 
+
 POST_ID = 6
 USER_ID = 1
 
@@ -117,6 +118,17 @@ def test_create_post(test_app: TestClient):
 
     assert user_post_obj == post_obj
     assert response.json() == user_post_data
+
+
+def test_delete_post(test_app: TestClient):
+    '''DELETE /post/{id} route should delete post in the database with given id and return it'''
+    test_post = Post.create(dict(
+        title='Test', description='test', user_id=USER_ID, price=42))
+
+    response = test_app.delete(f'/post/{test_post.id}')
+
+    assert response.status_code == 200
+    assert Post.query.get(test_post.id) is None
 
 
 def test_edit_post(test_app: TestClient):

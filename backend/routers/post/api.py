@@ -58,6 +58,13 @@ async def create_post(data: PostIn):
     return post
 
 
+@router.delete('/{id}', response_model=PostOut, tags=['post'])
+async def delete_post(id: int = Path(...)):
+    '''Deletes post by given id and returns deleted post if exists'''
+    deleted_post_or_none = Post.delete(id)
+    return deleted_post_or_none
+
+
 @router.post('/{id}', response_model=PostOut, tags=['post'])
 async def edit_post(data: PostEditIn, id: int = Path(...)):
     if post := Post.query.get(id):

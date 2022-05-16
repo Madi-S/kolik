@@ -11,14 +11,26 @@ from utils import generate_user_id, generate_user_token, get_unix_time
 class CreateMixin():
     @classmethod
     def create(cls, data: dict) -> Any:
+        '''Creates db object with given dict data and returns it'''
         obj = cls(**data)
         db.session.add(obj)
         db.session.commit()
         return obj
 
 
+class DeleteMixin():
+    @classmethod
+    def delete(cls, id: Any) -> Any:
+        '''Deletes db object by id and returns it if exists'''
+        obj = cls.query.get(id)
+        db.session.delete(obj)
+        db.session.commit()
+        return obj
+
+
 class EditMixin():
     def edit(self, data: dict) -> Any:
+        '''Edits db object with given dict data and returns it'''
         try:
             data.pop('id')
             data.pop('user_id')
@@ -96,13 +108,13 @@ class User(Base, CreateMixin, EditMixin):
         return f'<User #{self.id} name: {self.name}, phone: {self.phone}>'
 
 
-class Post(Base, CreateMixin, EditMixin):
+class Post(Base, CreateMixin, DeleteMixin, EditMixin):
     __tablename__ = 'post'
 
     id = Column(Integer, primary_key=True)
 
-    description = Column(String(1000), nullable=False)
     title = Column(String(100), nullable=False)
+    description = Column(String(1000), nullable=False)
     location = Column(String(500), default=enums.Location.all, nullable=False)
     category = Column(
         String(500), default=enums.PostCategory.all, nullable=False)
@@ -125,7 +137,7 @@ class Post(Base, CreateMixin, EditMixin):
     @classmethod
     def activate(cls, id: int) -> bool:
         '''Returns True if the post was activated, otherwise falsy None'''
-        if post := Post.query.get(id):
+        if post := cls.query.get(id):
             post.activated = True
             db.session.commit()
             return True
@@ -133,7 +145,7 @@ class Post(Base, CreateMixin, EditMixin):
     @classmethod
     def deactivate(cls, id: int) -> bool:
         '''Returns True if the post was deactivated, otherwise falsy None'''
-        if post := Post.query.get(id):
+        if post := cls.query.get(id):
             post.activated = False
             db.session.commit()
             return True
@@ -147,12 +159,11 @@ class Feedback(Base, CreateMixin):
     body = Column(String(1000), nullable=False)
     created_at = Column(Float, default=get_unix_time)
     is_read = Column(Boolean, default=True)
-    
+
     user_id = Column(Integer, ForeignKey('user.id'))
-    
+
     def __repr__(self) -> str:
         return f'<Feedback #{self.id} from user #{self.user_id}>'
-    
 
 
 if __name__ == '__main__':
