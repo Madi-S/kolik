@@ -23,16 +23,22 @@ router = APIRouter(
 
 
 @router.post('/query', response_model=List[PostOut], tags=['post'])
-async def query_posts(data: PostQuery):
-    query_handler = PostQueryHandler(data)
+async def query_posts(
+    data: PostQuery,
+    ignore_deactivated: bool = Header(default=True)
+):
+    query_handler = PostQueryHandler(data, ignore_deactivated)
     query_handler.apply_all()
     posts = query_handler.generate_entries()
     return posts
 
 
 @router.post('/query/count', response_model=int, tags=['post'])
-async def query_posts_count(data: PostQuery):
-    query_handler = PostQueryHandler(data)
+async def query_posts_count(
+    data: PostQuery,
+    ignore_deactivated: bool = Header(default=True)
+):
+    query_handler = PostQueryHandler(data, ignore_deactivated)
     query_handler.apply_all(apply_limit=False)
     posts_count = query_handler.get_count()
     return posts_count

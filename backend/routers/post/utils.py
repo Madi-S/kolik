@@ -29,9 +29,12 @@ def generate_image_uri(post_id, name):
 
 
 class PostQueryHandler:
-    def __init__(self, params: PostQuery) -> None:
+    def __init__(self, params: PostQuery, ignore_deactivated: bool) -> None:
         self.params = params
-        self.query = Post.query.filter_by(activated=True)
+        if ignore_deactivated:
+            self.query = Post.query.filter_by(activated=True)
+        else:
+            self.query = Post.query
 
     def generate_entries(self):
         return self.query.all()

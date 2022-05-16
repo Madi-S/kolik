@@ -54,40 +54,6 @@ def test_query_posts(test_app: TestClient):
     assert len(response.json()) == filtered_posts.count()
 
 
-def test_query_posts_count(test_app: TestClient):
-    '''POST /post/query/count route should return the length of a list of posts according to given query parameters'''
-    price_from = 0
-    price_from = randint(0, 10)
-    price_to = randint(999999999, 999999999999)
-    q = choice(('a', 'b', 'c', 'd', 'e', 'f'))
-    location = enums.Location.all
-    category = enums.PostCategory.all
-    # SQLAlchemy automatically orders entries by published_at
-    order_by_option = enums.PostOrderByOption.published_at_asc
-
-    json = {
-        'q': q,
-        'category': category,
-        'filters': {
-            'priceTo': price_to,
-            'priceFrom': price_from,
-            'location': location,
-            'orderByOption': order_by_option
-        }
-    }
-    response = test_app.post('/post/query/count', json=json)
-
-    filtered_posts = Post.query.filter(
-        or_(
-            Post.title.ilike(f'%{q}%'),
-            Post.description.ilike(f'%{q}%')
-        )
-    ).filter(Post.price >= price_from).filter(Post.price <= price_to)
-
-    assert response.status_code == 200
-    assert response.json() == filtered_posts.count()
-
-
 def test_get_post_by_id(test_app: TestClient):
     '''GET /post/{id} route should return User model by given id according to UserOut schema'''
     response = test_app.get(f'/post/{POST_ID}')
@@ -131,6 +97,30 @@ def test_delete_post(test_app: TestClient):
     assert Post.query.get(test_post.id) is None
 
 
+def test_activate_post(test_app: TestClient):
+    '''POST /activate/{id} should activate post in the database and return True on success'''
+    response = test_app.post(f'/post/activate/{POST_ID}')
+
+    assert response.status_code == 200
+    assert response.json() == True
+
+    post = Post.query.get(POST_ID)
+
+    assert post.activated == True
+
+
+def test_deactivate_post(test_app: TestClient):
+    '''POST /deactivate/{id} should activate post in the database and return True on success'''
+    response = test_app.post(f'/post/deactivate/{POST_ID}')
+
+    assert response.status_code == 200
+    assert response.json() == True
+
+    post = Post.query.get(POST_ID)
+
+    assert post.activated == False
+
+
 def test_edit_post(test_app: TestClient):
     '''POST /post/{id} route should edit post in the database with given arguments and return edited post'''
     expected_title = 'Changed title'
@@ -145,6 +135,41 @@ def test_edit_post(test_app: TestClient):
     assert response.json() == post_data
     assert response.json()['title'] == expected_title
     assert response.json()['price'] == expected_price
+
+
+def test_query_posts_count(test_app: TestClient):
+    '''POST /post/query/count route should return the length of a list of posts according to given query parameters'''
+    price_from = 0
+    price_from = randint(0, 10)
+    price_to = randint(999999999, 999999999999)
+    q = choice(('a', 'b', 'c', 'd', 'e', 'f'))
+    location = enums.Location.all
+    category = enums.PostCategory.all
+    # SQLAlchemy automatically orders entries by published_at
+    order_by_option = enums.PostOrderByOption.published_at_asc
+
+    json = {
+        'q': q,
+        'category': category,
+        'filters': {
+            'priceTo': price_to,
+            'priceFrom': price_from,
+            'location': location,
+            'orderByOption': order_by_option
+        }
+    }
+    response = test_app.post(
+        '/post/query/count', json=json, headers={'ignore-deactivated': 'false'})
+
+    filtered_posts = Post.query.filter(
+        or_(
+            Post.title.ilike(f'%{q}%'),
+            Post.description.ilike(f'%{q}%')
+        )
+    ).filter(Post.price >= price_from).filter(Post.price <= price_to)
+
+    assert response.status_code == 200
+    assert response.json() == filtered_posts.count()
 
 
 def test_upload_post_image(test_app: TestClient):
