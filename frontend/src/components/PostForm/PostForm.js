@@ -8,6 +8,7 @@ import { AppButton } from '../core/button'
 import { AppTextArea } from '../core/textarea'
 
 import THEME from '../../theme'
+import { BASE_URL } from '../../http'
 import * as CONSTANTS from '../../constants'
 import { LOCATIONS, CATEGORIES } from '../../data'
 
@@ -15,7 +16,9 @@ const DEFAULT_LOCATION = LOCATIONS[0].value
 const DEFAULT_CATEGORY = CATEGORIES[0].value
 
 const PostForm = ({
+    children,
     label = '',
+    buttonTitle = 'Create',
     onSubmit = async (post, imageUri) =>
         console.log('Post submitted:', post, imageUri),
     postState = {
@@ -29,9 +32,12 @@ const PostForm = ({
     titleStyle = {},
     containerStyle = {}
 }) => {
+    const _imageUri =
+        postState.imageUri || `${BASE_URL}/post/image/${postState.id}`
+
     const [title, setTitle] = useState(postState.title)
     const [price, setPrice] = useState(postState.price.toString())
-    const [imageUri, setImageUri] = useState(postState.imageUri)
+    const [imageUri, setImageUri] = useState(_imageUri)
     const [location, setLocation] = useState(postState.location)
     const [category, setCategory] = useState(postState.category)
     const [description, setDescription] = useState(postState.description)
@@ -91,11 +97,12 @@ const PostForm = ({
                     />
                     <View style={styles.center}>
                         <AppButton
-                            title='Create'
+                            title={buttonTitle}
                             onPress={onPostSubmit}
-                            style={styles.createButton}
+                            style={styles.submitButton}
                         />
                     </View>
+                    {children}
                 </View>
             </ScrollView>
         </View>
@@ -119,10 +126,10 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         backgroundColor: THEME.DANGER_COLOR
     },
-    createButton: {
+    submitButton: {
         borderRadius: 25,
         backgroundColor: THEME.DANGER_COLOR,
-        marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM
+        marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM / 2
     },
     center: {
         flex: 1,

@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
-import { Text, Card } from 'react-native-elements'
-import { ScrollView, StyleSheet } from 'react-native'
+import { Text } from 'react-native-elements'
+import { View, StyleSheet } from 'react-native'
 
-import { BASE_URL } from '../http'
-import { capitalize } from '../utils'
+import { editPostRequest } from '../http'
 import { FAButton } from '../components/core/button'
 import PostForm from '../components/PostForm/PostForm'
+
 
 /*
     Functionality:
@@ -20,41 +20,32 @@ import PostForm from '../components/PostForm/PostForm'
 
 const MyDetailScreen = ({ navigation }) => {
     const post = useSelector(state => state.post.currentPost)
+    const postId = post.id
 
+    const editPost = async (editedPostState, imageUri) => {
+        await editPostRequest(editedPostState, postId)
+        await uploadPostImageRequest(postId, imageUri)
+        navigation.navigate('Profile')
+    }
 
-    return <PostForm />
+    return (
+        <PostForm
+            label='Edit Your Post'
+            buttonTitle='Edit'
+            onSubmit={editPost}
+            postState={post}
+        >
+            <TogglePostActivation />
+        </PostForm>
+    )
+}
 
-    // return (
-    //     <ScrollView>
-    //         <Card>
-    //             <Card.Title>
-    //                 Activated: {post.activated ? 'Yes' : 'No'}
-    //             </Card.Title>
-    //             <Card.Title>Your Post: {post.title}</Card.Title>
-    //             <Card.Divider />
-    //             <Card.Image
-    //                 source={{
-    //                     uri: `${BASE_URL}/post/image/${parseInt(post.id)}`
-    //                 }}
-    //             />
-    //             <Text>Price: {post.price}</Text>
-    //             <Text>Category: {capitalize(post.category)}</Text>
-    //             <Text>Location: {capitalize(post.location)}</Text>
-    //             <Text>Created at: {Date(post.createdAt)}</Text>
-    //             <Text style={{ marginBottom: 10 }}>
-    //                 Description: {post.description}
-    //             </Text>
-    //             <FAButton
-    //                 style={styles.togglePhoneNumberButton}
-    //                 onPress={togglePhoneNumberIsShown}
-    //                 title={togglePhoneNumberTitle}
-    //             />
-    //             {phoneNumberIsShown ? (
-    //                 <Text>Phone number: {post.phoneNumber}</Text>
-    //             ) : null}
-    //         </Card>
-    //     </ScrollView>
-    // )
+const TogglePostActivation = () => {
+    return (
+        <View>
+            <Text>Activate/Deactivate Post</Text>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({

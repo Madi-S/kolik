@@ -13,7 +13,7 @@ export const getMyPostsRequest = async () => {
         headers: {
             'Content-Type': 'application/json',
             accept: 'application/json',
-            'auth-token': TOKEN,
+            'auth-token': TOKEN
         }
     })
 
@@ -61,6 +61,32 @@ export const deactivateMyPostRequest = async postId => {
 
     const success = JSON.parse(await res.text())
     return success
+}
+
+export const editPostRequest = async (params, postId) => {
+    const body = JSON.stringify({ ...params, userId: USER_ID })
+
+    // {
+    //     "title": "string",
+    //     "price": 0,
+    //     "description": "string",
+    //     "location": "all",
+    //     "category": "all",
+    //     "userId": 0
+    // }
+
+    const res = await fetch(`${BASE_URL}/post/${postId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
+            'auth-token': TOKEN
+        },
+        body
+    })
+
+    const createdPost = JSON.parse(await res.text())
+    return createdPost
 }
 
 export const createPostRequest = async params => {
