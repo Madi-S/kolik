@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux'
 import { Text } from 'react-native-elements'
 import { View, StyleSheet } from 'react-native'
 
-import { editPostRequest } from '../http'
 import { FAButton } from '../components/core/button'
 import PostForm from '../components/PostForm/PostForm'
-
+import { BASE_URL, editPostRequest, uploadPostImageRequest } from '../http'
 
 /*
     Functionality:
@@ -21,6 +20,12 @@ import PostForm from '../components/PostForm/PostForm'
 const MyDetailScreen = ({ navigation }) => {
     const post = useSelector(state => state.post.currentPost)
     const postId = post.id
+    const postState = {
+        ...post,
+        imageUri: `${BASE_URL}/post/image/${postId}`
+    }
+
+    console.log('POST IDDD', postId)
 
     const editPost = async (editedPostState, imageUri) => {
         await editPostRequest(editedPostState, postId)
@@ -31,9 +36,9 @@ const MyDetailScreen = ({ navigation }) => {
     return (
         <PostForm
             label='Edit Your Post'
-            buttonTitle='Edit'
+            buttonTitle='Save'
             onSubmit={editPost}
-            postState={post}
+            postState={postState}
         >
             <TogglePostActivation />
         </PostForm>

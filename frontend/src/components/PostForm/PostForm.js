@@ -32,12 +32,9 @@ const PostForm = ({
     titleStyle = {},
     containerStyle = {}
 }) => {
-    const _imageUri =
-        postState.imageUri || `${BASE_URL}/post/image/${postState.id}`
-
     const [title, setTitle] = useState(postState.title)
     const [price, setPrice] = useState(postState.price.toString())
-    const [imageUri, setImageUri] = useState(_imageUri)
+    const [imageUri, setImageUri] = useState(postState.imageUri)
     const [location, setLocation] = useState(postState.location)
     const [category, setCategory] = useState(postState.category)
     const [description, setDescription] = useState(postState.description)
