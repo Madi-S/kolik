@@ -3,8 +3,8 @@ import { Text, Card } from 'react-native-elements'
 import { useDispatch, useSelector } from 'react-redux'
 import { ScrollView, StyleSheet, Dimensions } from 'react-native'
 
-import { BASE_URL } from '../http'
 import { capitalize } from '../utils'
+import { getPostImageRequest } from '../http'
 import { FAButton } from '../components/core/button'
 import { setCurrentPost } from '../redux/actions/post'
 
@@ -37,7 +37,7 @@ const DetailScreen = ({ navigation }) => {
                 <Card.Divider />
                 <Card.Image
                     source={{
-                        uri: `${BASE_URL}/post/image/${parseInt(post.id)}`
+                        uri: getPostImageRequest(post.id)
                     }}
                 />
                 <Text>Price: {post.price}</Text>
