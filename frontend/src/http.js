@@ -8,17 +8,21 @@ export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
 let feedbackAlreadySent = false
 
 export const getMyPostsRequest = async () => {
-    const res = await fetch(`${BASE_URL}/post/by_user/${USER_ID}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': TOKEN
-        }
-    })
+    try {
+        const res = await fetch(`${BASE_URL}/post/by_user/${USER_ID}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            }
+        })
 
-    const posts = JSON.parse(await res.text())
-    return posts
+        const posts = JSON.parse(await res.text())
+        return posts
+    } catch (err) {
+        console.error('Error when retrieving my posts:', err)
+    }
 }
 
 export const deleteMyPostRequest = async postId => {
@@ -66,24 +70,28 @@ export const deactivateMyPostRequest = async postId => {
 export const editPostRequest = async (params, postId) => {
     const body = JSON.stringify({ ...params, userId: USER_ID })
 
-    const res = await fetch(`${BASE_URL}/post/${postId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': TOKEN
-        },
-        body
-    })
+    try {
+        const res = await fetch(`${BASE_URL}/post/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            },
+            body
+        })
 
-    const createdPost = JSON.parse(await res.text())
-    return createdPost
+        const createdPost = JSON.parse(await res.text())
+        return createdPost
+    } catch (err) {
+        console.error('Error when editing post:', err)
+    }
 }
 
 export const createPostRequest = async params => {
-    try {
-        const body = JSON.stringify({ ...params, userId: USER_ID })
+    const body = JSON.stringify({ ...params, userId: USER_ID })
 
+    try {
         const res = await fetch(`${BASE_URL}/post/`, {
             method: 'PUT',
             headers: {
@@ -103,38 +111,47 @@ export const createPostRequest = async params => {
 
 export const queryPostsRequest = async params => {
     const body = JSON.stringify(params)
-    const res = await fetch(`${BASE_URL}/post/query`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': TOKEN
-        },
-        body
-    })
-    const posts = JSON.parse(await res.text())
 
-    /* For some reasons in JavaScript an empty list is a truthy value */
-    if (posts.length === 0) {
-        return false
+    try {
+        const res = await fetch(`${BASE_URL}/post/query`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            },
+            body
+        })
+        const posts = JSON.parse(await res.text())
+
+        /* For some reasons in JavaScript an empty list is a truthy value */
+        if (posts.length === 0) {
+            return false
+        }
+        return posts
+    } catch (err) {
+        console.error('Error when querying posts:', err)
     }
-
-    return posts
 }
 
 export const getPostsQueryCountRequest = async params => {
     const body = JSON.stringify(params)
-    const res = await fetch(`${BASE_URL}/post/query/count`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': TOKEN
-        },
-        body
-    })
-    const postsCount = JSON.parse(await res.text())
-    return postsCount
+
+    try {
+        const res = await fetch(`${BASE_URL}/post/query/count`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            },
+            body
+        })
+        const postsCount = JSON.parse(await res.text())
+        return postsCount
+    } catch (err) {
+        console.error('Error when retreiving posts query count:', err)
+    }
 }
 
 export const uploadPostImageRequest = async (postId, imageUri) => {
