@@ -1,26 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Text } from 'react-native-elements'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 
-import { FAButton } from '../components/core/button'
 import PostForm from '../components/PostForm/PostForm'
+import TogglePostActivation from '../components/TogglePostActivation/TogglePostActivation'
 import {
     BASE_URL,
     editPostRequest,
     getPostImageRequest,
     uploadPostImageRequest
 } from '../http'
-
-/*
-    Functionality:
-        - Receive post parameter or take it from redux-selector
-            cuz it will be dispatched in MyPostsScree
-
-    UI:
-        - PostForm with changed buttonText -> 'Edit' 
-            and changed onPressHandler
-*/
 
 const MyDetailScreen = ({ navigation }) => {
     const post = useSelector(state => state.post.currentPost)
@@ -46,14 +35,6 @@ const MyDetailScreen = ({ navigation }) => {
         >
             <TogglePostActivation />
         </PostForm>
-    )
-}
-
-const TogglePostActivation = () => {
-    return (
-        <View>
-            <Text>Activate/Deactivate Post</Text>
-        </View>
     )
 }
 
