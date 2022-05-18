@@ -5,7 +5,12 @@ import { View, StyleSheet } from 'react-native'
 
 import { FAButton } from '../components/core/button'
 import PostForm from '../components/PostForm/PostForm'
-import { BASE_URL, editPostRequest, uploadPostImageRequest } from '../http'
+import {
+    BASE_URL,
+    editPostRequest,
+    getPostImageRequest,
+    uploadPostImageRequest
+} from '../http'
 
 /*
     Functionality:
@@ -20,17 +25,16 @@ import { BASE_URL, editPostRequest, uploadPostImageRequest } from '../http'
 const MyDetailScreen = ({ navigation }) => {
     const post = useSelector(state => state.post.currentPost)
     const postId = post.id
-    const postState = {
-        ...post,
-        imageUri: `${BASE_URL}/post/image/${postId}`
-    }
-
-    console.log('POST IDDD', postId)
+    const imageUri = getPostImageRequest(postId)
+    const postState = { ...post, imageUri }
 
     const editPost = async (editedPostState, imageUri) => {
-        await editPostRequest(editedPostState, postId)
-        await uploadPostImageRequest(postId, imageUri)
         navigation.navigate('Profile')
+
+        await editPostRequest(editedPostState, parseInt(postId))
+        if (!imageUri.includes(BASE_URL)) {
+            await uploadPostImageRequest(parseInt(postId), imageUri)
+        }
     }
 
     return (
@@ -53,13 +57,6 @@ const TogglePostActivation = () => {
     )
 }
 
-const styles = StyleSheet.create({
-    togglePhoneNumberButton: {
-        borderRadius: 0,
-        marginLeft: 0,
-        marginRight: 0,
-        marginBottom: 0
-    }
-})
+const styles = StyleSheet.create({})
 
 export default MyDetailScreen

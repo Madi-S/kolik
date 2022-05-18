@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 
 import THEME from '../theme'
-import { BASE_URL, getMyPostsRequest } from '../http'
 import * as CONSTANTS from '../constants'
 import PostLoader from '../components/PostLoader'
 import { FAButton } from '../components/core/button'
 import { setCurrentPost } from '../redux/actions/post'
+import { getPostImageRequest, getMyPostsRequest } from '../http'
 
 /*
     Functionality:
@@ -75,9 +75,7 @@ const MyPostPreview = ({ post, navigation }) => {
     return (
         <Card>
             <Card.Image
-                source={{
-                    uri: `${BASE_URL}/post/image/${parseInt(post.id)}`
-                }}
+                source={{ uri: getPostImageRequest(post.id) }}
                 style={styles.img}
             />
             <Card.Title>{post.title}</Card.Title>

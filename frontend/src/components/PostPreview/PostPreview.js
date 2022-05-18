@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux'
 import { StyleSheet } from 'react-native'
 import { Card } from 'react-native-elements'
 
-import { BASE_URL } from '../../http'
 import { FAButton } from '../core/button'
+import { getPostImageRequest } from '../../http'
 import { setCurrentPost } from '../../redux/actions/post'
 
 const PostPreview = ({ post, navigation, previewButtonStyle }) => {
@@ -18,9 +18,7 @@ const PostPreview = ({ post, navigation, previewButtonStyle }) => {
     return (
         <Card>
             <Card.Image
-                source={{
-                    uri: `${BASE_URL}/post/image/${parseInt(post.id)}`
-                }}
+                source={{ uri: getPostImageRequest(post.id) }}
                 style={styles.img}
             />
             <Card.Title>{post.title}</Card.Title>

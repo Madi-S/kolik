@@ -17,7 +17,6 @@ const PhotoPicker = ({
 
     const showAndProcessImage = img => {
         setImage(img.uri)
-        console.log('img uri', img.uri)
         onPick(img)
     }
 

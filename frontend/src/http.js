@@ -66,15 +66,6 @@ export const deactivateMyPostRequest = async postId => {
 export const editPostRequest = async (params, postId) => {
     const body = JSON.stringify({ ...params, userId: USER_ID })
 
-    // {
-    //     "title": "string",
-    //     "price": 0,
-    //     "description": "string",
-    //     "location": "all",
-    //     "category": "all",
-    //     "userId": 0
-    // }
-
     const res = await fetch(`${BASE_URL}/post/${postId}`, {
         method: 'POST',
         headers: {
@@ -195,4 +186,8 @@ export const sendFeedbackRequest = async feedbackBody => {
     } catch (err) {
         console.error('Error when sending feedback:', err)
     }
+}
+
+export const getPostImageRequest = postId => {
+    return `${BASE_URL}/post/image/${postId}` + '?' + new Date()
 }
