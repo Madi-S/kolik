@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import PostForm from '../components/PostForm/PostForm'
 import TogglePostActivation from '../components/TogglePostActivation/TogglePostActivation'
@@ -27,14 +27,19 @@ const MyDetailScreen = ({ navigation }) => {
     }
 
     return (
-        <PostForm
-            label='Edit Your Post'
-            buttonTitle='Save'
-            onSubmit={editPost}
-            postState={postState}
-        >
-            <TogglePostActivation />
-        </PostForm>
+        <ScrollView>
+            <PostForm
+                label='Edit Your Post'
+                buttonTitle='Save'
+                onSubmit={editPost}
+                postState={postState}
+            >
+                <TogglePostActivation
+                    postId={postId}
+                    isActivated={post.activated}
+                />
+            </PostForm>
+        </ScrollView>
     )
 }
 

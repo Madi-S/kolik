@@ -64,6 +64,7 @@ export const deactivateMyPostRequest = async postId => {
     })
 
     const success = JSON.parse(await res.text())
+    console.log(res)
     return success
 }
 

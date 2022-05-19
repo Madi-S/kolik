@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     submitButton: {
         borderRadius: 25,
         backgroundColor: THEME.DANGER_COLOR,
-        marginBottom: CONSTANTS.SCROLL_VIEW_MARGIN_BOTTOM / 2
+        marginBottom: 20
     },
     center: {
         flex: 1,

@@ -1,5 +1,5 @@
 let TOKEN = '2222'
-let USER_ID = 2
+let USER_ID = 1
 
 export const setToken = value => {
     TOKEN = value
