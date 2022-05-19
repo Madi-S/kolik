@@ -8,7 +8,11 @@ import * as CONSTANTS from '../constants'
 import PostLoader from '../components/PostLoader'
 import { FAButton } from '../components/core/button'
 import { setCurrentPost } from '../redux/actions/post'
-import { getPostImageRequest, getMyPostsRequest } from '../http'
+import {
+    getMyPostsRequest,
+    getPostImageRequest,
+    deleteMyPostRequest,
+} from '../http'
 
 /*
     Functionality:
@@ -70,7 +74,10 @@ const MyPostPreview = ({ post, navigation }) => {
         navigation.navigate('MyDetail', { name: post.title })
     }
 
-    const deleteMyPost = () => {}
+    const deleteMyPost = () => {
+        deleteMyPostRequest(post.id)
+        navigation.navigate('Profile')
+    }
 
     return (
         <Card>
