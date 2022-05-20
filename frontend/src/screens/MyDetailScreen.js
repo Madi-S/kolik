@@ -37,6 +37,7 @@ const MyDetailScreen = ({ navigation }) => {
                 <TogglePostActivation
                     postId={postId}
                     isActivated={post.activated}
+                    navigation={navigation}
                 />
             </PostForm>
         </ScrollView>

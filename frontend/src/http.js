@@ -40,32 +40,39 @@ export const deleteMyPostRequest = async postId => {
 }
 
 export const activateMyPostRequest = async postId => {
-    const res = await fetch(`${BASE_URL}/post/activate/${postId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': TOKEN
-        }
-    })
+    try {
+        const res = await fetch(`${BASE_URL}/post/activate/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            }
+        })
 
-    const success = JSON.parse(await res.text())
-    return success
+        const success = JSON.parse(await res.text())
+        return success
+    } catch (err) {
+        console.error('Error when activating my post:', err)
+    }
 }
 
 export const deactivateMyPostRequest = async postId => {
-    const res = await fetch(`${BASE_URL}/post/deactivate/${postId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            accept: 'application/json',
-            'auth-token': TOKEN
-        }
-    })
+    try {
+        const res = await fetch(`${BASE_URL}/post/deactivate/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                accept: 'application/json',
+                'auth-token': TOKEN
+            }
+        })
 
-    const success = JSON.parse(await res.text())
-    console.log(res)
-    return success
+        const success = JSON.parse(await res.text())
+        return success
+    } catch (err) {
+        console.error('Error when deactivating my post:', err)
+    }
 }
 
 export const editPostRequest = async (params, postId) => {

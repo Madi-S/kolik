@@ -5,27 +5,33 @@ import THEME from '../../theme'
 import { FAButton } from '../core/button'
 import { activateMyPostRequest, deactivateMyPostRequest } from '../../http'
 
-const TogglePostActivation = (isActivated, postId) => {
-    let title, color, handler
+const TogglePostActivation = ({ navigation, isActivated, postId }) => {
+    let title, color
+
+    let func = isActivated
+        ? async () => {
+              navigation.navigate('Profile')
+              await deactivateMyPostRequest(postId)
+          }
+        : async () => {
+              navigation.navigate('Profile')
+              await activateMyPostRequest(postId)
+          }
 
     if (isActivated) {
         title = 'Deactivate'
-        handler = deactivateMyPostRequest
         color = THEME.DANGER_COLOR
     } else {
         title = 'Activate'
-        handler = activateMyPostRequest
         color = THEME.INFO_COLOR
     }
-
-    const onPress = postId => handler(postId)
 
     return (
         <View>
             <FAButton
                 title={title}
                 style={{ ...styles, backgroundColor: color }}
-                onPress={onPress}
+                onPress={func}
             />
         </View>
     )
