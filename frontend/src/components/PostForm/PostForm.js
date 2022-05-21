@@ -53,56 +53,50 @@ const PostForm = ({
     const onImagePick = img => setImageUri(img.uri)
 
     return (
-        <View>
+        <ScrollView>
             <Text style={{ ...styles.title, ...titleStyle }}>{label}</Text>
-            <ScrollView>
-                <View style={{ ...styles.container, ...containerStyle }}>
-                    <View style={styles.center}>
-                        <PhotoPicker
-                            uri={imageUri}
-                            onPick={onImagePick}
-                            buttonStyle={styles.photoPickerButton}
-                        />
-                    </View>
-                    <AppInput
-                        title='Title'
-                        value={title}
-                        onChangeText={setTitle}
+            <View style={{ ...styles.container, ...containerStyle }}>
+                <View style={styles.center}>
+                    <PhotoPicker
+                        uri={imageUri}
+                        onPick={onImagePick}
+                        buttonStyle={styles.photoPickerButton}
                     />
-                    <AppInput
-                        title='Price'
-                        keyboardType='numeric'
-                        value={price}
-                        onChangeText={setPrice}
-                    />
-                    <AppSelect
-                        title='Location'
-                        selectedValue={location}
-                        onValueChange={setLocation}
-                        itemsList={LOCATIONS}
-                    />
-                    <AppSelect
-                        title='Category'
-                        selectedValue={category}
-                        onValueChange={setCategory}
-                        itemsList={CATEGORIES}
-                    />
-                    <AppTextArea
-                        title='Description'
-                        value={description}
-                        onChangeText={setDescription}
-                    />
-                    <View style={styles.center}>
-                        <AppButton
-                            title={buttonTitle}
-                            onPress={onPostSubmit}
-                            style={styles.submitButton}
-                        />
-                    </View>
-                    {children}
                 </View>
-            </ScrollView>
-        </View>
+                <AppInput title='Title' value={title} onChangeText={setTitle} />
+                <AppInput
+                    title='Price'
+                    keyboardType='numeric'
+                    value={price}
+                    onChangeText={setPrice}
+                />
+                <AppSelect
+                    title='Location'
+                    selectedValue={location}
+                    onValueChange={setLocation}
+                    itemsList={LOCATIONS}
+                />
+                <AppSelect
+                    title='Category'
+                    selectedValue={category}
+                    onValueChange={setCategory}
+                    itemsList={CATEGORIES}
+                />
+                <AppTextArea
+                    title='Description'
+                    value={description}
+                    onChangeText={setDescription}
+                />
+                <View style={styles.center}>
+                    <AppButton
+                        title={buttonTitle}
+                        onPress={onPostSubmit}
+                        style={styles.submitButton}
+                    />
+                </View>
+                {children}
+            </View>
+        </ScrollView>
     )
 }
 
@@ -111,7 +105,7 @@ const styles = StyleSheet.create({
         fontSize: 26,
         fontWeight: '800',
         textAlign: 'center',
-        marginBottom: 12
+        marginBottom: 8
     },
     container: {
         flex: 1,
@@ -126,7 +120,7 @@ const styles = StyleSheet.create({
     submitButton: {
         borderRadius: 25,
         backgroundColor: THEME.DANGER_COLOR,
-        marginBottom: 20
+        marginBottom: 200
     },
     center: {
         flex: 1,
