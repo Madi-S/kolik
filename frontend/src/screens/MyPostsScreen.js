@@ -1,18 +1,11 @@
-import { useDispatch } from 'react-redux'
-import { Card } from 'react-native-elements'
 import React, { useState, useEffect } from 'react'
 import { View, ScrollView, StyleSheet } from 'react-native'
 
 import THEME from '../theme'
 import * as CONSTANTS from '../constants'
+import { getMyPostsRequest } from '../http'
 import PostLoader from '../components/PostLoader'
-import { FAButton } from '../components/core/button'
-import { setCurrentPost } from '../redux/actions/post'
-import {
-    getMyPostsRequest,
-    getPostImageRequest,
-    deleteMyPostRequest
-} from '../http'
+import MyPostPreview from '../components/MyPostPreview'
 
 const MyPostsScreen = ({ navigation }) => {
     const [posts, setPosts] = useState(null)
@@ -48,36 +41,6 @@ const MyPostsScreen = ({ navigation }) => {
                 ))}
             </View>
         </ScrollView>
-    )
-}
-
-const MyPostPreview = ({ post, navigation }) => {
-    const dispatch = useDispatch()
-
-    const showPostDetail = () => {
-        dispatch(setCurrentPost(post))
-        navigation.navigate('MyDetail', { name: post.title })
-    }
-
-    const deleteMyPost = () => {
-        deleteMyPostRequest(post.id)
-        navigation.navigate('Profile')
-    }
-
-    return (
-        <Card>
-            <Card.Image
-                source={{ uri: getPostImageRequest(post.id) }}
-                style={styles.img}
-            />
-            <Card.Title>{post.title}</Card.Title>
-            <Card.Title>Price: {post.price} $</Card.Title>
-            <View>
-                <FAButton title='Edit' onPress={showPostDetail} />
-                <FAButton title='Delete' onPress={deleteMyPost} />
-            </View>
-            <Card.Divider />
-        </Card>
     )
 }
 
