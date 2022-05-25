@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
+import { View, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../../theme'
-import BottomHalfModal from '../../BottomHalfModal'
 import { AppInput } from '../../core/input'
-import { AppSelect } from '../../core/select'
 import { AppButton } from '../../core/button'
+import { AppSelect } from '../../core/select'
+import BottomHalfModal from '../../BottomHalfModal'
 import { LOCATIONS, SORT_BY_OPTIONS } from '../../../data'
 import { setSearchFilters } from '../../../redux/actions/search'
 
@@ -24,7 +24,7 @@ const FilterModal = () => {
         DEFAULT_ORDER_BY_OPTION
     )
 
-    const applyFilters = () => {
+    const closeModalAndDispatchSearchFilters = () => {
         setShowModal(false)
         dispatch(
             setSearchFilters({
@@ -70,7 +70,7 @@ const FilterModal = () => {
                 />
                 <View style={styles.applyButtonWrapper}>
                     <AppButton
-                        onPress={applyFilters}
+                        onPress={closeModalAndDispatchSearchFilters}
                         title='Apply'
                         style={styles.applyButton}
                     />
@@ -89,9 +89,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: '600',
         color: THEME.PRIMARY_COLOR,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        /* Remove margins in case of applying above styles */
         marginHorizontal: 20
     },
     contentTitle: {

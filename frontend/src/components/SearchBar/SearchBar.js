@@ -10,7 +10,7 @@ const SearchBar = () => {
     const dispatch = useDispatch()
     const [_searchQuery, _setSearchQuery] = useState()
 
-    const onChangeText = value => {
+    const setAndDispatchSearchQuery = value => {
         _setSearchQuery(value)
         dispatch(setSearchQuery(value))
     }
@@ -19,7 +19,7 @@ const SearchBar = () => {
         <NativeSearchBar
             placeholder='Type Here ...'
             value={_searchQuery}
-            onChangeText={onChangeText}
+            onChangeText={setAndDispatchSearchQuery}
             containerStyle={styles.container}
             inputContainerStyle={styles.inputContainer} 
         />

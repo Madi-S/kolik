@@ -15,7 +15,6 @@ const SearchBarModals = () => {
 
 const styles = StyleSheet.create({
     modalsWrapper: {
-        // flex: 1,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between'

@@ -6,13 +6,12 @@ import { AppButton } from '../core/button'
 import { AppTextArea } from '../core/textarea'
 import { sendFeedbackRequest } from '../../http'
 
-
 const Feedback = () => {
     const [feedbackValue, setFeedbackValue] = useState('')
 
     const sendFeedback = () => {
-        sendFeedbackRequest(feedbackValue)
         setFeedbackValue('')
+        sendFeedbackRequest(feedbackValue)
     }
 
     return (

@@ -53,9 +53,8 @@ const Posts = ({ navigation }) => {
 
     const loadMorePosts = event => {
         const positionY = event.nativeEvent.contentOffset.y
-        const MAGIC_NUMBER = 400
 
-        if (positionY > lastMaxOffsetY + MAGIC_NUMBER) {
+        if (userScrolledDown(positionY, lastMaxOffsetY)) {
             lastMaxOffsetY = positionY
 
             if (postsCount < postsCountLimit) {
@@ -76,10 +75,16 @@ const Posts = ({ navigation }) => {
                         navigation={navigation}
                     />
                 ))}
-                {showLoader ? <PostLoader /> : <Text></Text>}
+                {showLoader ? <PostLoader /> : <View></View>}
             </View>
         </ScrollView>
     )
+}
+
+const POSTS_OFFSET = 400
+
+const userScrolledDown = (positionY, lastMaxOffsetY) => {
+    return positionY > lastMaxOffsetY + POSTS_OFFSET
 }
 
 const styles = StyleSheet.create({

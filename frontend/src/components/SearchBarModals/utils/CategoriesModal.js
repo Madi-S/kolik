@@ -11,7 +11,7 @@ const CategoriesModal = () => {
     const dispatch = useDispatch()
     const [showModal, setShowModal] = useState(false)
 
-    const categoryClickHandler = value => {
+    const closeModalAndDispatchSearchCategory = value => {
         return () => {
             setShowModal(false)
             dispatch(setSearchCategory(value))
@@ -31,7 +31,7 @@ const CategoriesModal = () => {
                         <TouchableOpacity
                             key={value}
                             style={styles.button}
-                            onPress={categoryClickHandler(value)}
+                            onPress={closeModalAndDispatchSearchCategory(value)}
                         >
                             <Text style={styles.contentText}>{label}</Text>
                         </TouchableOpacity>
@@ -44,13 +44,10 @@ const CategoriesModal = () => {
 
 const styles = StyleSheet.create({
     content: {
-        backgroundColor: 'white',
         padding: 22,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-        /* Remove margins in case of applying above styles */
-        marginHorizontal: 20,
         borderRadius: 4,
+        marginHorizontal: 20,
+        backgroundColor: 'white',
         borderColor: 'rgba(0, 0, 0, 0.1)'
     },
     contentTitle: {
