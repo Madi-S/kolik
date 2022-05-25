@@ -1,29 +1,27 @@
 import React from 'react'
+import { Ionicons } from '@expo/vector-icons'
 import { View, Text, StyleSheet } from 'react-native'
 
 import THEME from '../../theme'
 
 const UserBar = () => {
     // TODO: Load username from the server
-    const userName = 'Mr Madi'
+    const username = 'Mr Madi'
 
     return (
         <View style={styles.wrapper}>
-            <View>
-                <Text>I am a User Icon</Text>
-            </View>
-            <Text>Hello, {userName}</Text>
+            <Ionicons name='person-circle-outline' size={48} color='black' />
+            <Text>Hello, {username}</Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     wrapper: {
-        // flex: 1,
-        // alignItems: 'center',
-        // flexDirection: 'row',
-        marginHorizontal: 20,
+        flex: 1,
         marginVertical: 30,
+        marginHorizontal: 20,
+        flexDirection: 'row',
         alignItems: 'center'
     }
 })
