@@ -8,7 +8,6 @@ import { AppButton } from '../core/button'
 import { AppTextArea } from '../core/textarea'
 
 import THEME from '../../theme'
-import { BASE_URL } from '../../http'
 import * as CONSTANTS from '../../constants'
 import { LOCATIONS, CATEGORIES } from '../../data'
 
@@ -119,8 +118,8 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         borderRadius: 25,
-        backgroundColor: THEME.DANGER_COLOR,
-        marginBottom: 200
+        marginBottom: 200,
+        backgroundColor: THEME.DANGER_COLOR
     },
     center: {
         flex: 1,

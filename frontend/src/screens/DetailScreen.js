@@ -1,24 +1,17 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Text, Card } from 'react-native-elements'
-import { useDispatch, useSelector } from 'react-redux'
-import { ScrollView, StyleSheet, Dimensions } from 'react-native'
+import { ScrollView, StyleSheet } from 'rseact-native'
 
 import { capitalize } from '../utils'
 import { getPostImageRequest } from '../http'
 import { FAButton } from '../components/core/button'
-import { setCurrentPost } from '../redux/actions/post'
 
 const DetailScreen = ({ navigation }) => {
-    const dispatch = useDispatch()
     const post = useSelector(state => state.post.currentPost)
 
+    // Request phone number when phoneNumberIsShown is true only once
     const [phoneNumberIsShown, setPhoneNumberIsShown] = useState(false)
-    const _screenWidth = Dimensions.get('window').width
-
-    const goBack = () => {
-        navigation.navigate('Posts')
-        dispatch(setCurrentPost(null))
-    }
 
     const togglePhoneNumberIsShown = () => {
         phoneNumberIsShown

@@ -8,7 +8,7 @@ import { activateMyPostRequest, deactivateMyPostRequest } from '../../http'
 const TogglePostActivation = ({ navigation, isActivated, postId }) => {
     let title, color
 
-    let func = isActivated
+    let toggleMyPostActivationStatus = isActivated
         ? async () => {
               navigation.navigate('Profile')
               await deactivateMyPostRequest(postId)
@@ -30,8 +30,8 @@ const TogglePostActivation = ({ navigation, isActivated, postId }) => {
         <View>
             <FAButton
                 title={title}
+                onPress={toggleMyPostActivationStatus}
                 style={{ ...styles, backgroundColor: color }}
-                onPress={func}
             />
         </View>
     )
