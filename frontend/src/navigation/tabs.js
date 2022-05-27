@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import THEME from '../theme'
+import AuthScreen from '../screens/AuthScreen'
 import PostsScreen from '../screens/PostsScreen'
 import CreateScreen from '../screens/CreateScreen'
 import DetailScreen from '../screens/DetailScreen'
@@ -20,9 +21,7 @@ const TabsStackNavigator = () => {
         <NavigationContainer>
             <Stack.Navigator initialRouteName='Tabs'>
                 <Stack.Screen
-                    options={{
-                        headerShown: false
-                    }}
+                    options={{ headerShown: false }}
                     name='Tabs'
                     component={Tabs}
                 />
@@ -32,14 +31,19 @@ const TabsStackNavigator = () => {
                     options={({ route }) => ({ title: route.params.name })}
                 />
                 <Stack.Screen
+                    name='MyDetail'
+                    component={MyDetailScreen}
+                    options={({ route }) => ({ title: route.params.name })}
+                />
+                <Stack.Screen
                     name='MyPosts'
                     component={MyPostsScreen}
                     options={{ title: 'My Posts' }}
                 />
                 <Stack.Screen
-                    name='MyDetail'
-                    component={MyDetailScreen}
-                    options={({ route }) => ({ title: route.params.name })}
+                    name='Auth'
+                    component={AuthScreen}
+                    options={{ headerShown: false }}
                 />
             </Stack.Navigator>
         </NavigationContainer>
