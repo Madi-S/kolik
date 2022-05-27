@@ -7,6 +7,36 @@ export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
 
 let feedbackAlreadySent = false
 
+export const sendConfirmationCodeRequest = async phoneNumber => {
+    const res = await fetch(`${BASE_URL}/user/send-code/${phoneNumber}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json'
+        }
+    })
+
+    const message = JSON.parse(await res.text())
+    return message
+}
+
+export const confirmPhoneNumberRequest = async (
+    code = 'XXXX',
+    userData = { name: '', location: '', phone: '' }
+) => {
+    const res = await fetch(`${BASE_URL}/user/${code}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json'
+        },
+        body: userData
+    })
+
+    const user = JSON.parse(await res.text())
+    return user
+}
+
 export const getMyPostsRequest = async () => {
     try {
         const res = await fetch(`${BASE_URL}/post/by_user/${USER_ID}`, {

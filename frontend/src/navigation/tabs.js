@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator()
 const TabsStackNavigator = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Tabs'>
+            <Stack.Navigator initialRouteName='Auth'>
                 <Stack.Screen
                     options={{ headerShown: false }}
                     name='Tabs'

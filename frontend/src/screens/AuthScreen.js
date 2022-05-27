@@ -1,16 +1,59 @@
 import React, { useState } from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
-import { AppButton } from '../components/core/button'
 import { AppInput } from '../components/core/input'
+import { AppButton } from '../components/core/button'
+import { AppSelect } from '../components/core/select'
+import { LOCATIONS } from '../data'
+import { confirmPhoneNumberRequest, sendConfirmationCodeRequest } from '../http'
 
 const AuthScreen = ({ navigation }) => {
-    return <Auth1 />
+    // After successful authentication navigation to 'Tabs'
+    // navigation.navigate('Tabs')
+
+    return (
+        <View>
+            <Auth0 />
+            <Auth1 />
+            <Auth2 />
+        </View>
+    )
+}
+
+// Do no requests, just save username and location for later user creation
+const Auth0 = () => {
+    const [name, setName] = useState('')
+    const [location, setLocation] = useState(LOCATIONS[0])
+
+    const saveNameAndLocation = () => {}
+
+    return (
+        <View>
+            <AppInput
+                title='Enter your name'
+                placeholder='John Doe'
+                value={name}
+                onChangeText={setName}
+            />
+            <AppSelect
+                title='Location'
+                selectedValue={location}
+                onValueChange={setLocation}
+                itemsList={LOCATIONS}
+            />
+            <AppButton onPress={saveNameAndLocation} />
+        </View>
+    )
 }
 
 // Enter phone number
 const Auth1 = () => {
     const [phoneNumber, setPhoneNumber] = useState('')
+
+    const onPress = async () => {
+        await sendConfirmationCodeRequest(phoneNumber)
+    }
+
     return (
         <View>
             <AppInput
@@ -19,14 +62,24 @@ const Auth1 = () => {
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
             />
-            <AppButton />
+            <AppButton onPress={onPress} />
         </View>
     )
 }
 
-// Enter confirmation code
+// Enter confirmation code and username
 const Auth2 = () => {
-    const [confirmationCode, setConfirmationCode] = useState('')
+    // Save token, username and userId after user from response body
+
+    const [confirmationCode, setConfirmationCode] = useState('2222')
+
+    const onPress = async () => {
+        await confirmPhoneNumberRequest(confirmationCode, {
+            name: 'Madi',
+            phoneNumber: '+77784156666'
+        })
+    }
+
     return (
         <View>
             <AppInput
@@ -35,25 +88,7 @@ const Auth2 = () => {
                 value={confirmationCode}
                 onChangeText={setConfirmationCode}
             />
-            <AppButton />
-        </View>
-    )
-}
-
-// Enter user name (if user does not exist in the database)
-const Auth3 = () => {
-    // Save token, username and userId after user from response body
-    const [name, setName] = useState('')
-    return (
-        <View>
-            <Text>Enter your </Text>
-            <AppInput
-                title='Enter your name'
-                placeholder='John Doe'
-                value={name}
-                onChangeText={setName}
-            />
-            <AppButton />
+            <AppButton onPress={onPress} />
         </View>
     )
 }
