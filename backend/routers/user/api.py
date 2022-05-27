@@ -53,6 +53,7 @@ async def edit_user(data: UserEditIn, id: int = Path(...)):
 async def send_confirmation_code(phone: str = Path(...)):
     phone_entity = PhoneEntity(phone)
     if phone_entity.is_valid():
+        # TODO: Later randomly generate 4-digit code and send it as SMS
         code = TEST_CONFIRMATION_CODE
         if phone_entity.confirmation_code_sent(code):
             phone_obj = Phone.query.filter_by(value=phone).first() or \
@@ -79,6 +80,8 @@ async def create_user(
     if phone_obj := Phone.query.filter_by(value=data.phone).first():
         if phone_obj.confirmed(confirmation_code):
             logger.debug('Phone confirmed successfully')
+            
+            phone_obj.set_confirmation_code_to(None)
 
             user = User.query.filter_by(phone=data.phone).first() or \
                 User.create(data.dict())
