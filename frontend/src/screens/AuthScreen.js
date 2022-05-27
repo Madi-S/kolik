@@ -51,7 +51,8 @@ const Auth1 = () => {
     const [phoneNumber, setPhoneNumber] = useState('')
 
     const onPress = async () => {
-        await sendConfirmationCodeRequest(phoneNumber)
+        const result = await sendConfirmationCodeRequest(phoneNumber)
+        console.log('Result from Auth1:', result)
     }
 
     return (
@@ -74,10 +75,12 @@ const Auth2 = () => {
     const [confirmationCode, setConfirmationCode] = useState('2222')
 
     const onPress = async () => {
-        await confirmPhoneNumberRequest(confirmationCode, {
+        const result = await confirmPhoneNumberRequest(confirmationCode, {
             name: 'Madi',
-            phoneNumber: '+77784156666'
+            phone: '+77784156666',
+            location: 'all'
         })
+        console.log('Result from Auth2:', result)
     }
 
     return (
