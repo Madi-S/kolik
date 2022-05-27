@@ -9,18 +9,18 @@ const AppInput = ({
     placeholder = 'Type ...',
     containerStyle = {},
     inputStyle = {},
-    value = null,
-    onChangeText = () => {},
+    value = '',
+    onChangeText = () => {}
 }) => {
     return (
-        <View style={{...styles.container, ...containerStyle}}>
+        <View style={{ ...styles.container, ...containerStyle }}>
             <Text>{title}</Text>
             <TextInput
-                style={{...styles.input, ...inputStyle}}
-                keyboardType={keyboardType}
+                style={{ ...styles.input, ...inputStyle }}
                 value={value}
-                placeholder={placeholder}
                 onChangeText={onChangeText}
+                placeholder={placeholder}
+                keyboardType={keyboardType}
             />
         </View>
     )
