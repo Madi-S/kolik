@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Text, Card } from 'react-native-elements'
-import { ScrollView, StyleSheet } from 'rseact-native'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import { capitalize } from '../utils'
 import { getPostImageRequest } from '../http'
