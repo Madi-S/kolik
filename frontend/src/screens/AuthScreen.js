@@ -10,7 +10,6 @@ import { confirmPhoneNumberRequest, sendConfirmationCodeRequest } from '../http'
 
 const AuthScreen = ({ navigation }) => {
     if (getToken() && getUserId()) {
-        console.log(getUserId(), getToken())
         navigation.navigate('Tabs')
         return <Text>Hello World</Text>
     } else {
@@ -48,8 +47,8 @@ const AuthScreen = ({ navigation }) => {
             )
         } else if (pageNumber === 2) {
             const onSuccess = json => {
-                setToken(json.token)
                 setUserId(json.id)
+                setToken(json.token)
                 navigation.navigate('Tabs')
             }
 

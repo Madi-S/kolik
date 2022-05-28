@@ -1,8 +1,5 @@
 import { getToken, getUserId } from './auth'
 
-const TOKEN = getToken()
-const USER_ID = getUserId()
-
 export const BASE_URL = 'https://kolik-native-backend.herokuapp.com'
 
 let feedbackAlreadySent = false
@@ -47,12 +44,12 @@ export const confirmPhoneNumberRequest = async (
 
 export const getMyPostsRequest = async () => {
     try {
-        const res = await fetch(`${BASE_URL}/post/by_user/${USER_ID}`, {
+        const res = await fetch(`${BASE_URL}/post/by_user/${getUserId()}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             }
         })
 
@@ -69,7 +66,7 @@ export const deleteMyPostRequest = async postId => {
         headers: {
             'Content-Type': 'application/json',
             accept: 'application/json',
-            'auth-token': TOKEN
+            'auth-token': getToken()
         }
     })
 
@@ -84,7 +81,7 @@ export const activateMyPostRequest = async postId => {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             }
         })
 
@@ -102,7 +99,7 @@ export const deactivateMyPostRequest = async postId => {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             }
         })
 
@@ -114,7 +111,7 @@ export const deactivateMyPostRequest = async postId => {
 }
 
 export const editPostRequest = async (params, postId) => {
-    const body = JSON.stringify({ ...params, userId: USER_ID })
+    const body = JSON.stringify({ ...params, userId: getUserId() })
 
     try {
         const res = await fetch(`${BASE_URL}/post/${postId}`, {
@@ -122,7 +119,7 @@ export const editPostRequest = async (params, postId) => {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             },
             body
         })
@@ -135,7 +132,7 @@ export const editPostRequest = async (params, postId) => {
 }
 
 export const createPostRequest = async params => {
-    const body = JSON.stringify({ ...params, userId: USER_ID })
+    const body = JSON.stringify({ ...params, userId: getUserId() })
 
     try {
         const res = await fetch(`${BASE_URL}/post/`, {
@@ -143,7 +140,7 @@ export const createPostRequest = async params => {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             },
             body
         })
@@ -164,7 +161,7 @@ export const queryPostsRequest = async params => {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             },
             body
         })
@@ -189,7 +186,7 @@ export const getPostsQueryCountRequest = async params => {
             headers: {
                 'Content-Type': 'application/json',
                 accept: 'application/json',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             },
             body
         })
@@ -214,7 +211,7 @@ export const uploadPostImageRequest = async (postId, imageUri) => {
             body: formData,
             headers: {
                 'content-type': 'multipart/form-data',
-                'auth-token': TOKEN
+                'auth-token': getToken()
             }
         })
 
@@ -231,7 +228,7 @@ export const sendFeedbackRequest = async feedbackBody => {
         return
     }
 
-    const body = JSON.stringify({ body: feedbackBody, userId: USER_ID })
+    const body = JSON.stringify({ body: feedbackBody, userId: getUserId() })
 
     try {
         const res = await fetch(`${BASE_URL}/misc/feedback`, {
