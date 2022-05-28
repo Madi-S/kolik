@@ -11,7 +11,8 @@ from .schema import PostQuery, PostOut, PostIn, PostEditIn
 
 # !!! Make sure that Header will be mandatory in producation build
 def validate_auth_token(x_token: str = Header('2222', alias='auth-token')) -> Any:
-    if x_token != '2222':
+    user_exists = bool(User.query.filter_by(token=x_token).first())
+    if not user_exists or x_token != '2222':
         raise HTTPException(401, 'User is not authenticated')
 
 
