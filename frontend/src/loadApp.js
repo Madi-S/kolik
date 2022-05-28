@@ -1,8 +1,6 @@
 import * as Font from 'expo-font'
 import { setToken, setUserId } from './auth'
 
-
-
 const loadApp = async () => {
     await setAuthParams()
 
@@ -20,8 +18,8 @@ const loadApp = async () => {
 }
 
 const setAuthParams = async () => {
-    setUserId(2)
-    setToken('2222')
+    // Check token for validity
+    // If token is not valid, set userId and token to null
 }
 
 export default loadApp
