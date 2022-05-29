@@ -5,26 +5,11 @@ from sqlalchemy import or_
 import enums
 from models import Post
 from .schema import PostQuery
-
-
-'''
-params: {
-    q: 'toyota'
-    from_: 0
-    to: 100
-    category: 'station_wagon'
-    filters: {
-        price_from: 100
-        price_to: 2000000
-        location: 'astana'
-        order_by_option: 'price-desc
-    }
-}
-'''
+from config import IMAGES_FOLDER
 
 
 def generate_image_uri(post_id, name):
-    logger.debug('Generated image uri', f'./images/{post_id}__{name}')
+    logger.debug('Generated image uri', f'./{IMAGES_FOLDER}/{post_id}__{name}')
     return f'./images/{post_id}__{name}'
 
 

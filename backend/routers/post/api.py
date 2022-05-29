@@ -5,14 +5,15 @@ from typing import Any, List
 from loguru import logger
 
 from models import Post, User
+from config import DEFAULT_POST_IMAGE, TEST_AUTH_TOKEN
 from .utils import PostQueryHandler, generate_image_uri
 from .schema import PostQuery, PostOut, PostIn, PostEditIn
 
 
 # !!! Make sure that Header will be mandatory in producation build
-def validate_auth_token(x_token: str = Header('2222', alias='auth-token')) -> Any:
+def validate_auth_token(x_token: str = Header(TEST_AUTH_TOKEN, alias='auth-token')) -> Any:
     user_doesnot_exists = not bool(User.query.filter_by(token=x_token).first())
-    if user_doesnot_exists and x_token != '2222':
+    if user_doesnot_exists and x_token != TEST_AUTH_TOKEN:
         raise HTTPException(401, 'User is not authenticated')
 
 
@@ -97,9 +98,6 @@ def deactivate_post(id):
     return Post.deactivate(id)
 
 
-IMAGES_FOLDER = 'images'
-
-
 @router.put('/image/{post_id}', response_model=PostOut, tags=['post', 'image'])
 async def upload_post_image(
     post_id: int = Path(...),
@@ -129,5 +127,5 @@ async def get_post_image(post_id: int = Path(...)):
         if post.image_uri:
             return FileResponse(post.image_uri)
 
-    default_image = f'{IMAGES_FOLDER}/potnyara.png'
+    default_image = DEFAULT_POST_IMAGE
     return FileResponse(default_image)

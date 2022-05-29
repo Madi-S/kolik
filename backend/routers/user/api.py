@@ -5,6 +5,7 @@ from loguru import logger
 
 from models import User, Phone
 from .utils import PhoneEntity
+from config import TEST_CONFIRMATION_CODE
 from .schema import UserOut, UserIn, UserEditIn
 
 
@@ -13,7 +14,6 @@ router = APIRouter(
     tags=['user']
 )
 
-TEST_CONFIRMATION_CODE = '2222'
 
 registration_steps = '''
 Registration steps:
@@ -80,7 +80,7 @@ async def create_user(
     if phone_obj := Phone.query.filter_by(value=data.phone).first():
         if phone_obj.confirmed(confirmation_code):
             logger.debug('Phone confirmed successfully')
-            
+
             phone_obj.set_confirmation_code_to(None)
 
             user = User.query.filter_by(phone=data.phone).first() or \
