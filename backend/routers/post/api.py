@@ -1,9 +1,10 @@
-from fastapi import Header, APIRouter, Path, HTTPException, File, UploadFile, Depends
+from fastapi import Header, APIRouter, Path, HTTPException, File, UploadFile, Depends, Request, Response
 from fastapi.responses import FileResponse
 
 from typing import Any, List
 from loguru import logger
 
+from main import limiter
 from models import Post, User
 from config import DEFAULT_POST_IMAGE, TEST_AUTH_TOKEN
 from .utils import PostQueryHandler, generate_image_uri
@@ -26,6 +27,8 @@ router = APIRouter(
 
 @router.post('/query', response_model=List[PostOut], tags=['post'])
 async def query_posts(
+    request: Request,
+    response: Response,
     data: PostQuery,
     ignore_deactivated: bool = Header(default=True)
 ):
@@ -37,6 +40,8 @@ async def query_posts(
 
 @router.post('/query/count', response_model=int, tags=['post'])
 async def query_posts_count(
+    request: Request,
+    response: Response,
     data: PostQuery,
     ignore_deactivated: bool = Header(default=True)
 ):
@@ -47,7 +52,11 @@ async def query_posts_count(
 
 
 @router.get('/{id}', response_model=PostOut, tags=['post'])
-async def get_post_by_id(id: int = Path(...)):
+async def get_post_by_id(
+    request: Request,
+    response: Response,
+    id: int = Path(...)
+):
     if post := Post.query.get(id):
         return post
 
@@ -55,26 +64,45 @@ async def get_post_by_id(id: int = Path(...)):
 
 
 @router.get('/by_user/{user_id}', response_model=List[PostOut], tags=['post'])
-async def get_all_posts_by_user_id(user_id: int = Path(...)):
+async def get_all_posts_by_user_id(
+    request: Request,
+    response: Response,
+    user_id: int = Path(...)
+):
     if user := User.query.get(user_id):
         return user.posts
 
 
+@limiter.limit('1/minute')
 @router.put('/', response_model=PostOut, tags=['post'])
-async def create_post(data: PostIn):
+async def create_post(
+    request: Request,
+    response: Response,
+    data: PostIn
+):
     post = Post.create(data.dict())
     return post
 
 
 @router.delete('/{id}', response_model=PostOut, tags=['post'])
-async def delete_post(id: int = Path(...)):
+async def delete_post(
+        request: Request,
+        response: Response,
+        id: int = Path(...)
+):
     '''Deletes post by given id and returns deleted post if exists'''
     deleted_post_or_none = Post.delete(id)
     return deleted_post_or_none
 
 
+@limiter.limit('2/minute')
 @router.post('/{id}', response_model=PostOut, tags=['post'])
-async def edit_post(data: PostEditIn, id: int = Path(...)):
+async def edit_post(
+        request: Request,
+        response: Response,
+        data: PostEditIn,
+        id: int = Path(...)
+):
     if post := Post.query.get(id):
         # if post.user_id == data.user_id:
         post.edit(data.dict())
@@ -86,20 +114,32 @@ async def edit_post(data: PostEditIn, id: int = Path(...)):
     raise HTTPException(404, 'Post not found')
 
 
+@limiter.limit('4/minute')
 @router.post('/activate/{id}', response_model=bool, tags=['post'])
-def activate_post(id):
+def activate_post(
+    request: Request,
+    response: Response,
+    id: int = Path(...)
+):
     '''Returns True if post was activated'''
     return Post.activate(id)
 
 
+@limiter.limit('4/minute')
 @router.post('/deactivate/{id}', response_model=bool, tags=['post'])
-def deactivate_post(id):
+def deactivate_post(
+    request: Request,
+    response: Response,
+    id: int = Path(...)
+):
     '''Returns True if post was deactivated'''
     return Post.deactivate(id)
 
 
 @router.put('/image/{post_id}', response_model=PostOut, tags=['post', 'image'])
 async def upload_post_image(
+    request: Request,
+    response: Response,
     post_id: int = Path(...),
     image: UploadFile = File(...)
 ):
