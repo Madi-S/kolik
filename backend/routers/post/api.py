@@ -1,21 +1,14 @@
-from fastapi import Header, APIRouter, Path, HTTPException, File, UploadFile, Depends, Request, Response
+from fastapi import Header, APIRouter, Path, HTTPException, File, UploadFile, Depends, Request, Response, status
 from fastapi.responses import FileResponse
 
-from typing import Any, List
+from typing import List
 from loguru import logger
 
-from main import limiter
 from models import Post, User
-from config import DEFAULT_POST_IMAGE, TEST_AUTH_TOKEN
+from config import DEFAULT_POST_IMAGE
+from services import limiter, validate_auth_token
 from .utils import PostQueryHandler, generate_image_uri
 from .schema import PostQuery, PostOut, PostIn, PostEditIn
-
-
-# !!! Make sure that Header will be mandatory in producation build
-def validate_auth_token(x_token: str = Header(TEST_AUTH_TOKEN, alias='auth-token')) -> Any:
-    user_doesnot_exists = not bool(User.query.filter_by(token=x_token).first())
-    if user_doesnot_exists and x_token != TEST_AUTH_TOKEN:
-        raise HTTPException(401, 'User is not authenticated')
 
 
 router = APIRouter(
@@ -25,122 +18,139 @@ router = APIRouter(
 )
 
 
-@router.post('/query', response_model=List[PostOut], tags=['post'])
+@router.post('/query', response_model=List[PostOut], tags=['post'], status_code=status.HTTP_200_OK)
 async def query_posts(
     request: Request,
     response: Response,
     data: PostQuery,
     ignore_deactivated: bool = Header(default=True)
 ):
-    query_handler = PostQueryHandler(data, ignore_deactivated)
-    query_handler.apply_all()
-    posts = query_handler.generate_entries()
-    return posts
+    try:
+        query_handler = PostQueryHandler(data, ignore_deactivated)
+        query_handler.apply_all()
+        posts = query_handler.generate_entries()
+        return posts
+    except Exception as e:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, e)
 
 
-@router.post('/query/count', response_model=int, tags=['post'])
+@router.post('/query/count', response_model=int, tags=['post'], status_code=status.HTTP_200_OK)
 async def query_posts_count(
     request: Request,
     response: Response,
     data: PostQuery,
     ignore_deactivated: bool = Header(default=True)
 ):
-    query_handler = PostQueryHandler(data, ignore_deactivated)
-    query_handler.apply_all(apply_limit=False)
-    posts_count = query_handler.get_count()
-    return posts_count
+    try:
+        query_handler = PostQueryHandler(data, ignore_deactivated)
+        query_handler.apply_all(apply_limit=False)
+        posts_count = query_handler.get_count()
+        return posts_count
+    except Exception as e:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY, e)
 
 
-@router.get('/{id}', response_model=PostOut, tags=['post'])
+@router.get('/{id}', response_model=PostOut, tags=['post'], status_code=status.HTTP_200_OK)
 async def get_post_by_id(
     request: Request,
     response: Response,
-    id: int = Path(...)
+    id: str = Path(...)
 ):
     if post := Post.query.get(id):
         return post
 
-    return HTTPException(404, 'Post not found')
+    raise HTTPException(404, 'Post not found')
 
 
-@router.get('/by_user/{user_id}', response_model=List[PostOut], tags=['post'])
+@router.get('/by_user/{user_id}', response_model=List[PostOut], tags=['post'], status_code=status.HTTP_200_OK)
 async def get_all_posts_by_user_id(
     request: Request,
     response: Response,
-    user_id: int = Path(...)
+    user_id: str = Path(...)
 ):
     if user := User.query.get(user_id):
         return user.posts
 
+    raise HTTPException(404, 'User with provided id does not exist')
 
-@limiter.limit('1/minute')
-@router.put('/', response_model=PostOut, tags=['post'])
+
+@router.put('/', response_model=PostOut, tags=['post'], status_code=status.HTTP_201_CREATED)
+@limiter.limit('3/minute')
 async def create_post(
     request: Request,
     response: Response,
     data: PostIn
 ):
+    user_id = data.user_id
+    if not User.query.get(user_id):
+        raise HTTPException(404, 'User with provided id does not exist')
     post = Post.create(data.dict())
     return post
 
 
-@router.delete('/{id}', response_model=PostOut, tags=['post'])
+@router.delete('/{id}', tags=['post'], status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit('7/minute')
 async def delete_post(
         request: Request,
         response: Response,
-        id: int = Path(...)
+        id: str = Path(...)
 ):
-    '''Deletes post by given id and returns deleted post if exists'''
-    deleted_post_or_none = Post.delete(id)
-    return deleted_post_or_none
+    post_was_deleted = Post.delete(id)
+    if not post_was_deleted:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not deleted')
 
 
+@router.post('/{id}', tags=['post'], status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit('2/minute')
-@router.post('/{id}', response_model=PostOut, tags=['post'])
 async def edit_post(
         request: Request,
         response: Response,
         data: PostEditIn,
-        id: int = Path(...)
+        id: str = Path(...)
 ):
     if post := Post.query.get(id):
-        # if post.user_id == data.user_id:
-        post.edit(data.dict())
-        return post
+        if post.user_id == data.user_id:
+            post.edit(data.dict())
+        else:
+            raise HTTPException(
+                status.HTTP_401_UNAUTHORIZED, 'You have no rights to edit this post')
+    else:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not found')
 
-        # raise HTTPException(
-        #     404, 'Given userId does not match with post.userId')
 
-    raise HTTPException(404, 'Post not found')
-
-
+@router.post('/activate/{id}', response_model=bool, tags=['post'], status_code=status.HTTP_200_OK)
 @limiter.limit('4/minute')
-@router.post('/activate/{id}', response_model=bool, tags=['post'])
 def activate_post(
     request: Request,
     response: Response,
-    id: int = Path(...)
+    id: str = Path(...)
 ):
     '''Returns True if post was activated'''
-    return Post.activate(id)
+    if post := Post.query.get(id):
+        return post.activate()
+
+    raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not found')
 
 
+@router.post('/deactivate/{id}', response_model=bool, tags=['post'], status_code=status.HTTP_200_OK)
 @limiter.limit('4/minute')
-@router.post('/deactivate/{id}', response_model=bool, tags=['post'])
 def deactivate_post(
     request: Request,
     response: Response,
-    id: int = Path(...)
+    id: str = Path(...)
 ):
     '''Returns True if post was deactivated'''
-    return Post.deactivate(id)
+    if post := Post.query.get(id):
+        return post.deactivate()
+
+    raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not found')
 
 
-@router.put('/image/{post_id}', response_model=PostOut, tags=['post', 'image'])
+@router.put('/image/{post_id}', tags=['post', 'image'], status_code=status.HTTP_204_NO_CONTENT)
 async def upload_post_image(
     request: Request,
     response: Response,
-    post_id: int = Path(...),
+    post_id: str = Path(...),
     image: UploadFile = File(...)
 ):
     if post := Post.query.get(post_id):
@@ -153,13 +163,12 @@ async def upload_post_image(
             f.write(contents)
 
         post.set_image_uri(image_uri)
-        return post
+    else:
+        raise HTTPException(404, 'Post was not found')
 
-    raise HTTPException(404, 'Post not found')
 
-
-@router.get('/image/{post_id}', tags=['post', 'image'])
-async def get_post_image(post_id: int = Path(...)):
+@router.get('/image/{post_id}', tags=['post', 'image'], status_code=status.HTTP_200_OK)
+async def get_post_image(post_id: str = Path(...)):
     logger.debug('Received postId', post_id)
     logger.debug('Found post with such id', Post.query.get(post_id))
     if post := Post.query.get(post_id):

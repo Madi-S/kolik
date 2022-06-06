@@ -6,6 +6,12 @@
 uvicorn main:app --reload
 ```
 
+### Update requirements.txt
+
+```sh
+pipreqs . --encoding='utf-8' --force --savepath=requirements.in & pip-compile
+```
+
 ### Push changes to Heroku
 
 ```sh
@@ -29,7 +35,7 @@ python models.py
 ### Make & Run migrations
 
 ```sh
-alembic revision --autogenerate -m "I am a teapot"
+alembic revision --autogenerate -m "123"
 alembic upgrade head
 ```
 
@@ -49,6 +55,8 @@ alembic stamp head
 
 ```sh
 python -m pytest
+python -m pytest tests/test_user.py1`
+python -m pytest tests/test_user.py -r P (show stdout)
 python -m pytest -k "test_query_posts"
 python -m pytest -k "test_query_posts and not test_get_post_by_id"
 ```

@@ -16,6 +16,30 @@ class UserIn(Model):
     phone: str
     location: Optional[enums.Location]
 
+    @validator('name')
+    def name_must_be_between_3_and_30_chars(cls, name: str):
+        if len(name) >= 3 and len(name) <= 30:
+            return name
+        raise ValueError('Name must be between 3 and 30 characters')
+
+    @validator('phone')
+    def phone_must_be_12_chars_long(cls, phone: str):
+        if len(phone) == 12:
+            return phone
+        raise ValueError('Phone must be 12 characters long')
+
+    @validator('phone')
+    def phone_must_start_with_plus(cls, phone: str):
+        if phone.startswith('+'):
+            return phone
+        raise ValueError('Phone must start with +')
+
+    @validator('phone')
+    def phone_must_be_digit(cls, phone: str):
+        if phone[1:].isdigit():
+            return phone
+        raise ValueError('Phone must be a valid number')
+
 
 class UserEditIn(Model):
     '''
@@ -24,9 +48,15 @@ class UserEditIn(Model):
     name: Optional[str] = None
     location: Optional[enums.Location] = None
 
+    @validator('name')
+    def name_must_be_between_3_and_30_chars(cls, name: str, values, **kwargs):
+        if len(name) >= 3 and len(name) <= 30:
+            return name
+        raise ValueError('Name must be between 3 and 30 characters')
+
 
 class UserOut(Model):
-    id: int
+    id: str
     name: str
     token: str
     phone: str

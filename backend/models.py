@@ -1,5 +1,6 @@
-from typing import Any
+from typing_extensions import Self
 from loguru import logger
+from typing import Any, TypeVar, Type
 from sqlalchemy import Column, Boolean, String, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship
 
@@ -8,9 +9,13 @@ from db import Base, db
 from utils import generate_user_id, generate_user_token, get_unix_time
 
 
+TCreate = TypeVar('TCreate', bound='CreateMixin')
+TDelete = TypeVar('TDelete', bound='DeleteMixin')
+
+
 class CreateMixin():
     @classmethod
-    def create(cls, data: dict) -> Any:
+    def create(cls: Type[TCreate], data: dict) -> TCreate:
         '''Creates db object with given dict data and returns it'''
         obj = cls(**data)
         db.session.add(obj)
@@ -20,16 +25,16 @@ class CreateMixin():
 
 class DeleteMixin():
     @classmethod
-    def delete(cls, id: Any) -> Any:
+    def delete(cls: Type[TDelete], id: int | str) -> TDelete | None:
         '''Deletes db object by id and returns it if exists'''
-        obj = cls.query.get(id)
-        db.session.delete(obj)
-        db.session.commit()
-        return obj
+        if obj := cls.query.get(id):
+            db.session.delete(obj)
+            db.session.commit()
+            return obj
 
 
 class EditMixin():
-    def edit(self, data: dict) -> Any:
+    def edit(self, data: dict) -> Self:
         '''Edits db object with given dict data and returns it'''
         try:
             data.pop('id')
@@ -49,7 +54,7 @@ class Phone(Base):
     '''TODO: Implement strict one to one relationship with User'''
     __tablename__ = 'phone'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(100), primary_key=True, default=generate_user_id)
 
     value = Column(String(12), unique=True)
     confirmation_code = Column(String(4))
@@ -65,7 +70,7 @@ class Phone(Base):
         return f'<Phone #{self.id}: value: {self.value}, code: {self.confirmation_code} for user #{self.user.id}>'
 
     @classmethod
-    def create(cls, phone_value: str) -> Any:
+    def create(cls, phone_value: str) -> 'Phone':
         phone = cls(value=phone_value)
         db.session.add(phone)
         db.session.commit()
@@ -87,11 +92,9 @@ class Phone(Base):
 class User(Base, CreateMixin, EditMixin):
     __tablename__ = 'user'
 
-    # id = Column(String(100), primary_key=True, default=generate_user_id)
-    id = Column(Integer, primary_key=True)
+    id = Column(String(100), primary_key=True, default=generate_user_id)
 
     name = Column(String(200), nullable=False)
-
     location = Column(String(500), default=enums.Location.all, nullable=False)
     token = Column(String(100), unique=True, default=generate_user_token)
     device_info = Column(String(300))
@@ -111,10 +114,10 @@ class User(Base, CreateMixin, EditMixin):
 class Post(Base, CreateMixin, DeleteMixin, EditMixin):
     __tablename__ = 'post'
 
-    id = Column(Integer, primary_key=True)
+    id = Column(String(100), primary_key=True, default=generate_user_id)
 
     title = Column(String(100), nullable=False)
-    description = Column(String(1000), nullable=False)
+    description = Column(String(2000), nullable=False)
     location = Column(String(500), default=enums.Location.all, nullable=False)
     category = Column(
         String(500), default=enums.PostCategory.all, nullable=False)
@@ -125,7 +128,7 @@ class Post(Base, CreateMixin, DeleteMixin, EditMixin):
     slug = Column(String(100))
     activated = Column(Boolean, default=True)
 
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(String(100), ForeignKey('user.id'))
 
     def __repr__(self) -> str:
         return f'<Post #{self.id} from user {self.user.name}>'
@@ -134,21 +137,17 @@ class Post(Base, CreateMixin, DeleteMixin, EditMixin):
         self.image_uri = file_path
         db.session.commit()
 
-    @classmethod
-    def activate(cls, id: int) -> bool:
+    def activate(self) -> bool:
         '''Returns True if the post was activated, otherwise falsy None'''
-        if post := cls.query.get(id):
-            post.activated = True
-            db.session.commit()
-            return True
+        self.activated = True
+        db.session.commit()
+        return True
 
-    @classmethod
-    def deactivate(cls, id: int) -> bool:
+    def deactivate(self) -> bool:
         '''Returns True if the post was deactivated, otherwise falsy None'''
-        if post := cls.query.get(id):
-            post.activated = False
-            db.session.commit()
-            return True
+        self.activated = False
+        db.session.commit()
+        return True
 
 
 class Feedback(Base, CreateMixin):
@@ -158,9 +157,9 @@ class Feedback(Base, CreateMixin):
 
     body = Column(String(1000), nullable=False)
     created_at = Column(Float, default=get_unix_time)
-    is_read = Column(Boolean, default=True)
+    is_read = Column(Boolean, default=False)
 
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(String(100), ForeignKey('user.id'))
 
     def __repr__(self) -> str:
         return f'<Feedback #{self.id} from user #{self.user_id}>'

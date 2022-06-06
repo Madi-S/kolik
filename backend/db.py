@@ -5,18 +5,22 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
+if os.environ.get('DEBUG') == 'TRUE':
+    # check_same_thread is only for sqlite
+    engine = create_engine(os.environ['DATABASE_URL'], connect_args={
+        'check_same_thread': False})
+    db_session = scoped_session(sessionmaker(
+        bind=engine,
+        autoflush=False,
+        autocommit=False
+    ))
+else:
+    raise Exception('Database connection for non-debug case is not defined')
 
-# check_same_thread is only for sqlite
-engine = create_engine(os.environ['DATABASE_URL'], connect_args={
-                       'check_same_thread': False})
-db_session = scoped_session(sessionmaker(
-    bind=engine,
-    autoflush=False,
-    autocommit=False
-))
 
 Base = declarative_base()
 Base.query = db_session.query_property()

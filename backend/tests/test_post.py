@@ -6,17 +6,16 @@ from random import randint, choice
 
 import enums
 from models import Post, User
-
+from config import IMAGES_FOLDER
 from routers.post.schema import PostOut
-from routers.post.api import IMAGES_FOLDER
 from routers.post.utils import generate_image_uri
 
 
-POST_ID = 6
-USER_ID = 1
+POST_ID = Post.query.first().id
+USER_ID = User.query.first().id
 
 
-def test_query_posts(test_app: TestClient):
+def test_query_posts__success(test_app: TestClient):
     '''POST /post/query route should return a list of posts according to given query parameters'''
     from_ = randint(1, 4)
     to = randint(5, 9)
@@ -54,7 +53,26 @@ def test_query_posts(test_app: TestClient):
     assert len(response.json()) == filtered_posts.count()
 
 
-def test_get_post_by_id(test_app: TestClient):
+def test_query_posts__fail_schema(test_app: TestClient):
+    '''POST /post/query route should raise 422 status code for invalid incoming json data'''
+    invalid_json = {
+        'q': 'a',
+        'from_': 123,
+        'to': 55,
+        'category': 'all',
+        'filters': {
+            'priceTo': 10,
+            'priceFrom': 10000,
+            'location': 'usa?',
+            'orderByOption': 'burger'
+        }
+    }
+    response = test_app.post('/post/query', json=invalid_json)
+
+    assert response.status_code == 422
+
+
+def test_get_post_by_id__success(test_app: TestClient):
     '''GET /post/{id} route should return User model by given id according to UserOut schema'''
     response = test_app.get(f'/post/{POST_ID}')
 
@@ -64,11 +82,19 @@ def test_get_post_by_id(test_app: TestClient):
     assert response.json() == post_data
 
 
-def test_create_post(test_app: TestClient):
+def test_get_post_by_id__fail_not_found(test_app: TestClient):
+    '''GET /post/{id} route should raise 404 status code for non existing post id'''
+    non_existing_post_id = POST_ID + str(randint(1000, 9999))
+    response = test_app.get(f'/post/{non_existing_post_id}')
+
+    assert response.status_code == 404
+
+
+def test_create_post__success(test_app: TestClient):
     '''PUT /post route should create post in the database with given arguments and return it'''
     json = {
         'title': 'test', 'price': 42, 'description': 'test',
-        'location': enums.Location.kokshetau, 'category': enums.PostCategory.suv, 'userId': 1
+        'location': enums.Location.kokshetau, 'category': enums.PostCategory.suv, 'userId': USER_ID
     }
     response = test_app.put(f'/post/', json=json)
 
@@ -76,7 +102,7 @@ def test_create_post(test_app: TestClient):
     post_obj = Post.query.get(post_id)
     post_data = PostOut.from_orm(post_obj).dict(by_alias=True)
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json() == post_data
 
     user_post_obj = User.query.get(USER_ID).posts[-1]
@@ -86,18 +112,49 @@ def test_create_post(test_app: TestClient):
     assert response.json() == user_post_data
 
 
-def test_delete_post(test_app: TestClient):
-    '''DELETE /post/{id} route should delete post in the database with given id and return it'''
+def test_create_post__fail_not_found(test_app: TestClient):
+    '''PUT /post route should raise 404 status code for non existing user with provided user id'''
+    non_existing_user_id = USER_ID + str(randint(1000, 9999))
+    json = {
+        'title': 'test', 'price': 42, 'description': 'test',
+        'location': enums.Location.kokshetau, 'category': enums.PostCategory.suv, 'userId': non_existing_user_id
+    }
+    response = test_app.put(f'/post/', json=json)
+
+    assert response.status_code == 404
+
+
+def test_create_post__fail_schema(test_app: TestClient):
+    '''PUT /post route should raise 422 status code for invalid incoming json data'''
+    json = {
+        'title': 'test', 'price': -999, 'description': 'test',
+        'location': enums.Location.kokshetau, 'category': enums.PostCategory.suv, 'userId': USER_ID
+    }
+    response = test_app.put(f'/post/', json=json)
+
+    assert response.status_code == 422
+
+
+def test_delete_post__success(test_app: TestClient):
+    '''DELETE /post/{id} route should delete post in the database with given id'''
     test_post = Post.create(dict(
         title='Test', description='test', user_id=USER_ID, price=42))
 
     response = test_app.delete(f'/post/{test_post.id}')
 
-    assert response.status_code == 200
-    assert Post.query.get(test_post.id) is None
+    assert response.status_code == 204
 
 
-def test_activate_post(test_app: TestClient):
+def test_delete_post__fail_not_found(test_app: TestClient):
+    '''DELETE /post/{id} route should raise 404 status code for non existing post id'''
+    non_existing_post_id = POST_ID + str(randint(1000, 9999))
+
+    response = test_app.delete(f'/post/{non_existing_post_id}')
+
+    assert response.status_code == 404
+
+
+def test_activate_post__success(test_app: TestClient):
     '''POST /activate/{id} should activate post in the database and return True on success'''
     response = test_app.post(f'/post/activate/{POST_ID}')
 
@@ -105,11 +162,29 @@ def test_activate_post(test_app: TestClient):
     assert response.json() == True
 
     post = Post.query.get(POST_ID)
-
     assert post.activated == True
 
 
-def test_deactivate_post(test_app: TestClient):
+def test_activate_post__fail_not_found(test_app: TestClient):
+    '''POST /activate/{id} should raise 404 status code for non existing post id'''
+    non_existing_user_id = USER_ID + str(randint(1000, 9999))
+    response = test_app.post(f'/post/activate/{non_existing_user_id}')
+
+    assert response.status_code == 404
+
+
+def test_activate_post__fail_limit(test_app: TestClient):
+    '''POST /activate/{id} should raise 429 status code after 4 requests in a minute'''
+    test_app.post(f'/post/activate/{POST_ID}')
+    test_app.post(f'/post/activate/{POST_ID}')
+    test_app.post(f'/post/activate/{POST_ID}')
+    test_app.post(f'/post/activate/{POST_ID}')
+    response = test_app.post(f'/post/activate/{POST_ID}')
+
+    assert response.status_code == 429
+
+
+def test_deactivate_post__success(test_app: TestClient):
     '''POST /deactivate/{id} should activate post in the database and return True on success'''
     response = test_app.post(f'/post/deactivate/{POST_ID}')
 
@@ -121,7 +196,26 @@ def test_deactivate_post(test_app: TestClient):
     assert post.activated == False
 
 
-def test_edit_post(test_app: TestClient):
+def test_deactivate_post__fail_not_found(test_app: TestClient):
+    '''POST /deactivate/{id} should raise 404 status code for non existing post id'''
+    non_existing_user_id = USER_ID + str(randint(1000, 9999))
+    response = test_app.post(f'/post/deactivate/{non_existing_user_id}')
+
+    assert response.status_code == 404
+
+
+def test_deactivate_post__fail_limit(test_app: TestClient):
+    '''POST /deactivate/{id} should raise 429 status code after 4 requests in a minute'''
+    test_app.post(f'/post/deactivate/{POST_ID}')
+    test_app.post(f'/post/deactivate/{POST_ID}')
+    test_app.post(f'/post/deactivate/{POST_ID}')
+    test_app.post(f'/post/deactivate/{POST_ID}')
+    response = test_app.post(f'/post/deactivate/{POST_ID}')
+
+    assert response.status_code == 429
+
+
+def test_edit_post__success(test_app: TestClient):
     '''POST /post/{id} route should edit post in the database with given arguments and return edited post'''
     expected_title = 'Changed title'
     expected_price = 228

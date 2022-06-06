@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Path, HTTPException, Request, Response
+from fastapi import APIRouter, Path, HTTPException, Request, Response, status
 
 from typing import List
 from loguru import logger
 
-from main import limiter
+from services import limiter
 from models import User, Phone
 from .utils import PhoneEntity
 from config import TEST_CONFIRMATION_CODE
@@ -23,73 +23,79 @@ Registration steps:
 '''
 
 
-@router.get('/', response_model=List[UserOut], tags=['user'])
+@router.get('/', response_model=List[UserOut], tags=['user'], status_code=status.HTTP_200_OK)
+@limiter.limit('2/minute')
 async def get_users(request: Request, response: Response):
     users = User.query.all()
     return users
 
 
-@router.get('/{id}', response_model=UserOut, tags=['user'])
+@router.get('/{id}', response_model=UserOut, tags=['user'], status_code=status.HTTP_200_OK)
 async def get_user_by_id(
     request: Request,
     response: Response,
-    id: int = Path(...)
+    id: str = Path(...)
 ):
-    user = User.query.get(id)
-    if user is None:
-        return HTTPException(404, 'User not found')
-    return user
+    if user := User.query.get(id):
+        return user
+
+    raise HTTPException(status.HTTP_404_NOT_FOUND,
+                        f'User with id {id} was not found')
 
 
+@router.post('/{id}', tags=['user'], status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit('2/minute')
-@router.post('/{id}', response_model=UserOut, tags=['user'])
 async def edit_user(
     request: Request,
     response: Response,
     data: UserEditIn,
-    id: int = Path(...)
+    id: str = Path(...)
 ):
     if user := User.query.get(id):
         user.edit(data.dict())
-        return user
+    else:
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+                            f'User with id {id} was not found')
 
-    raise HTTPException(404, 'User not found')
 
-
-@limiter.limit('3/minute')
 @router.post(
     '/send-code/{phone}',
     tags=['user', 'phone'],
-    description=registration_steps
+    description=registration_steps,
+    status_code=status.HTTP_200_OK
 )
+@limiter.limit('3/minute')
 async def send_confirmation_code(
     request: Request,
     response: Response,
-    phone: str = Path(...)
+    phone: str = Path(...),
 ):
+    if not PhoneEntity.is_valid(phone):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_ENTITY)
+
     phone_entity = PhoneEntity(phone)
-    if phone_entity.is_valid():
-        # TODO: Later randomly generate 4-digit code and send it as SMS
-        code = TEST_CONFIRMATION_CODE
-        if phone_entity.confirmation_code_sent(code):
-            phone_obj = Phone.query.filter_by(value=phone).first() or \
-                Phone.create(phone)
-            phone_obj.set_confirmation_code_to(code)
 
-            return {'msg': f'Confirmation code sent to {phone}', 'status': True}
+    # TODO: Later randomly generate 4-digit code and send it as SMS
+    code = TEST_CONFIRMATION_CODE
+    if phone_entity.confirmation_code_sent(code):
+        phone_obj = Phone.query.filter_by(value=phone).first() or \
+            Phone.create(phone)
+        phone_obj.set_confirmation_code_to(code)
 
-        return {'msg': f'Confirmation was not code sent to {phone}', 'status': False}
+        return {'msg': f'Confirmation code sent to {phone}', 'status': True}
 
-    return {'msg': f'Phone {phone} is not valid', 'status': False}
+    raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                        f'Confirmation was not code sent to {phone}')
 
 
-@limiter.limit('3/minute')
 @router.put(
     '/{confirmation_code}',
     response_model=UserOut,
     tags=['user', 'phone'],
-    description=registration_steps
+    description=registration_steps,
+    status_code=status.HTTP_201_CREATED
 )
+@limiter.limit('3/minute')
 async def create_user(
     request: Request,
     response: Response,
@@ -105,7 +111,9 @@ async def create_user(
             user = User.query.filter_by(phone=data.phone).first() or \
                 User.create(data.dict())
             return user
-        else:
-            raise HTTPException(404, 'Confirmation code is incorrect')
-    raise HTTPException(404,
+
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
+                            'Confirmation code is incorrect')
+
+    raise HTTPException(status.HTTP_404_NOT_FOUND,
                         'Phone was not found, try sending a confirmation code to it first')
