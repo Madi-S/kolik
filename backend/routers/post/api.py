@@ -4,9 +4,12 @@ from fastapi.responses import FileResponse
 from typing import List
 from loguru import logger
 
+from http_ import messages
+from http_.services import limiter, validate_auth_token
+
 from models import Post, User
 from config import DEFAULT_POST_IMAGE
-from services import limiter, validate_auth_token
+
 from .utils import PostQueryHandler, generate_image_uri
 from .schema import PostQuery, PostOut, PostIn, PostEditIn
 
@@ -59,7 +62,7 @@ async def get_post_by_id(
     if post := Post.query.get(id):
         return post
 
-    raise HTTPException(404, 'Post not found')
+    raise HTTPException(404, messages.POST_NOT_FOUND.format(id))
 
 
 @router.get('/by_user/{user_id}', response_model=List[PostOut], tags=['post'], status_code=status.HTTP_200_OK)
@@ -71,7 +74,7 @@ async def get_all_posts_by_user_id(
     if user := User.query.get(user_id):
         return user.posts
 
-    raise HTTPException(404, 'User with provided id does not exist')
+    raise HTTPException(404, messages.USER_NOT_FOUND.format(user_id))
 
 
 @router.put('/', response_model=PostOut, tags=['post'], status_code=status.HTTP_201_CREATED)
@@ -83,7 +86,8 @@ async def create_post(
 ):
     user_id = data.user_id
     if not User.query.get(user_id):
-        raise HTTPException(404, 'User with provided id does not exist')
+        raise HTTPException(404, messages.USER_NOT_FOUND.format(user_id))
+
     post = Post.create(data.dict())
     return post
 
@@ -97,7 +101,7 @@ async def delete_post(
 ):
     post_was_deleted = Post.delete(id)
     if not post_was_deleted:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not deleted')
+        raise HTTPException(status.HTTP_404_NOT_FOUND, messages.POST_NOT_FOUND.format(id))
 
 
 @router.post('/{id}', tags=['post'], status_code=status.HTTP_204_NO_CONTENT)
@@ -113,9 +117,9 @@ async def edit_post(
             post.edit(data.dict())
         else:
             raise HTTPException(
-                status.HTTP_401_UNAUTHORIZED, 'You have no rights to edit this post')
+                status.HTTP_401_UNAUTHORIZED, messages.USER_NOT_AUTHORIZED)
     else:
-        raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not found')
+        raise HTTPException(status.HTTP_404_NOT_FOUND, messages.POST_NOT_FOUND.format(id))
 
 
 @router.post('/activate/{id}', response_model=bool, tags=['post'], status_code=status.HTTP_200_OK)
@@ -129,7 +133,7 @@ def activate_post(
     if post := Post.query.get(id):
         return post.activate()
 
-    raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not found')
+    raise HTTPException(status.HTTP_404_NOT_FOUND, messages.POST_NOT_FOUND.format(id))
 
 
 @router.post('/deactivate/{id}', response_model=bool, tags=['post'], status_code=status.HTTP_200_OK)
@@ -143,7 +147,7 @@ def deactivate_post(
     if post := Post.query.get(id):
         return post.deactivate()
 
-    raise HTTPException(status.HTTP_404_NOT_FOUND, 'Post was not found')
+    raise HTTPException(status.HTTP_404_NOT_FOUND, messages.POST_NOT_FOUND.format(id))
 
 
 @router.put('/image/{post_id}', tags=['post', 'image'], status_code=status.HTTP_204_NO_CONTENT)
@@ -164,7 +168,7 @@ async def upload_post_image(
 
         post.set_image_uri(image_uri)
     else:
-        raise HTTPException(404, 'Post was not found')
+        raise HTTPException(404, messages.POST_NOT_FOUND.format(id))
 
 
 @router.get('/image/{post_id}', tags=['post', 'image'], status_code=status.HTTP_200_OK)
@@ -175,6 +179,9 @@ async def get_post_image(post_id: str = Path(...)):
         logger.debug('Post found {}', post.image_uri)
         if post.image_uri:
             return FileResponse(post.image_uri)
-
-    default_image = DEFAULT_POST_IMAGE
-    return FileResponse(default_image)
+    
+        default_image = DEFAULT_POST_IMAGE
+        return FileResponse(default_image)
+    
+    raise HTTPException(status.HTTP_404_NOT_FOUND, messages.POST_NOT_FOUND.format(id))
+        

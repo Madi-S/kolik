@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from services import limiter
+from http_.services import limiter
 from routers.user.api import router as user_router
 from routers.post.api import router as post_router
 from routers.misc.api import router as misc_router

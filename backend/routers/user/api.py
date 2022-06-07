@@ -3,10 +3,13 @@ from fastapi import APIRouter, Path, HTTPException, Request, Response, status
 from typing import List
 from loguru import logger
 
-from services import limiter
+from http_ import messages
+from http_.services import limiter
+
 from models import User, Phone
-from .utils import PhoneEntity
 from config import TEST_CONFIRMATION_CODE
+
+from .utils import PhoneEntity
 from .schema import UserOut, UserIn, UserEditIn
 
 
@@ -40,7 +43,7 @@ async def get_user_by_id(
         return user
 
     raise HTTPException(status.HTTP_404_NOT_FOUND,
-                        f'User with id {id} was not found')
+                        messages.USER_NOT_FOUND.format(id))
 
 
 @router.post('/{id}', tags=['user'], status_code=status.HTTP_204_NO_CONTENT)
@@ -55,7 +58,7 @@ async def edit_user(
         user.edit(data.dict())
     else:
         raise HTTPException(status.HTTP_404_NOT_FOUND,
-                            f'User with id {id} was not found')
+                            messages.USER_NOT_FOUND.format(id))
 
 
 @router.post(
@@ -82,10 +85,13 @@ async def send_confirmation_code(
             Phone.create(phone)
         phone_obj.set_confirmation_code_to(code)
 
-        return {'msg': f'Confirmation code sent to {phone}', 'status': True}
+        return {
+            'msg': messages.CONFIRMATION_CODE_SENT_SUCCESS.format(phone),
+            'status': True
+        }
 
     raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                        f'Confirmation was not code sent to {phone}')
+                        messages.CONFIRMATION_CODE_SENT_ERROR.format(phone))
 
 
 @router.put(
@@ -113,7 +119,7 @@ async def create_user(
             return user
 
         raise HTTPException(status.HTTP_401_UNAUTHORIZED,
-                            'Confirmation code is incorrect')
+                            messages.CONFIRMATION_CODE_IS_INCORRECT)
 
     raise HTTPException(status.HTTP_404_NOT_FOUND,
-                        'Phone was not found, try sending a confirmation code to it first')
+                        messages.PHONE_NOT_FOUND)
