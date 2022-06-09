@@ -55,7 +55,7 @@ alembic stamp head
 
 ```sh
 python -m pytest
-python -m pytest tests/test_user.py1`
+python -m pytest tests/test_user.py
 python -m pytest tests/test_user.py -r P (show stdout)
 python -m pytest -k "test_query_posts"
 python -m pytest -k "test_query_posts and not test_get_post_by_id"
