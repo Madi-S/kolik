@@ -1,5 +1,4 @@
-import statistics
-from fastapi import HTTPException, Header
+from fastapi import status, Header, HTTPException
 
 from typing import Any
 from slowapi import Limiter
@@ -16,5 +15,5 @@ limiter = Limiter(key_func=get_remote_address)
 def validate_auth_token(x_token: str = Header(TEST_AUTH_TOKEN, alias='auth-token')) -> Any:
     user_doesnot_exists = not bool(User.query.filter_by(token=x_token).first())
     if user_doesnot_exists and x_token != TEST_AUTH_TOKEN:
-        raise HTTPException(statistics.HTTP_401_UNAUTHORIZED,
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED,
                             'User is not authenticated')

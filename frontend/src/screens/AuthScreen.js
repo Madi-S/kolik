@@ -44,7 +44,6 @@ const AuthScreen = ({ navigation }) => {
             const onPress = async () => {
                 setPageNumber(2)
                 const result = await sendConfirmationCodeRequest(phoneNumber)
-                console.log('Result from Auth1:', result)
             }
 
             return (
@@ -60,11 +59,11 @@ const AuthScreen = ({ navigation }) => {
             const onPress = async json => {
                 const result = await confirmPhoneNumberRequest(
                     confirmationCode,
-                    { name, phone, location }
+                    { name, location: location.value, phone: phoneNumber }
                 )
                 if (result.token) {
-                    setUserId(json.id)
-                    setToken(json.token)
+                    setUserId(result.id)
+                    setToken(result.token)
                     navigation.navigate('Tabs')
                 } else {
                     setPageNumber(0)

@@ -22,7 +22,7 @@ export const sendConfirmationCodeRequest = async phoneNumber => {
 }
 
 export const confirmPhoneNumberRequest = async (
-    code = 'XXXX',
+    code = '2222',
     userData = { name: '', location: '', phone: '' }
 ) => {
     try {
