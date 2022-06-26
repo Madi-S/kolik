@@ -5,10 +5,11 @@ import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'expo-status-bar'
 import { ThemeProvider } from 'react-native-elements'
 import { useColorScheme } from 'react-native-appearance'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import THEME from './src/theme'
 import loadApp from './src/loadApp'
-import store from './src/redux/store'
+import { store, persistor } from './src/redux/store'
 import TabsStackNavigator from './src/navigation/tabs'
 
 const providerTheme = { Button: { raised: true } }
@@ -32,10 +33,12 @@ const App = () => {
 
     return (
         <Provider store={store}>
-            <ThemeProvider theme={providerTheme} useDark={isDarkScheme}>
-                <TabsStackNavigator />
-                <StatusBar style='auto' />
-            </ThemeProvider>
+            <PersistGate loading={null} persistor={persistor}>
+                <ThemeProvider theme={providerTheme} useDark={isDarkScheme}>
+                    <TabsStackNavigator />
+                    <StatusBar style='auto' />
+                </ThemeProvider>
+            </PersistGate>
         </Provider>
     )
 }

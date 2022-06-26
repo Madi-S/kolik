@@ -1,14 +1,34 @@
 import thunk from 'redux-thunk'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { persistStore, persistReducer } from 'redux-persist'
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 
 import { postReducer } from './reducers/post'
 import { searchReducer } from './reducers/search'
 import { settingsReducer } from './reducers/settings'
 
+const rootPersistConfig = {
+    key: 'root',
+    storage: AsyncStorage
+}
+
+const postPersistConfig = {
+    key: 'post',
+    storage: AsyncStorage
+}
+
+const settingsPersistConfig = {
+    key: 'settings',
+    storage: AsyncStorage
+}
+
 const rootReducer = combineReducers({
-    post: postReducer,
     search: searchReducer,
-    settings: settingsReducer
+    post: persistReducer(postPersistConfig, postReducer),
+    settings: persistReducer(settingsPersistConfig, settingsReducer)
 })
 
-export default createStore(rootReducer, applyMiddleware(thunk))
+const persistsRootReducer = (rootPersistConfig, rootReducer)
+
+export const store = createStore(persistsRootReducer, applyMiddleware(thunk))
+export const persistor = persistStore(store)

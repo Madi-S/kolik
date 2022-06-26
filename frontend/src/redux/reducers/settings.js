@@ -2,7 +2,8 @@ import { TOGGLE_DARK_THEME, TOGGLE_NOTIFICATIONS_ENABLED } from '../types'
 
 const initialState = {
     darkThemeEnabled: false,
-    notificationsEnabled: false
+    userAthenticated: false,
+    notificationsEnabled: false,
 }
 
 export const settingsReducer = (state = initialState, action) => {
