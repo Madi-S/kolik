@@ -7,19 +7,18 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
-if os.environ.get('DEBUG') == 'TRUE':
+if os.environ.get("DEBUG") == "TRUE":
     # check_same_thread is only for sqlite
-    engine = create_engine(os.environ['DATABASE_URL'], connect_args={
-        'check_same_thread': False})
-    db_session = scoped_session(sessionmaker(
-        bind=engine,
-        autoflush=False,
-        autocommit=False
-    ))
+    engine = create_engine(
+        os.environ["DATABASE_URL"], connect_args={"check_same_thread": False}
+    )
+    db_session = scoped_session(
+        sessionmaker(bind=engine, autoflush=False, autocommit=False)
+    )
 else:
-    raise Exception('Database connection for non-debug case is not defined')
+    raise Exception("Database connection for non-debug case is not defined")
 
 
 Base = declarative_base()
@@ -32,11 +31,11 @@ class db:
 
 
 def init_db():
-    '''!!! MUST BE CALLED INSIDE `models.py` !!!'''
-    logger.debug('Initializing database')
+    """!!! MUST BE CALLED INSIDE `models.py` !!!"""
+    logger.debug("Initializing database")
     try:
-        logger.debug('Initializion successful')
+        logger.debug("Initializion successful")
         Base.metadata.drop_all(bind=engine)
         Base.metadata.create_all(bind=engine)
     except Exception as e:
-        logger.debug(f'Initializion failed {e}')
+        logger.debug(f"Initializion failed {e}")

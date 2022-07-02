@@ -9,12 +9,12 @@ class PhoneEntity:
         self.phone = phone
 
     def confirmation_code_sent(self, code) -> bool:
-        '''Returns `True` if the code was successfully sent'''
-        'TODO: Using public APIs send confirmation `code` to `phone`'
-        logger.debug('Sending confirmation code {} to {}', code, self.phone)
+        """Returns `True` if the code was successfully sent"""
+        "TODO: Using public APIs send confirmation `code` to `phone`"
+        logger.debug("Sending confirmation code {} to {}", code, self.phone)
         return True
 
     @staticmethod
     def is_valid(phone: str) -> bool:
-        '''Returns `True` if the phone is written in the correct format, otherwise `False`'''
-        return phone.startswith('+') and len(phone) == STANDARD_PHONE_LENGTH
+        """Returns `True` if the phone is written in the correct format, otherwise `False`"""
+        return phone.startswith("+") and len(phone) == STANDARD_PHONE_LENGTH

@@ -9,8 +9,8 @@ from config import IMAGES_FOLDER
 
 
 def generate_image_uri(post_id, name):
-    logger.debug('Generated image uri', f'./{IMAGES_FOLDER}/{post_id}__{name}')
-    return f'./images/{post_id}__{name}'
+    logger.debug("Generated image uri", f"./{IMAGES_FOLDER}/{post_id}__{name}")
+    return f"./images/{post_id}__{name}"
 
 
 class PostQueryHandler:
@@ -37,8 +37,8 @@ class PostQueryHandler:
     def _apply_contains_q_to_columns(self) -> None:
         self.query = self.query.filter(
             or_(
-                Post.title.ilike(f'%{self.params.q}%'),
-                Post.description.ilike(f'%{self.params.q}%'),
+                Post.title.ilike(f"%{self.params.q}%"),
+                Post.description.ilike(f"%{self.params.q}%"),
             )
         )
 
@@ -51,23 +51,18 @@ class PostQueryHandler:
             self._apply_price_range_filter()
 
     def _apply_location_filter(self) -> None:
-        self.query = self.query.filter_by(
-            location=self.params.filters.location)
+        self.query = self.query.filter_by(location=self.params.filters.location)
 
     def _apply_category_filter(self) -> None:
-        self.query = self.query.filter_by(
-            category=self.params.category)
+        self.query = self.query.filter_by(category=self.params.category)
 
     def _apply_price_range_filter(self) -> None:
-        self.query = self.query.filter(
-            Post.price >= self.params.filters.price_from)
-        self.query = self.query.filter(
-            Post.price <= self.params.filters.price_to)
+        self.query = self.query.filter(Post.price >= self.params.filters.price_from)
+        self.query = self.query.filter(Post.price <= self.params.filters.price_to)
 
     def _apply_order_by(self) -> None:
-        order_by_column, order = self.params.filters.order_by_option.split(
-            '-')
-        descending_order = order == 'desc'
+        order_by_column, order = self.params.filters.order_by_option.split("-")
+        descending_order = order == "desc"
 
         if descending_order:
             order_by_expr = getattr(Post, order_by_column).desc()

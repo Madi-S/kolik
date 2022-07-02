@@ -1,10 +1,10 @@
-USER_NOT_FOUND = 'User with id {} was not found'
-USER_NOT_AUTHORIZED = 'You have no rights for this action'
+USER_NOT_FOUND = "User with id {} was not found"
+USER_NOT_AUTHORIZED = "You have no rights for this action"
 
-POST_NOT_FOUND = 'Post with {} was not found'
+POST_NOT_FOUND = "Post with {} was not found"
 
-PHONE_NOT_FOUND = 'Phone was not found, try sending a confirmation code to it first'
+PHONE_NOT_FOUND = "Phone was not found, try sending a confirmation code to it first"
 
-CONFIRMATION_CODE_SENT_ERROR = 'Confirmation was not code sent to {}'
-CONFIRMATION_CODE_SENT_SUCCESS = 'Confirmation code sent to {}'
-CONFIRMATION_CODE_IS_INCORRECT = 'Confirmation code is incorrect'
+CONFIRMATION_CODE_SENT_ERROR = "Confirmation was not code sent to {}"
+CONFIRMATION_CODE_SENT_SUCCESS = "Confirmation code sent to {}"
+CONFIRMATION_CODE_IS_INCORRECT = "Confirmation code is incorrect"

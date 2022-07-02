@@ -12,7 +12,7 @@ def generate_user_token() -> str:
 
 
 def beautify_datetime(datetime: datetime) -> str:
-    return datetime.strftime('%B, %d, %Y at %H:%M')
+    return datetime.strftime("%B, %d, %Y at %H:%M")
 
 
 def get_list_of_enum_value(enum: Enum) -> list:

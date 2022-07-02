@@ -10,17 +10,18 @@ from dotenv import load_dotenv
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 sys.path.append(BASE_DIR)
 
 
 config = context.config
-config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])
+config.set_main_option("sqlalchemy.url", os.environ["DATABASE_URL"])
 fileConfig(config.config_file_name)
 
 
 import models
 from db import metadata
+
 target_metadata = metadata
 
 
@@ -64,7 +65,8 @@ def run_migrations_online():
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata, 
+            connection=connection,
+            target_metadata=target_metadata,
             render_as_batch=True,
         )
 
