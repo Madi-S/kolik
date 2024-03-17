@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
+
+.alert {
+    z-index: 100;
+    transition: opacity 1s;
+    font-family: Quicksand;
+    width: 50%;
+    padding: 30px;
+    margin: 20px auto;
+    position: absolute;
+    border-radius: 5px;
+    box-shadow: 0 0 15px 5px #ccc;
+}
+
+.close {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    opacity: 0.5;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    right: 15px;
+    top: 25px;
+    text-align: center;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    font-size: 1.6em;
+    cursor: pointer;
+}
+
+@mixin alert($name, $bgColor) {
+    $accentColor: darken($bgColor, 50);
+    .#{$name} {
+        background-color: #{$bgColor};
+        border-left: 5px solid $accentColor;
+        .close {
+            color: $accentColor;
+            border-color: $accentColor;
+        }
+    }
+}
+@include alert(danger-alert, #f7a7a3);
+@include alert(simple-alert, #ebebeb);
+@include alert(success-alert, #a8f0c6);
+@include alert(warning-alert, #ffd48a);

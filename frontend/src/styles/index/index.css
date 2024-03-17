@@ -1,0 +1,43 @@
+/* index__navbar styles */
+
+.index {
+    min-height: 100%;
+}
+
+.index__navbar {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 30px;
+    width: 100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    margin-top: auto;
+    width: 100%;
+    background: #023047;
+    height: 70px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.index__navbar-icon {
+    height: 65px;
+    width: auto;
+    cursor: pointer;
+}
+
+.index__navbar-icon:focus,
+.index__navbar-icon:hover {
+    opacity: 0.8;
+}
+
+.icon-center {
+    height: 85px;
+}
+
+.feed__search-value:empty:before{
+    content: attr(placeholder);
+    pointer-events: none;
+    display: block; /* For Firefox */
+  }

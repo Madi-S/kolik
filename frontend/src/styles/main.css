@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+/* Core styles */
+
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html {
+    box-sizing: border-box;
+    background: #f1f1f1;
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+html {
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+input,
+textarea,
+input:hover,
+input:focus,
+input:active,
+textarea:hover,
+textarea:focus,
+textarea:active {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+/* Logo styles */
+
+.logo {
+    height: auto;
+    width: 80px;
+    margin-left: 20px;
+    padding-bottom: 10px;
+}
+
+.logo img {
+    height: 100%;
+    width: 100%;
+}
+
+/* Select styles */
+
+.select svg {
+    position: absolute;
+    right: 0;
+    top: calc(50% - 3px);
+    width: 10px;
+    height: 6px;
+    stroke-width: 2px;
+    stroke: #9098a9;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+}
+
+.select select {
+    margin-top: 4.5px;
+    -webkit-appearance: none;
+    padding: 0px 0px 7px 6px;
+    width: 20vw;
+    border: 1px solid #e8eaed;
+    border-radius: 5px;
+    background: #f1f1f1;
+    box-shadow: 0 4px 3px -2px #9098a9;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    transition: all 150ms ease;
+}
+
+.select select:required:invalid {
+    color: #5a667f;
+}
+
+.select select option {
+    width: 100%;
+    color: #223254;
+}
+
+.select select option[value=''][disabled] {
+    display: none;
+}
+
+.select select:focus {
+    outline: none;
+    border-color: #07f;
+    box-shadow: 0 0 0 2px rgba(0, 119, 255, 0.2);
+}
+
+.select select:hover + svg {
+    stroke: #07f;
+}
+
+.sprites {
+    position: absolute;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    user-select: none;
+}

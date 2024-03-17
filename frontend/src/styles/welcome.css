@@ -1,0 +1,94 @@
+/* Welcome styles */
+
+.welcome {
+    display: flex;
+    margin: 0;
+    color: #023047;
+    flex-direction: column;
+    align-items: center;
+}
+
+.welcome__card {
+    background: inherit;
+    width: 400px;
+    height: 760px;
+    margin: 1%;
+    margin-bottom: 0;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    background: #69ddfd;
+    justify-content: flex-start;
+    box-shadow: 10px 50px 60px #bfe1eb;
+}
+
+.welcome__card-img {
+    height: 330px;
+    width: 100%;
+    margin: 10%;
+    margin-bottom: 3%;
+}
+
+.welcome__card-img img {
+    width: 100%;
+    height: auto;
+}
+
+.welcome__card-info {
+    padding: 30px;
+    text-align: center;
+    font-size: 1.4rem;
+    overflow-y: hidden;
+}
+
+.welcome__nav {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.welcome__nav-circle {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 50%;
+    border: 2px solid #023047;
+}
+
+.circle-active {
+    background: #023047 !important;
+}
+
+.welcome__next-btn-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.welcome__next-btn {
+    border: none;
+    font-weight: 600;
+    padding: 13px 20px;
+    border-radius: 20px;
+    font-size: 2rem;
+    width: 150px;
+    background: #023047;
+    transition: all 0.25s ease;
+    color: #61dafb !important;
+}
+
+.welcome__next-btn:hover {
+    cursor: pointer;
+    color: #69ddfd;
+    background-color: #02283b;
+    box-shadow: 14px 14px 70px #b4efff;
+}
+
+.welcome__next-btn:disabled {
+    pointer-events: none;
+    color: #61dafbcd;
+    background-color: #023047ab;
+    box-shadow: none !important;
+}
